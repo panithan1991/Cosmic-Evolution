@@ -416,9 +416,14 @@ canvas{
     padding-bottom:3px;
 
     scrollbar-width:thin;
+    scrollbar-color:#4e94ac #0b172b;
 
     scroll-behavior:smooth;
 }
+
+.evolutionPath::-webkit-scrollbar{height:5px}
+.evolutionPath::-webkit-scrollbar-track{background:#0b172b;border-radius:10px}
+.evolutionPath::-webkit-scrollbar-thumb{background:#4e94ac;border-radius:10px}
 
 .evoNode{
     flex:0 0 96px;
@@ -885,6 +890,26 @@ h1 span{
             repeat(4,1fr);
     }
 }
+
+.playLegend{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.playLegend span{display:inline-flex;align-items:center;gap:5px;padding:5px 7px;border-radius:8px;font-size:10px;font-weight:800;background:rgba(10,20,37,.85)}
+.playLegend .food{color:#84f8cb;border:1px solid #3ba980}
+.playLegend .safe{color:#a8ffb5;border:1px solid #64cf85}
+.playLegend .danger{color:#ff9cae;border:1px solid #e86b85}
+.scienceFact{margin-top:9px;padding:8px 9px;border-left:2px solid #81c7ff;background:rgba(71,143,214,.1);color:#c8def5;font-size:10px;line-height:1.45}
+.enemyChip.safe{color:#b9ffd1;border-color:rgba(108,232,145,.65);background:rgba(19,78,53,.58)}
+.enemyChip.safe .count{color:#91f3aa}
+.enemyStatus{font-weight:900;letter-spacing:.4px}
+@media(max-width:760px){
+  .statusPanel{width:225px;bottom:109px}
+  .scienceFact{font-size:9px}
+  .playLegend span{font-size:8px;padding:4px 5px}
+}
+@media(max-height:600px){
+  .statusPanel{bottom:85px;padding:7px}
+  .evolutionDock{height:74px}
+  .scienceFact{display:none}
+}
 </style>
 </head>
 
@@ -916,7 +941,7 @@ h1 span{
     </div>
 
     <div class="hudBox">
-        <small>EVOLUTION</small>
+        <small>COSMIC SCALE</small>
         <strong id="stage"
                 class="stage">
             ROCKY PLANET
@@ -995,8 +1020,14 @@ h1 span{
 
     <div class="help">
         Mouse / Touch = Move<br>
-        Hold Click / SPACE = Repulse
+        Hold Click / SPACE = Repulse (หยุดเก็บชั่วคราว)
     </div>
+    <div class="playLegend" aria-label="Game symbol guide">
+        <span class="food">◆ เก็บได้: ฝุ่น/แก๊ส</span>
+        <span class="safe">＋ วงเขียว: ดูดซับได้</span>
+        <span class="danger">! วงแดง: หลบ</span>
+    </div>
+    <div id="scienceFact" class="scienceFact"></div>
 
 </div>
 
@@ -1023,7 +1054,7 @@ h1 span{
     <div id="threatHint"
          class="threatHint">
 
-        ไอคอนสีแดงคือศัตรูที่อาจปรากฏในระดับปัจจุบัน
+        สีเขียวดูดซับได้ • สีแดงต้องหลบ
 
     </div>
 
@@ -1035,7 +1066,7 @@ h1 span{
     <div class="dockHeader">
 
         <strong>
-            EVOLUTION PATH
+            COSMIC SCALE PATH
         </strong>
 
         <span id="dockThreats"
@@ -1067,32 +1098,28 @@ h1 span{
     <div class="card">
 
         <div class="eyebrow">
-            COSMIC EVOLUTION — SCIENCE-INSPIRED
+            COSMIC EXPLORER — SCIENCE-INSPIRED
         </div>
 
         <h1 id="title">
-            FROM PLANET<br>
-            <span>TO COSMIC WEB</span>
+            EXPLORE THE<br>
+            <span>COSMIC SCALE</span>
         </h1>
 
         <p id="description"
            class="description">
 
-            สะสม Matter เพิ่มมวล
-            เอาตัวรอดจากภัยคุกคามที่รุนแรงขึ้น
-            และขยายสเกลจากดาวเคราะห์
-            ไปสู่โครงสร้างขนาดใหญ่ของจักรวาล
+            เก็บฝุ่นและแก๊สรูปเพชร ◆ สะสมคะแนน Mass
+            หลบวัตถุวงแดง และดูดซับวัตถุวงเขียว
+            เพื่อสำรวจโครงสร้างจักรวาลที่ใหญ่ขึ้น
 
         </p>
 
         <div class="scienceNote">
 
-            เส้นทางนี้เป็น game progression ที่อิงดาราศาสตร์:
-            Supernova เป็นเหตุการณ์,
-            Neutron Star เป็นหนึ่งใน stellar remnants,
-            Black Hole ไม่จำเป็นต้องผ่าน Neutron Star ในธรรมชาติ
-            และ Quasar เป็นสถานะของ active galactic nucleus
-            ไม่ใช่ขั้นก่อน Black Hole.
+            นี่คือการปลดล็อก “สเกลจักรวาล” ในเกม ไม่ใช่วงจรชีวิตของวัตถุเดียว:
+            ดาวเคราะห์ไม่กลายเป็นดาวฤกษ์ และหลุมดำไม่กลายเป็นกาแล็กซี
+            ส่วน Mass เป็นคะแนนเกม ไม่ใช่มวลจริงทางฟิสิกส์
 
         </div>
 
@@ -1115,7 +1142,7 @@ h1 span{
         <button id="startBtn"
                 class="startBtn">
 
-            BEGIN COSMIC EVOLUTION
+            START EXPLORING
 
         </button>
 
@@ -1134,6 +1161,8 @@ h1 span{
 </div>
 
 
+<script src="cosmic-rules.js"></script>
+<script src="cosmic-art.js"></script>
 <script>
 
 const $ =
@@ -1173,6 +1202,9 @@ const lifeUI =
 
 const stageNameUI =
     $("stageName");
+
+const scienceFactUI =
+    $("scienceFact");
 
 const nextStageUI =
     $("nextStage");
@@ -1602,7 +1634,7 @@ const stages = [
             "🌌",
 
         name:
-            "PROTO / DWARF GALAXY",
+            "DWARF GALAXY",
 
         min:
             400000,
@@ -1648,7 +1680,7 @@ const stages = [
             "🌀",
 
         name:
-            "BARRED SPIRAL GALAXY",
+            "LARGE BARRED SPIRAL",
 
         min:
             900000,
@@ -1671,7 +1703,7 @@ const stages = [
             "💿",
 
         name:
-            "LENTICULAR GALAXY",
+            "GALAXY PAIR",
 
         min:
             1200000,
@@ -1694,7 +1726,7 @@ const stages = [
             "✨",
 
         name:
-            "ELLIPTICAL GALAXY",
+            "GALAXY TRIO",
 
         min:
             1600000,
@@ -1881,10 +1913,10 @@ const enemyData = {
     mine:{
 
         icon:
-            "💣",
+            "☢️",
 
         name:
-            "Dark Matter Mine",
+            "Plasma Burst",
 
         color:
             "#ff7895",
@@ -2255,10 +2287,10 @@ const enemyData = {
     darkNode:{
 
         icon:
-            "🕸️",
+            "🌀",
 
         name:
-            "Dark Matter Node",
+            "Gravity Well",
 
         color:
             "#8a7dff",
@@ -2276,7 +2308,7 @@ const enemyData = {
             17,
 
         absorbStage:
-            18,
+            99,
 
         reward:
             1200000,
@@ -2882,12 +2914,13 @@ class Matter{
             1;
 
 
-        let power =
-            current.gravityPower;
+        const attraction = CosmicRules.matterAttraction(
+            current.gravityRange, current.gravityPower, width, height
+        );
 
+        let power = attraction.power;
 
-        let range =
-            current.gravityRange;
+        let range = attraction.range;
 
 
         if(
@@ -3123,9 +3156,8 @@ class Matter{
 
 
         if(
-            distance <
-            current.radius +
-            11 &&
+            CosmicRules.collisionDistance(this.x, this.y, player.x, player.y) <
+            current.radius + 11 &&
             !pointer.down
         ){
 
@@ -3141,55 +3173,18 @@ class Matter{
         ctx.save();
 
 
-        ctx.shadowColor =
-            this.color;
-
-
-        ctx.shadowBlur =
-            10;
-
-
-        ctx.fillStyle =
-            this.color;
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-            this.x,
-            this.y,
-            this.radius,
-            0,
-            Math.PI *
-            2
-        );
-
-
-        ctx.fill();
-
-
-        ctx.globalAlpha =
-            .16;
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-            this.x,
-            this.y,
-            this.radius *
-            3.5,
-            0,
-            Math.PI *
-            2
-        );
-
-
-        ctx.fill();
-
-
+        // Every collectible shares one silhouette; size and inner color show value.
+        const size = this.radius * 2.4;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(Math.PI / 4 + Math.sin(game.time * 2 + this.phase) * .08);
+        ctx.shadowColor = "#70f5c2";
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = "#48da9b";
+        ctx.fillRect(-size / 2, -size / 2, size, size);
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = this.type === "gold" ? "#ffe98a" :
+            this.type === "blue" ? "#c8f3ff" : "#e5fff4";
+        ctx.fillRect(-size * .2, -size * .2, size * .4, size * .4);
         ctx.restore();
     }
 
@@ -3203,7 +3198,7 @@ function collectMatter(
     const scale =
         1 +
         game.currentStage *
-        .085;
+        .035;
 
 
     const massGain =
@@ -3397,7 +3392,7 @@ class Projectile{
 
 
         ctx.shadowColor =
-            this.color;
+            "#ff597c";
 
 
         ctx.shadowBlur =
@@ -3405,20 +3400,17 @@ class Projectile{
 
 
         ctx.fillStyle =
-            this.color;
+            "#ff597c";
 
 
         ctx.beginPath();
 
 
-        ctx.arc(
-            this.x,
-            this.y,
-            this.radius,
-            0,
-            Math.PI *
-            2
-        );
+        ctx.moveTo(this.x, this.y - this.radius * 1.7);
+        ctx.lineTo(this.x + this.radius, this.y);
+        ctx.lineTo(this.x, this.y + this.radius * 1.7);
+        ctx.lineTo(this.x - this.radius, this.y);
+        ctx.closePath();
 
 
         ctx.fill();
@@ -3818,7 +3810,8 @@ class Enemy{
 
             if(
                 distance <
-                110
+                110 &&
+                CosmicRules.canDetonateMine(game.currentStage, this.absorbStage)
             ){
 
                 this.explodeMine();
@@ -3874,7 +3867,8 @@ class Enemy{
             this.behavior ===
             "pulse" &&
             this.cooldown <=
-            0
+            0 &&
+            !CosmicRules.isAbsorbable(game.currentStage, this.absorbStage)
         ){
 
             this.firePulse();
@@ -3894,7 +3888,8 @@ class Enemy{
 
         if(
             this.behavior ===
-            "quasar"
+            "quasar" &&
+            !CosmicRules.isAbsorbable(game.currentStage, this.absorbStage)
         ){
 
             this.quasarDamage();
@@ -3919,14 +3914,17 @@ class Enemy{
             stage().radius;
 
 
+        const collisionDistance = CosmicRules.collisionDistance(
+            this.x, this.y, player.x, player.y
+        );
+
         if(
-            distance <
+            collisionDistance <
             collision
         ){
 
             if(
-                game.currentStage >=
-                this.absorbStage
+                CosmicRules.isAbsorbable(game.currentStage, this.absorbStage)
             ){
 
                 absorbEnemy(
@@ -4236,12 +4234,9 @@ function availableEnemies(){
         )
     ){
 
-        if(
-            game.wave >=
-            info.unlockWave &&
-            game.currentStage >=
-            info.unlockStage
-        ){
+        if(CosmicRules.canSpawnEnemy(
+            game.wave, game.currentStage, info.unlockWave, info.unlockStage
+        )){
 
             pool.push(
                 key
@@ -4517,7 +4512,7 @@ function updateEvolution(){
 
 
     showToast(
-        "✦ EVOLUTION — " +
+        "✦ DISCOVERED — " +
         current.name
     );
 
@@ -4555,7 +4550,7 @@ function updateEvolution(){
     ){
 
         showSpecial(
-            "🌌 GALAXY ASSEMBLY — BLACK HOLE BECOMES CENTRAL NUCLEUS",
+            "🌌 GALAXY SCALE — STARS, GAS, DUST & DARK MATTER",
             2600
         );
     }
@@ -5069,6 +5064,37 @@ function drawEnemy(
 
             break;
     }
+
+    drawEnemyStatus(enemy);
+}
+
+function drawEnemyStatus(enemy){
+    const safe = CosmicRules.isAbsorbable(game.currentStage, enemy.absorbStage);
+    const color = safe ? "#88f3a8" : "#ff6f87";
+    const ring = enemy.radius + 9;
+    ctx.save();
+    ctx.translate(enemy.x, enemy.y);
+    ctx.rotate(enemy.rotation * .12);
+    ctx.strokeStyle = color;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 13;
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash(safe ? [] : [5, 4]);
+    ctx.beginPath();
+    ctx.arc(0, 0, ring, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.rotate(-enemy.rotation * .12);
+    ctx.fillStyle = safe ? "#154c36" : "#751e37";
+    ctx.beginPath();
+    ctx.arc(0, -ring, 10, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 14px system-ui";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(safe ? "+" : "!", 0, -ring - 1);
+    ctx.restore();
 }
 
 
@@ -5879,14 +5905,14 @@ function drawPlayer(){
 
         case "planet":
 
-            drawRockyPlanet();
+            CosmicArt.planet(ctx, player.x, player.y, stage().radius);
 
             break;
 
 
         case "gas":
 
-            drawGasGiant();
+            CosmicArt.planet(ctx, player.x, player.y, stage().radius, true);
 
             break;
 
@@ -5900,34 +5926,28 @@ function drawPlayer(){
 
         case "star":
 
-            drawStar(
-                "yellow"
-            );
+            CosmicArt.star(ctx, player.x, player.y, stage().radius, "yellow");
 
             break;
 
 
         case "massiveStar":
 
-            drawStar(
-                "white"
-            );
+            CosmicArt.star(ctx, player.x, player.y, stage().radius, "white");
 
             break;
 
 
         case "supergiant":
 
-            drawStar(
-                "blue"
-            );
+            CosmicArt.star(ctx, player.x, player.y, stage().radius, "blue");
 
             break;
 
 
         case "supernova":
 
-            drawSupernovaRemnant();
+            CosmicArt.nebula(ctx, player.x, player.y, stage().radius);
 
             break;
 
@@ -5959,39 +5979,35 @@ function drawPlayer(){
 
         case "protoGalaxy":
 
-            drawProtoGalaxy();
+            CosmicArt.galaxy(ctx, player.x, player.y, stage().radius * .75, false, game.time);
 
             break;
 
 
         case "spiral":
 
-            drawRealisticGalaxy(
-                "spiral"
-            );
+            CosmicArt.galaxy(ctx, player.x, player.y, stage().radius, false, game.time);
 
             break;
 
 
         case "barred":
 
-            drawRealisticGalaxy(
-                "barred"
-            );
+            CosmicArt.galaxy(ctx, player.x, player.y, stage().radius, true, game.time);
 
             break;
 
 
         case "lenticular":
 
-            drawLenticular();
+            CosmicArt.group(ctx, player.x, player.y, stage().radius, 2, game.time);
 
             break;
 
 
         case "elliptical":
 
-            drawElliptical();
+            CosmicArt.group(ctx, player.x, player.y, stage().radius, 3, game.time);
 
             break;
 
@@ -8161,17 +8177,19 @@ function updateThreatUI(){
     enemyChips.replaceChildren();
 
 
-    for(
-        const type
-        of pool.slice(
-            -6
-        )
-    ){
+    const visibleTypes = [...new Set([
+        ...enemies.filter(enemy => enemy.alive).map(enemy => enemy.type),
+        ...pool.slice(-4)
+    ])].slice(-6);
+
+    for(const type of visibleTypes){
 
         const info =
             enemyData[
                 type
             ];
+
+        const safe = CosmicRules.isAbsorbable(game.currentStage, info.absorbStage);
 
 
         const chip =
@@ -8181,7 +8199,7 @@ function updateThreatUI(){
 
 
         chip.className =
-            "enemyChip";
+            safe ? "enemyChip safe" : "enemyChip";
 
 
         chip.innerHTML =
@@ -8189,6 +8207,8 @@ function updateThreatUI(){
             <span class="ico">
                 ${info.icon}
             </span>
+
+            <span class="enemyStatus">${safe ? "+" : "!"}</span>
 
             <span>
                 ${info.name}
@@ -8244,7 +8264,7 @@ function updateThreatUI(){
 
 
     threatHint.textContent =
-        "Active " +
+        "เขียว + ดูดซับได้ • แดง ! หลบ • Active " +
         enemies.filter(
             enemy =>
                 enemy.alive
@@ -8505,6 +8525,9 @@ function updateHUD(){
         " " +
         stage().name;
 
+    scienceFactUI.textContent =
+        "รู้ไว้: " + CosmicRules.facts[game.currentStage];
+
 
     massText.textContent =
         Math.floor(
@@ -8674,24 +8697,16 @@ function updateGame(
         stage().radius;
 
 
-    player.x =
-        clamp(
-            player.x,
-            radius,
-            width -
-            radius
-        );
+    player.x = CosmicRules.clampPlayfield(
+        player.x, Math.min(radius, width / 2), width - radius
+    );
 
 
-    player.y =
-        clamp(
-            player.y,
-            70 +
-            radius,
-            height -
-            radius -
-            105
-        );
+    player.y = CosmicRules.clampPlayfield(
+        player.y,
+        Math.min(70 + radius, height / 2),
+        height - radius - 105
+    );
 
 
     if(
@@ -9108,11 +9123,8 @@ function startGame(){
         [];
 
 
-    for(
-        let i = 0;
-        i < 190;
-        i++
-    ){
+    const matterCount = Math.min(145, Math.max(70, Math.round(width * height / 4300)));
+    for(let i = 0; i < matterCount; i++){
 
         matter.push(
             new Matter()
@@ -9199,7 +9211,7 @@ function endGame(){
 
 
     startBtn.textContent =
-        "EVOLVE AGAIN";
+        "EXPLORE AGAIN";
 }
 
 
@@ -9246,10 +9258,9 @@ function saveRanking(){
         "Cosmic Pilot";
 
 
-    localStorage.setItem(
-        "cosmic-player-name-v7",
-        name
-    );
+    try{
+        localStorage.setItem("cosmic-player-name-v7", name);
+    }catch{}
 
 
     const data =
@@ -9285,15 +9296,9 @@ function saveRanking(){
     );
 
 
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(
-            data.slice(
-                0,
-                10
-            )
-        )
-    );
+    try{
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data.slice(0, 10)));
+    }catch{}
 }
 
 
@@ -9555,11 +9560,11 @@ startBtn.addEventListener(
 );
 
 
-playerName.value =
-    localStorage.getItem(
-        "cosmic-player-name-v7"
-    ) ||
-    "";
+try{
+    playerName.value = localStorage.getItem("cosmic-player-name-v7") || "";
+}catch{
+    playerName.value = "";
+}
 
 
 buildEvolutionUI();
@@ -9570,7 +9575,7 @@ renderRanking();
 
 for(
     let i = 0;
-    i < 140;
+    i < 90;
     i++
 ){
 

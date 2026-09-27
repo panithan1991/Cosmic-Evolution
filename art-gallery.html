@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cosmic Evolution — Art Gallery</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;padding:32px;background:radial-gradient(circle at 50% 0%,#172545,#050914 55%);color:#e8f3ff;font:16px system-ui,sans-serif}
+    main{max-width:1100px;margin:auto}
+    h1{margin:0 0 8px;font-size:clamp(30px,5vw,54px)}
+    p{color:#afc3dc;line-height:1.5}
+    a{color:#7ee8df}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;margin:28px 0}
+    article{padding:12px;border:1px solid #293955;border-radius:18px;background:#0b1326;text-align:center}
+    canvas{display:block;width:100%;aspect-ratio:1;background:radial-gradient(circle,#122342,#050912 72%);border-radius:12px}
+    h2{font-size:16px;margin:12px 0 4px}
+    small{color:#90aeca}
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Cosmic Art Gallery</h1>
+    <p>ภาพตัวละครที่วาดด้วย Canvas และย่อขยายได้โดยไม่ใช้ภาพจากบุคคลอื่น • <a href="./">กลับไปเล่นเกม</a></p>
+    <div class="grid" id="grid"></div>
+    <p>แกลเลอรีนี้แสดงชนิดและสเกลต่าง ๆ เพื่อดูงานภาพ ไม่ได้หมายความว่าวัตถุแต่ละชนิดเปลี่ยนเป็นชนิดต่อไป</p>
+  </main>
+  <script src="cosmic-art.js"></script>
+  <script>
+    const examples = [
+      ["Rocky planet", "ดาวเคราะห์หิน", c => CosmicArt.planet(c, 110, 110, 48)],
+      ["Gas giant", "ดาวเคราะห์แก๊ส", c => CosmicArt.planet(c, 110, 110, 48, true)],
+      ["Main-sequence star", "ดาวฤกษ์สีเหลือง", c => CosmicArt.star(c, 110, 110, 45, "yellow")],
+      ["Hot massive star", "ดาวฤกษ์ขาวฟ้า", c => CosmicArt.star(c, 110, 110, 45, "white")],
+      ["Blue supergiant", "ดาวมหายักษ์สีน้ำเงิน", c => CosmicArt.star(c, 110, 110, 45, "blue")],
+      ["Supernova remnant", "ซากแก๊สจากซูเปอร์โนวา", c => CosmicArt.nebula(c, 110, 110, 52)],
+      ["Spiral galaxy", "กาแล็กซีเกลียว", c => CosmicArt.galaxy(c, 110, 110, 53, false, 0)],
+      ["Barred spiral", "กาแล็กซีเกลียวมีคาน", c => CosmicArt.galaxy(c, 110, 110, 53, true, 0)],
+      ["Galaxy pair", "กาแล็กซีสองแห่ง", c => CosmicArt.group(c, 110, 110, 77, 2, 0)],
+      ["Galaxy trio", "กาแล็กซีสามแห่ง", c => CosmicArt.group(c, 110, 110, 77, 3, 0)]
+    ];
+    for (const [name, description, paint] of examples) {
+      const card = document.createElement("article");
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = 220;
+      const title = document.createElement("h2");
+      title.textContent = name;
+      const note = document.createElement("small");
+      note.textContent = description;
+      card.append(canvas, title, note);
+      grid.append(card);
+      paint(canvas.getContext("2d"));
+    }
+  </script>
+</body>
+</html>
