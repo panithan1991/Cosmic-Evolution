@@ -2,7 +2,8 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover">
 
 <title>Cosmic Evolution</title>
 
@@ -11,14 +12,13 @@
     box-sizing:border-box;
 }
 
-html,
-body{
+html,body{
     margin:0;
     width:100%;
     height:100%;
     overflow:hidden;
     background:#01030a;
-    color:#fff;
+    color:white;
     font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
@@ -30,31 +30,33 @@ canvas{
     touch-action:none;
 }
 
-/* ===========================
+/* ==============================
    HUD
-=========================== */
+============================== */
 
 .hud{
     position:fixed;
     top:12px;
     left:50%;
     transform:translateX(-50%);
+
     display:flex;
-    z-index:10;
 
     padding:7px;
 
     border:1px solid rgba(255,255,255,.12);
     border-radius:18px;
 
-    background:rgba(5,11,27,.82);
-    backdrop-filter:blur(14px);
+    background:rgba(4,10,25,.84);
+    backdrop-filter:blur(16px);
 
-    box-shadow:0 15px 50px rgba(0,0,0,.38);
+    box-shadow:0 18px 55px rgba(0,0,0,.42);
+
+    z-index:20;
 }
 
 .hudBox{
-    min-width:86px;
+    min-width:88px;
     padding:6px 12px;
 
     text-align:center;
@@ -69,11 +71,12 @@ canvas{
 .hudBox small{
     display:block;
 
-    font-size:8px;
-    font-weight:800;
-    letter-spacing:1.2px;
+    color:#7087a8;
 
-    color:#7489aa;
+    font-size:8px;
+    font-weight:900;
+
+    letter-spacing:1.2px;
 }
 
 .hudBox strong{
@@ -81,78 +84,90 @@ canvas{
 
     margin-top:2px;
 
-    font-size:16px;
+    font-size:15px;
 }
 
 #mass{
-    color:#6ff0d4;
+    color:#67efd3;
 }
 
 #combo{
-    color:#ffe06e;
+    color:#ffe16f;
 }
 
 #life{
-    color:#ff7189;
+    color:#ff7188;
     letter-spacing:2px;
 }
 
 #stage{
-    color:#8bcfff;
-    font-size:11px;
+    max-width:125px;
+
+    color:#86c9ff;
+
+    font-size:10px;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
-/* ===========================
-   EVOLUTION PANEL
-=========================== */
+/* ==============================
+   LEFT STATUS
+============================== */
 
-.leftPanel{
+.statusPanel{
     position:fixed;
-    left:18px;
-    bottom:18px;
 
-    width:min(360px,calc(100vw - 36px));
+    left:17px;
+    bottom:17px;
+
+    width:min(370px,calc(100vw - 34px));
 
     padding:14px 16px;
-
-    z-index:10;
 
     border:1px solid rgba(255,255,255,.11);
     border-radius:17px;
 
-    background:rgba(4,10,25,.78);
-    backdrop-filter:blur(14px);
+    background:rgba(3,9,23,.79);
+    backdrop-filter:blur(15px);
+
+    z-index:20;
 }
 
-.panelHeader{
+.statusHeader{
     display:flex;
     justify-content:space-between;
-    gap:10px;
     align-items:center;
+
+    gap:10px;
 }
 
 #stageName{
+    color:#dbeaff;
+
     font-size:11px;
     font-weight:900;
-    letter-spacing:1px;
 
-    color:#dcecff;
+    letter-spacing:.7px;
 }
 
 #nextStage{
+    color:#7085a5;
+
     font-size:9px;
-    color:#7186a6;
 }
 
-.progressTrack{
+.track{
     height:8px;
+
     margin-top:9px;
 
     overflow:hidden;
 
     border-radius:999px;
 
-    background:rgba(255,255,255,.08);
+    background:rgba(255,255,255,.075);
 }
 
 #massBar{
@@ -161,27 +176,29 @@ canvas{
 
     border-radius:inherit;
 
-    background:linear-gradient(
-        90deg,
-        #57e8ce,
-        #65bcff,
-        #b17cff
-    );
+    background:
+        linear-gradient(
+            90deg,
+            #4de5ca,
+            #67bcff,
+            #a77eff
+        );
 
-    box-shadow:0 0 15px rgba(90,220,255,.45);
+    box-shadow:0 0 16px rgba(83,219,255,.45);
 }
 
-.panelRow{
+.statusRow{
     display:flex;
     justify-content:space-between;
 
     margin-top:6px;
 
+    color:#7085a5;
+
     font-size:9px;
-    color:#7186a7;
 }
 
-.energyTitle{
+.energyHeader{
     margin-top:12px;
 }
 
@@ -189,73 +206,155 @@ canvas{
     width:100%;
     height:100%;
 
-    background:linear-gradient(
-        90deg,
-        #6fdcff,
-        #5df1cd
-    );
-
     border-radius:inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #66d9ff,
+            #59f0cc
+        );
 }
 
-.controls{
-    margin-top:9px;
+.help{
+    margin-top:8px;
+
+    color:#607695;
 
     font-size:9px;
-    line-height:1.5;
-
-    color:#657a99;
+    line-height:1.55;
 }
 
-/* ===========================
-   ENEMY PANEL
-=========================== */
+/* ==============================
+   RIGHT THREAT PANEL
+============================== */
 
-.enemyPanel{
+.threatPanel{
     position:fixed;
-    right:18px;
-    bottom:18px;
 
-    width:210px;
+    right:17px;
+    bottom:17px;
 
-    padding:12px;
+    width:220px;
+
+    padding:13px;
 
     border:1px solid rgba(255,255,255,.1);
-    border-radius:15px;
+    border-radius:16px;
 
-    background:rgba(4,10,25,.72);
-    backdrop-filter:blur(12px);
+    background:rgba(3,9,23,.76);
+    backdrop-filter:blur(14px);
 
-    z-index:10;
+    z-index:20;
 }
 
-.enemyPanel small{
-    color:#7188aa;
+.threatPanel small{
+    color:#7187a8;
+
     font-size:8px;
-    letter-spacing:1px;
+    font-weight:900;
+
+    letter-spacing:1.2px;
 }
 
-#enemyLevel{
+#threat{
     display:block;
 
     margin-top:4px;
 
+    color:#ff95aa;
+
     font-size:11px;
-    color:#ff9eac;
 }
 
-.enemyHint{
+#threatInfo{
     margin-top:5px;
 
-    color:#667d9f;
+    color:#667b9a;
 
     font-size:9px;
-    line-height:1.4;
+    line-height:1.45;
 }
 
-/* ===========================
+/* ==============================
+   SPECIAL EVENT
+============================== */
+
+.specialEvent{
+    position:fixed;
+
+    top:91px;
+    left:50%;
+
+    transform:translateX(-50%) translateY(-10px);
+
+    padding:9px 15px;
+
+    border:1px solid rgba(238,174,255,.25);
+    border-radius:999px;
+
+    background:rgba(22,8,38,.82);
+
+    color:#efc2ff;
+
+    font-size:10px;
+    font-weight:900;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.25s;
+
+    z-index:30;
+}
+
+.specialEvent.show{
+    opacity:1;
+
+    transform:translateX(-50%) translateY(0);
+}
+
+/* ==============================
+   TOAST
+============================== */
+
+.toast{
+    position:fixed;
+
+    top:125px;
+    left:50%;
+
+    transform:translateX(-50%) translateY(-8px);
+
+    padding:8px 14px;
+
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:999px;
+
+    background:rgba(4,12,29,.9);
+
+    font-size:10px;
+    font-weight:850;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.2s;
+
+    z-index:30;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:translateX(-50%) translateY(0);
+}
+
+/* ==============================
    OVERLAY
-=========================== */
+============================== */
 
 .overlay{
     position:fixed;
@@ -267,16 +366,16 @@ canvas{
 
     padding:20px;
 
-    z-index:30;
-
     background:
         radial-gradient(
             circle at center,
-            rgba(20,55,83,.28),
-            rgba(1,3,10,.8)
+            rgba(17,47,76,.3),
+            rgba(1,3,10,.83)
         );
 
     backdrop-filter:blur(8px);
+
+    z-index:50;
 }
 
 .overlay.hidden{
@@ -284,12 +383,12 @@ canvas{
 }
 
 .card{
-    width:min(650px,100%);
+    width:min(690px,100%);
     max-height:93vh;
 
     overflow-y:auto;
 
-    padding:30px;
+    padding:29px;
 
     border:1px solid rgba(255,255,255,.12);
     border-radius:27px;
@@ -298,22 +397,24 @@ canvas{
         linear-gradient(
             145deg,
             rgba(13,25,49,.97),
-            rgba(4,10,24,.98)
+            rgba(4,9,23,.985)
         );
 
-    box-shadow:0 40px 100px rgba(0,0,0,.55);
+    box-shadow:
+        0 40px 110px rgba(0,0,0,.58);
 }
 
 .eyebrow{
-    color:#66ead5;
+    color:#64ead3;
 
     font-size:9px;
     font-weight:900;
+
     letter-spacing:3px;
 }
 
 h1{
-    margin:8px 0 10px;
+    margin:8px 0 11px;
 
     font-size:clamp(38px,7vw,68px);
     line-height:.91;
@@ -322,75 +423,92 @@ h1{
 }
 
 h1 span{
-    color:#6bead6;
+    color:#67e9d4;
 }
 
 .description{
-    color:#96aac5;
+    color:#98abc5;
 
     font-size:12px;
-    line-height:1.6;
+    line-height:1.65;
 }
 
-/* Evolution road */
+.scienceNote{
+    margin:13px 0;
 
-.evolutionRoad{
+    padding:10px 12px;
+
+    border-left:2px solid rgba(105,201,255,.6);
+
+    background:rgba(90,170,255,.055);
+
+    color:#778dab;
+
+    font-size:9px;
+    line-height:1.55;
+}
+
+.evolutionGrid{
     display:grid;
+
     grid-template-columns:repeat(5,1fr);
+
     gap:5px;
 
     margin:17px 0;
 }
 
-.evoItem{
+.evo{
     padding:8px 4px;
 
-    border:1px solid rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.065);
     border-radius:9px;
 
     text-align:center;
 
-    background:rgba(255,255,255,.03);
+    background:rgba(255,255,255,.028);
 }
 
-.evoItem .icon{
-    font-size:18px;
+.evo .icon{
+    font-size:17px;
 }
 
-.evoItem b{
+.evo b{
     display:block;
 
     margin-top:3px;
 
-    font-size:7px;
+    color:#c9d8eb;
 
-    color:#cad9ec;
+    font-size:7px;
 }
 
-.evoItem small{
+.evo small{
     display:block;
 
-    color:#637896;
+    margin-top:2px;
+
+    color:#617593;
 
     font-size:6px;
 }
 
-/* Name */
-
-label{
+.playerLabel{
     display:block;
 
-    color:#788eae;
+    color:#758baa;
 
     font-size:9px;
-    font-weight:800;
+    font-weight:900;
+
     letter-spacing:1px;
 }
 
 #playerName{
     width:100%;
 
-    margin:6px 0 11px;
+    margin-top:6px;
+    margin-bottom:11px;
 
     padding:12px 13px;
 
@@ -414,11 +532,12 @@ label{
 
     cursor:pointer;
 
-    background:linear-gradient(
-        90deg,
-        #56e4ca,
-        #6ac8ff
-    );
+    background:
+        linear-gradient(
+            90deg,
+            #53e2c8,
+            #69c7ff
+        );
 
     color:#03141a;
 
@@ -429,84 +548,57 @@ label{
 .rankingTitle{
     margin-top:18px;
 
-    color:#7086a8;
+    color:#7085a5;
 
     font-size:8px;
     font-weight:900;
+
     letter-spacing:2px;
 }
 
 #ranking{
-    padding:0;
     margin:6px 0 0;
+    padding:0;
 
     list-style:none;
 }
 
 #ranking li{
     display:grid;
+
     grid-template-columns:35px 1fr auto;
 
     padding:7px 2px;
 
     border-bottom:1px solid rgba(255,255,255,.05);
 
-    font-size:10px;
+    color:#9caec6;
 
-    color:#9caec8;
+    font-size:10px;
 }
 
-.scoreText{
-    color:#fff;
+.rankMass{
+    color:white;
     font-weight:800;
 }
 
-/* ===========================
-   TOAST
-=========================== */
-
-.toast{
-    position:fixed;
-
-    top:94px;
-    left:50%;
-
-    transform:translate(-50%,-8px);
-
-    padding:8px 14px;
-
-    border:1px solid rgba(255,255,255,.12);
-    border-radius:999px;
-
-    background:rgba(5,14,31,.9);
-
-    font-size:10px;
-    font-weight:800;
-
-    opacity:0;
-
-    transition:.2s;
-
-    pointer-events:none;
-
-    z-index:20;
-}
-
-.toast.show{
-    opacity:1;
-    transform:translate(-50%,0);
-}
+/* ==============================
+   RESPONSIVE
+============================== */
 
 @media(max-width:760px){
 
     .hud{
         width:calc(100% - 12px);
+
         top:6px;
     }
 
     .hudBox{
-        min-width:0;
         flex:1;
+
+        min-width:0;
+
         padding:5px 2px;
     }
 
@@ -515,24 +607,28 @@ label{
     }
 
     .hudBox strong{
-        font-size:10px;
+        font-size:9px;
     }
 
     #stage{
-        font-size:7px;
+        font-size:6px;
     }
 
-    .leftPanel{
+    .statusPanel{
         left:8px;
         bottom:8px;
+
         width:235px;
+
         padding:10px;
     }
 
-    .enemyPanel{
+    .threatPanel{
         right:8px;
         bottom:8px;
-        width:140px;
+
+        width:145px;
+
         padding:9px;
     }
 
@@ -540,7 +636,7 @@ label{
         padding:21px;
     }
 
-    .evolutionRoad{
+    .evolutionGrid{
         grid-template-columns:repeat(5,1fr);
     }
 }
@@ -552,8 +648,6 @@ label{
 
 <canvas id="canvas"></canvas>
 
-
-<!-- HUD -->
 
 <div class="hud">
 
@@ -590,11 +684,9 @@ label{
 </div>
 
 
-<!-- LEFT PANEL -->
+<div class="statusPanel">
 
-<div class="leftPanel">
-
-    <div class="panelHeader">
+    <div class="statusHeader">
 
         <span id="stageName">
             🪨 ROCKY PLANET
@@ -607,12 +699,12 @@ label{
     </div>
 
 
-    <div class="progressTrack">
+    <div class="track">
         <div id="massBar"></div>
     </div>
 
 
-    <div class="panelRow">
+    <div class="statusRow">
 
         <span id="massText">
             0 MASS
@@ -625,9 +717,11 @@ label{
     </div>
 
 
-    <div class="panelRow energyTitle">
+    <div class="statusRow energyHeader">
 
-        <span>REPULSE ENERGY</span>
+        <span>
+            REPULSE ENERGY
+        </span>
 
         <span id="energyText">
             100%
@@ -636,148 +730,196 @@ label{
     </div>
 
 
-    <div class="progressTrack">
+    <div class="track">
         <div id="energyBar"></div>
     </div>
 
 
-    <div class="controls">
-
-        Move: Mouse / Touch<br>
-        Repulse: Hold Click / SPACE
-
+    <div class="help">
+        Mouse / Touch = Move<br>
+        Hold Click / SPACE = Repulse
     </div>
 
 </div>
 
 
-<!-- ENEMY PANEL -->
+<div class="threatPanel">
 
-<div class="enemyPanel">
+    <small>
+        CURRENT COSMIC THREAT
+    </small>
 
-    <small>COSMIC THREAT</small>
-
-    <strong id="enemyLevel">
-        Asteroids
+    <strong id="threat">
+        ASTEROIDS
     </strong>
 
-    <div class="enemyHint">
-        ศัตรูชนิดใหม่จะปรากฏเมื่อจักรวาลของคุณวิวัฒนาการ
+    <div id="threatInfo">
+        ศัตรูจะวิวัฒนาการตามระดับของจักรวาล
     </div>
 
 </div>
 
 
-<div id="toast" class="toast"></div>
+<div id="specialEvent"
+     class="specialEvent">
+</div>
+
+<div id="toast"
+     class="toast">
+</div>
 
 
-<!-- MENU -->
-
-<div id="overlay" class="overlay">
+<div id="overlay"
+     class="overlay">
 
     <div class="card">
 
         <div class="eyebrow">
-            COSMIC EVOLUTION
+            COSMIC SCALE EVOLUTION
         </div>
 
         <h1 id="title">
             FROM PLANET<br>
-            <span>TO UNIVERSE</span>
+            <span>TO COSMIC WEB</span>
         </h1>
 
-        <p id="description" class="description">
+        <p id="description"
+           class="description">
 
-            ดูดซับ Matter เพื่อเพิ่มมวล
-            วิวัฒนาการจากดาวเคราะห์
-            ไปสู่กาแล็กซี กระจุกกาแล็กซี
-            และ Supercluster
+            ดูดซับ Matter เพิ่มมวล
+            เอาตัวรอดจากวัตถุอันตราย
+            และขยายสเกลจากดาวเคราะห์
+            ไปจนถึงโครงสร้างขนาดใหญ่ของจักรวาล
 
         </p>
 
 
-        <div class="evolutionRoad">
+        <div class="scienceNote">
 
-            <div class="evoItem">
+            การเพิ่ม Mass ในเกมเป็นหน่วย Progression
+            ไม่ใช่มวลดาราศาสตร์จริง
+            และกาแล็กซีไม่ได้เกิดจากดาวดวงเดียวที่โตขึ้นโดยตรง
+            เส้นทางหลัง 400,000 Mass
+            ถูกออกแบบให้ได้รับแรงบันดาลใจจาก
+            morphology และการควบรวมของกาแล็กซีจริง
+
+        </div>
+
+
+        <div class="evolutionGrid">
+
+            <div class="evo">
                 <div class="icon">🪨</div>
-                <b>PLANET</b>
+                <b>ROCKY PLANET</b>
                 <small>0</small>
             </div>
 
-            <div class="evoItem">
+            <div class="evo">
                 <div class="icon">🪐</div>
                 <b>GAS GIANT</b>
                 <small>10K</small>
             </div>
 
-            <div class="evoItem">
+            <div class="evo">
                 <div class="icon">☀️</div>
                 <b>STAR</b>
                 <small>20K</small>
             </div>
 
-            <div class="evoItem">
+            <div class="evo">
                 <div class="icon">🌟</div>
                 <b>MASSIVE STAR</b>
-                <small>30K</small>
+                <small>50K</small>
             </div>
 
-            <div class="evoItem">
-                <div class="icon">🌌</div>
-                <b>SPIRAL</b>
-                <small>40K</small>
+            <div class="evo">
+                <div class="icon">🔵</div>
+                <b>SUPERGIANT</b>
+                <small>100K</small>
             </div>
 
-            <div class="evoItem">
-                <div class="icon">🌀</div>
-                <b>BARRED</b>
-                <small>60K</small>
-            </div>
-
-            <div class="evoItem">
-                <div class="icon">✨</div>
-                <b>ELLIPTICAL</b>
-                <small>80K</small>
-            </div>
-
-            <div class="evoItem">
-                <div class="icon">⭕</div>
-                <b>RING</b>
-                <small>110K</small>
-            </div>
-
-            <div class="evoItem">
-                <div class="icon">🌌</div>
-                <b>CLUSTER</b>
+            <div class="evo">
+                <div class="icon">💥</div>
+                <b>HYPERGIANT</b>
                 <small>150K</small>
             </div>
 
-            <div class="evoItem">
+            <div class="evo">
+                <div class="icon">⚫</div>
+                <b>BLACK HOLE</b>
+                <small>200K</small>
+            </div>
+
+            <div class="evo">
+                <div class="icon">🕳️</div>
+                <b>SUPER BH</b>
+                <small>300K</small>
+            </div>
+
+            <div class="evo">
+                <div class="icon">🌌</div>
+                <b>SPIRAL GALAXY</b>
+                <small>400K</small>
+            </div>
+
+            <div class="evo">
+                <div class="icon">🌀</div>
+                <b>BARRED SPIRAL</b>
+                <small>600K</small>
+            </div>
+
+            <div class="evo">
+                <div class="icon">💿</div>
+                <b>LENTICULAR</b>
+                <small>800K</small>
+            </div>
+
+            <div class="evo">
+                <div class="icon">✨</div>
+                <b>ELLIPTICAL</b>
+                <small>1.1M</small>
+            </div>
+
+            <div class="evo">
+                <div class="icon">🌌</div>
+                <b>GALAXY GROUP</b>
+                <small>1.5M</small>
+            </div>
+
+            <div class="evo">
                 <div class="icon">🌠</div>
+                <b>CLUSTER</b>
+                <small>2.2M</small>
+            </div>
+
+            <div class="evo">
+                <div class="icon">🕸️</div>
                 <b>SUPERCLUSTER</b>
-                <small>250K+</small>
+                <small>3.5M+</small>
             </div>
 
         </div>
 
 
-        <label>
+        <label class="playerLabel">
+
             PLAYER NAME
 
             <input
                 id="playerName"
                 maxlength="16"
                 placeholder="Space">
+
         </label>
 
 
         <button id="startBtn">
-            BEGIN EVOLUTION
+            BEGIN COSMIC EVOLUTION
         </button>
 
 
         <div class="rankingTitle">
-            LOCAL TOP 10 BY MASS
+            LOCAL TOP 10 — HIGHEST MASS
         </div>
 
         <ol id="ranking"></ol>
@@ -789,9 +931,9 @@ label{
 
 <script>
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
+/* ==========================================================
+   DOM
+========================================================== */
 
 const canvas =
     document.getElementById("canvas");
@@ -839,8 +981,17 @@ const energyBar =
 const energyText =
     document.getElementById("energyText");
 
-const enemyLevel =
-    document.getElementById("enemyLevel");
+const threatUI =
+    document.getElementById("threat");
+
+const threatInfo =
+    document.getElementById("threatInfo");
+
+const specialEvent =
+    document.getElementById("specialEvent");
+
+const toast =
+    document.getElementById("toast");
 
 const overlay =
     document.getElementById("overlay");
@@ -860,22 +1011,21 @@ const startBtn =
 const ranking =
     document.getElementById("ranking");
 
-const toast =
-    document.getElementById("toast");
 
-
-/* =========================================================
+/* ==========================================================
    WORLD
-========================================================= */
+========================================================== */
 
-let width;
-let height;
-let dpr;
+let width = 0;
+let height = 0;
+let dpr = 1;
+
+let backgroundStars = [];
 
 let matter = [];
 let enemies = [];
-let effects = [];
-let stars = [];
+let particles = [];
+let texts = [];
 
 let lastTime =
     performance.now();
@@ -883,9 +1033,9 @@ let lastTime =
 let toastTimer;
 
 
-/* =========================================================
-   PLAYER INPUT
-========================================================= */
+/* ==========================================================
+   INPUT
+========================================================== */
 
 const pointer = {
 
@@ -903,6 +1053,10 @@ const pointer = {
 };
 
 
+/* ==========================================================
+   PLAYER
+========================================================== */
+
 const player = {
 
     x:
@@ -919,29 +1073,29 @@ const player = {
 };
 
 
-/* =========================================================
-   GAME
-========================================================= */
+/* ==========================================================
+   GAME STATE
+========================================================== */
 
 const game = {
 
     state:
         "menu",
 
-    mass:
+    score:
         0,
 
-    score:
+    mass:
         0,
 
     combo:
         1,
 
-    comboTimer:
-        0,
-
     bestCombo:
         1,
+
+    comboTimer:
+        0,
 
     lives:
         3,
@@ -958,24 +1112,32 @@ const game = {
     invulnerable:
         0,
 
-    nextEnemy:
-        4,
-
     currentStage:
         0,
 
-    maxMass:
+    nextEnemy:
+        4,
+
+    ringEvent:
+        0,
+
+    enemiesAbsorbed:
+        0,
+
+    highestMass:
         0
 };
 
 
 const STORAGE_KEY =
-    "cosmic-evolution-ranking-v3";
+    "cosmic-evolution-science-v5";
 
 
-/* =========================================================
-   EVOLUTION
-========================================================= */
+/* ==========================================================
+   EVOLUTION STAGES
+
+   Galaxy begins at 400,000 MASS.
+========================================================== */
 
 const stages = [
 
@@ -984,19 +1146,19 @@ const stages = [
         icon:"🪨",
         name:"ROCKY PLANET",
         min:0,
-        gravityRange:270,
-        gravityPower:410,
-        radius:22
+        radius:22,
+        gravityRange:275,
+        gravityPower:420
     },
 
     {
-        id:"gas",
+        id:"gasGiant",
         icon:"🪐",
         name:"GAS GIANT",
         min:10000,
+        radius:29,
         gravityRange:330,
-        gravityPower:520,
-        radius:29
+        gravityPower:520
     },
 
     {
@@ -1004,189 +1166,300 @@ const stages = [
         icon:"☀️",
         name:"STAR",
         min:20000,
-        gravityRange:390,
-        gravityPower:680,
-        radius:33
+        radius:33,
+        gravityRange:385,
+        gravityPower:650
     },
 
     {
         id:"massiveStar",
         icon:"🌟",
         name:"MASSIVE STAR",
-        min:30000,
-        gravityRange:450,
-        gravityPower:850,
-        radius:38
+        min:50000,
+        radius:37,
+        gravityRange:425,
+        gravityPower:760
     },
 
     {
-        id:"spiral",
+        id:"blueSupergiant",
+        icon:"🔵",
+        name:"BLUE SUPERGIANT",
+        min:100000,
+        radius:41,
+        gravityRange:470,
+        gravityPower:880
+    },
+
+    {
+        id:"hypergiant",
+        icon:"💥",
+        name:"HYPERGIANT",
+        min:150000,
+        radius:45,
+        gravityRange:510,
+        gravityPower:980
+    },
+
+    {
+        id:"blackHole",
+        icon:"⚫",
+        name:"BLACK HOLE",
+        min:200000,
+        radius:37,
+        gravityRange:580,
+        gravityPower:1200
+    },
+
+    {
+        id:"superBlackHole",
+        icon:"🕳️",
+        name:"SUPERMASSIVE BLACK HOLE",
+        min:300000,
+        radius:46,
+        gravityRange:675,
+        gravityPower:1450
+    },
+
+    {
+        id:"spiralGalaxy",
         icon:"🌌",
         name:"SPIRAL GALAXY",
-        min:40000,
-        gravityRange:510,
-        gravityPower:1000,
-        radius:44
+        min:400000,
+        radius:56,
+        gravityRange:760,
+        gravityPower:1650
     },
 
     {
-        id:"barred",
+        id:"barredSpiral",
         icon:"🌀",
-        name:"BARRED SPIRAL",
-        min:60000,
-        gravityRange:570,
-        gravityPower:1180,
-        radius:49
+        name:"BARRED SPIRAL GALAXY",
+        min:600000,
+        radius:61,
+        gravityRange:830,
+        gravityPower:1850
+    },
+
+    {
+        id:"lenticular",
+        icon:"💿",
+        name:"LENTICULAR GALAXY",
+        min:800000,
+        radius:65,
+        gravityRange:900,
+        gravityPower:2050
     },
 
     {
         id:"elliptical",
         icon:"✨",
         name:"ELLIPTICAL GALAXY",
-        min:80000,
-        gravityRange:640,
-        gravityPower:1350,
-        radius:55
+        min:1100000,
+        radius:70,
+        gravityRange:980,
+        gravityPower:2250
     },
 
     {
-        id:"ring",
-        icon:"⭕",
-        name:"RING GALAXY",
-        min:110000,
-        gravityRange:720,
-        gravityPower:1550,
-        radius:60
-    },
-
-    {
-        id:"cluster",
+        id:"galaxyGroup",
         icon:"🌌",
+        name:"GALAXY GROUP",
+        min:1500000,
+        radius:78,
+        gravityRange:1100,
+        gravityPower:2500
+    },
+
+    {
+        id:"galaxyCluster",
+        icon:"🌠",
         name:"GALAXY CLUSTER",
-        min:150000,
-        gravityRange:820,
-        gravityPower:1800,
-        radius:68
+        min:2200000,
+        radius:88,
+        gravityRange:1250,
+        gravityPower:2900
     },
 
     {
         id:"supercluster",
-        icon:"🌠",
+        icon:"🕸️",
         name:"SUPERCLUSTER",
-        min:250000,
-        gravityRange:950,
-        gravityPower:2200,
-        radius:78
+        min:3500000,
+        radius:100,
+        gravityRange:1450,
+        gravityPower:3400
+    },
+
+    {
+        id:"cosmicWeb",
+        icon:"🌐",
+        name:"COSMIC WEB",
+        min:5000000,
+        radius:115,
+        gravityRange:1700,
+        gravityPower:4000
     }
 ];
 
 
-function getStageIndex(){
+/* ==========================================================
+   ENEMY TYPES
+========================================================== */
 
-    let index = 0;
+const enemyData = {
 
-    for(
-        let i = 0;
-        i < stages.length;
-        i++
-    ){
+    asteroid:{
+        name:"ASTEROID",
+        color:"#a3917c",
+        radius:12,
+        speed:55,
+        unlockWave:1,
+        unlockStage:0,
+        absorbStage:1,
+        reward:1000
+    },
 
-        if(
-            game.mass >=
-            stages[i].min
-        ){
+    comet:{
+        name:"COMET",
+        color:"#bfeaff",
+        radius:9,
+        speed:180,
+        unlockWave:2,
+        unlockStage:0,
+        absorbStage:2,
+        reward:1800
+    },
 
-            index = i;
-        }
+    roguePlanet:{
+        name:"ROGUE PLANET",
+        color:"#bc7369",
+        radius:20,
+        speed:45,
+        unlockWave:3,
+        unlockStage:1,
+        absorbStage:3,
+        reward:5000
+    },
+
+    neutronStar:{
+        name:"NEUTRON STAR",
+        color:"#a8d3ff",
+        radius:14,
+        speed:70,
+        unlockWave:4,
+        unlockStage:2,
+        absorbStage:5,
+        reward:12000
+    },
+
+    magnetar:{
+        name:"MAGNETAR",
+        color:"#9d8dff",
+        radius:15,
+        speed:75,
+        unlockWave:5,
+        unlockStage:3,
+        absorbStage:6,
+        reward:18000
+    },
+
+    blackHole:{
+        name:"STELLAR BLACK HOLE",
+        color:"#ad6aff",
+        radius:23,
+        speed:40,
+        unlockWave:6,
+        unlockStage:4,
+        absorbStage:7,
+        reward:40000
+    },
+
+    wanderingBH:{
+        name:"WANDERING BLACK HOLE",
+        color:"#7d69ff",
+        radius:29,
+        speed:52,
+        unlockWave:8,
+        unlockStage:6,
+        absorbStage:8,
+        reward:65000
+    },
+
+    dwarfGalaxy:{
+        name:"DWARF GALAXY",
+        color:"#7fc5ff",
+        radius:31,
+        speed:36,
+        unlockWave:10,
+        unlockStage:8,
+        absorbStage:10,
+        reward:90000
+    },
+
+    rivalGalaxy:{
+        name:"RIVAL GALAXY",
+        color:"#f18ad9",
+        radius:42,
+        speed:32,
+        unlockWave:12,
+        unlockStage:8,
+        absorbStage:11,
+        reward:180000
+    },
+
+    quasar:{
+        name:"QUASAR",
+        color:"#d5b2ff",
+        radius:35,
+        speed:23,
+        unlockWave:14,
+        unlockStage:9,
+        absorbStage:12,
+        reward:260000
+    },
+
+    rivalGroup:{
+        name:"RIVAL GALAXY GROUP",
+        color:"#ffb1d9",
+        radius:55,
+        speed:24,
+        unlockWave:16,
+        unlockStage:12,
+        absorbStage:13,
+        reward:400000
+    },
+
+    rivalCluster:{
+        name:"RIVAL GALAXY CLUSTER",
+        color:"#ff9ab7",
+        radius:70,
+        speed:19,
+        unlockWave:20,
+        unlockStage:13,
+        absorbStage:14,
+        reward:700000
     }
-
-    return index;
-}
+};
 
 
-function currentStage(){
+/* ==========================================================
+   UTILS
+========================================================== */
 
-    return stages[
-        game.currentStage
-    ];
-}
-
-
-function updateEvolution(){
-
-    const index =
-        getStageIndex();
-
-
-    if(
-        index ===
-        game.currentStage
-    ){
-        return;
-    }
-
-
-    game.currentStage =
-        index;
-
-
-    const s =
-        currentStage();
-
-
-    showToast(
-        "✦ EVOLUTION — " +
-        s.name
-    );
-
-
-    cosmicExplosion(
-        player.x,
-        player.y,
-        "#ffffff",
-        100
-    );
-}
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function clamp(
-    value,
-    min,
-    max
-){
+function clamp(v,min,max){
 
     return Math.max(
         min,
         Math.min(
             max,
-            value
+            v
         )
     );
 }
 
 
-function dist(
-    x1,
-    y1,
-    x2,
-    y2
-){
-
-    return Math.hypot(
-        x2 - x1,
-        y2 - y1
-    );
-}
-
-
-function random(
-    min,
-    max
-){
+function random(min,max){
 
     return (
         min +
@@ -1199,9 +1472,146 @@ function random(
 }
 
 
-/* =========================================================
+function distance(
+    x1,y1,
+    x2,y2
+){
+
+    return Math.hypot(
+        x2-x1,
+        y2-y1
+    );
+}
+
+
+function hash(n){
+
+    return (
+        Math.sin(
+            n * 12.9898
+        ) *
+        43758.5453
+    ) % 1;
+}
+
+
+function pseudo(n){
+
+    return Math.abs(
+        hash(n)
+    );
+}
+
+
+/* ==========================================================
+   STAGE FUNCTIONS
+========================================================== */
+
+function getStageIndex(){
+
+    let index = 0;
+
+
+    for(
+        let i=0;
+        i<stages.length;
+        i++
+    ){
+
+        if(
+            game.mass >=
+            stages[i].min
+        ){
+
+            index = i;
+        }
+    }
+
+
+    return index;
+}
+
+
+function getStage(){
+
+    return stages[
+        game.currentStage
+    ];
+}
+
+
+function updateEvolution(){
+
+    const newIndex =
+        getStageIndex();
+
+
+    if(
+        newIndex ===
+        game.currentStage
+    ){
+
+        return;
+    }
+
+
+    game.currentStage =
+        newIndex;
+
+
+    const stage =
+        getStage();
+
+
+    showToast(
+        "✦ EVOLUTION — " +
+        stage.name
+    );
+
+
+    explosion(
+        player.x,
+        player.y,
+        "#ffffff",
+        100
+    );
+
+
+    for(
+        let i=0;
+        i<4;
+        i++
+    ){
+
+        texts.push({
+
+            x:player.x,
+
+            y:
+                player.y -
+                30 -
+                i*11,
+
+            text:
+                i === 0
+                ? stage.name
+                : "",
+
+            color:"#ffffff",
+
+            life:
+                1.7
+        });
+    }
+
+
+    updateThreat();
+}
+
+
+/* ==========================================================
    RESIZE
-========================================================= */
+========================================================== */
 
 function resize(){
 
@@ -1220,30 +1630,29 @@ function resize(){
 
 
     canvas.width =
-        width * dpr;
+        Math.round(
+            width*dpr
+        );
 
     canvas.height =
-        height * dpr;
+        Math.round(
+            height*dpr
+        );
 
 
     canvas.style.width =
-        width + "px";
+        width+"px";
 
     canvas.style.height =
-        height + "px";
+        height+"px";
 
 
     ctx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
+        dpr,0,0,dpr,0,0
     );
 
 
-    createStars();
+    createBackgroundStars();
 }
 
 
@@ -1256,94 +1665,227 @@ addEventListener(
 resize();
 
 
-/* =========================================================
-   STAR FIELD
-========================================================= */
+/* ==========================================================
+   BACKGROUND
+========================================================== */
 
-function createStars(){
+function createBackgroundStars(){
 
-    stars = [];
+    backgroundStars = [];
 
 
     const count =
         Math.floor(
-            width *
-            height /
-            6500
+            width*height /
+            6000
         );
 
 
     for(
-        let i = 0;
-        i < count;
+        let i=0;
+        i<count;
         i++
     ){
 
-        stars.push({
+        backgroundStars.push({
 
             x:
-                Math.random() *
-                width,
+                Math.random()*width,
 
             y:
-                Math.random() *
-                height,
+                Math.random()*height,
 
             size:
-                random(
-                    .4,
-                    1.7
-                ),
+                random(.3,1.8),
 
             alpha:
-                random(
-                    .15,
-                    .65
-                ),
+                random(.13,.65),
 
             phase:
-                Math.random() *
-                Math.PI *
-                2
+                random(
+                    0,
+                    Math.PI*2
+                )
         });
     }
 }
 
 
-/* =========================================================
+function drawBackground(){
+
+    ctx.fillStyle =
+        "rgba(1,3,10,.25)";
+
+
+    ctx.fillRect(
+        0,0,width,height
+    );
+
+
+    const spaceGlow =
+        ctx.createRadialGradient(
+            width*.5,
+            height*.45,
+            50,
+            width*.5,
+            height*.45,
+            Math.max(
+                width,
+                height
+            )*.72
+        );
+
+
+    spaceGlow.addColorStop(
+        0,
+        "rgba(31,60,99,.055)"
+    );
+
+
+    spaceGlow.addColorStop(
+        .55,
+        "rgba(30,22,80,.025)"
+    );
+
+
+    spaceGlow.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+
+    ctx.fillStyle =
+        spaceGlow;
+
+
+    ctx.fillRect(
+        0,0,width,height
+    );
+
+
+    for(
+        const star
+        of backgroundStars
+    ){
+
+        const alpha =
+            star.alpha *
+            (
+                .75 +
+                Math.sin(
+                    game.time*1.25 +
+                    star.phase
+                )*.25
+            );
+
+
+        ctx.globalAlpha =
+            alpha;
+
+
+        ctx.fillStyle =
+            "#dcecff";
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            star.x,
+            star.y,
+            star.size,
+            0,
+            Math.PI*2
+        );
+
+
+        ctx.fill();
+    }
+
+
+    ctx.globalAlpha = 1;
+}
+
+
+/* ==========================================================
    MATTER
-========================================================= */
+========================================================== */
 
 class Matter{
 
     constructor(){
 
-        this.reset();
+        this.reset(
+            true
+        );
     }
 
 
-    reset(){
+    reset(initial=false){
 
-        this.x =
-            Math.random() *
-            width;
+        if(initial){
 
-        this.y =
-            Math.random() *
-            height;
+            this.x =
+                Math.random()*width;
+
+            this.y =
+                Math.random()*height;
+        }
+
+        else{
+
+            const side =
+                Math.floor(
+                    Math.random()*4
+                );
+
+
+            if(side===0){
+
+                this.x =
+                    Math.random()*width;
+
+                this.y =
+                    -30;
+            }
+
+
+            if(side===1){
+
+                this.x =
+                    width+30;
+
+                this.y =
+                    Math.random()*height;
+            }
+
+
+            if(side===2){
+
+                this.x =
+                    Math.random()*width;
+
+                this.y =
+                    height+30;
+            }
+
+
+            if(side===3){
+
+                this.x =
+                    -30;
+
+                this.y =
+                    Math.random()*height;
+            }
+        }
 
 
         this.vx =
-            random(
-                -25,
-                25
-            );
+            random(-25,25);
 
         this.vy =
-            random(
-                -25,
-                25
-            );
+            random(-25,25);
 
 
         const roll =
@@ -1351,40 +1893,40 @@ class Matter{
 
 
         if(
-            roll < .055
+            roll < .045
         ){
 
             this.type =
                 "gold";
 
-            this.massValue =
-                1000;
+            this.mass =
+                2500;
 
-            this.scoreValue =
-                100;
+            this.score =
+                140;
 
             this.color =
-                "#ffe16b";
+                "#ffe068";
 
             this.radius =
-                4;
+                4.2;
         }
 
         else if(
-            roll < .22
+            roll < .20
         ){
 
             this.type =
                 "blue";
 
-            this.massValue =
-                250;
+            this.mass =
+                650;
 
-            this.scoreValue =
-                25;
+            this.score =
+                35;
 
             this.color =
-                "#69baff";
+                "#68bcff";
 
             this.radius =
                 3.2;
@@ -1395,14 +1937,14 @@ class Matter{
             this.type =
                 "normal";
 
-            this.massValue =
-                100;
+            this.mass =
+                200;
 
-            this.scoreValue =
+            this.score =
                 10;
 
             this.color =
-                "#66efd0";
+                "#65f1cf";
 
             this.radius =
                 2.7;
@@ -1410,18 +1952,17 @@ class Matter{
 
 
         this.phase =
-            Math.random() *
-            Math.PI *
-            2;
+            random(
+                0,
+                Math.PI*2
+            );
     }
 
 
-    update(
-        dt
-    ){
+    update(dt){
 
-        const s =
-            currentStage();
+        const stage =
+            getStage();
 
 
         const dx =
@@ -1433,7 +1974,7 @@ class Matter{
             this.y;
 
 
-        const distance =
+        const d =
             Math.hypot(
                 dx,
                 dy
@@ -1441,31 +1982,29 @@ class Matter{
 
 
         if(
-            distance <
-            s.gravityRange
+            d <
+            stage.gravityRange
         ){
 
             const falloff =
                 1 -
-                distance /
-                s.gravityRange;
+                d /
+                stage.gravityRange;
 
 
             const force =
-                s.gravityPower *
+                stage.gravityPower *
                 falloff;
 
 
             this.vx +=
-                dx /
-                distance *
+                dx/d *
                 force *
                 dt;
 
 
             this.vy +=
-                dy /
-                distance *
+                dy/d *
                 force *
                 dt;
         }
@@ -1474,34 +2013,31 @@ class Matter{
         if(
             pointer.down &&
             game.energy > 0 &&
-            distance < 240
+            d < 255
         ){
 
             const force =
                 (
                     1 -
-                    distance /
-                    240
+                    d/255
                 ) *
-                1150;
+                1200;
 
 
             this.vx -=
-                dx /
-                distance *
+                dx/d *
                 force *
                 dt;
 
 
             this.vy -=
-                dy /
-                distance *
+                dy/d *
                 force *
                 dt;
         }
 
 
-        /* some enemies steal matter */
+        /* Enemy gravity */
 
         for(
             const enemy
@@ -1509,21 +2045,8 @@ class Matter{
         ){
 
             if(
-                !enemy.alive
-            ){
-                continue;
-            }
-
-
-            if(
-                enemy.type !==
-                    "blackhole" &&
-                enemy.type !==
-                    "dwarfGalaxy" &&
-                enemy.type !==
-                    "rivalGalaxy" &&
-                enemy.type !==
-                    "quasar"
+                !enemy.alive ||
+                !enemy.hasGravity
             ){
                 continue;
             }
@@ -1547,34 +2070,30 @@ class Matter{
 
             const range =
                 enemy.radius *
-                5;
+                enemy.gravityRange;
 
 
             if(
-                ed <
-                range
+                ed < range
             ){
 
-                const power =
+                const force =
                     (
                         1 -
-                        ed /
-                        range
+                        ed/range
                     ) *
-                    360;
+                    enemy.gravityPower;
 
 
                 this.vx +=
-                    ex /
-                    ed *
-                    power *
+                    ex/ed *
+                    force *
                     dt;
 
 
                 this.vy +=
-                    ey /
-                    ed *
-                    power *
+                    ey/ed *
+                    force *
                     dt;
             }
         }
@@ -1582,21 +2101,19 @@ class Matter{
 
         this.vx +=
             Math.sin(
-                game.time *
-                1.5 +
+                game.time*1.7 +
                 this.phase
             ) *
-            4 *
+            3 *
             dt;
 
 
         this.vy +=
             Math.cos(
-                game.time *
-                1.7 +
+                game.time*1.4 +
                 this.phase
             ) *
-            4 *
+            3 *
             dt;
 
 
@@ -1612,60 +2129,39 @@ class Matter{
 
         this.vx *=
             Math.pow(
-                .995,
-                dt *
-                60
+                .996,
+                dt*60
             );
 
 
         this.vy *=
             Math.pow(
-                .995,
-                dt *
-                60
+                .996,
+                dt*60
             );
 
 
-        if(
-            this.x <
-            -30
-        ){
-            this.x =
-                width + 30;
+        if(this.x<-40){
+            this.x=width+40;
+        }
+
+        if(this.x>width+40){
+            this.x=-40;
+        }
+
+        if(this.y<-40){
+            this.y=height+40;
+        }
+
+        if(this.y>height+40){
+            this.y=-40;
         }
 
 
         if(
-            this.x >
-            width + 30
-        ){
-            this.x =
-                -30;
-        }
-
-
-        if(
-            this.y <
-            -30
-        ){
-            this.y =
-                height + 30;
-        }
-
-
-        if(
-            this.y >
-            height + 30
-        ){
-            this.y =
-                -30;
-        }
-
-
-        if(
-            distance <
-            s.radius +
-            10 &&
+            d <
+            stage.radius +
+            11 &&
             !pointer.down
         ){
 
@@ -1681,16 +2177,15 @@ class Matter{
         ctx.save();
 
 
-        ctx.fillStyle =
-            this.color;
-
-
         ctx.shadowColor =
             this.color;
 
-
         ctx.shadowBlur =
-            10;
+            11;
+
+
+        ctx.fillStyle =
+            this.color;
 
 
         ctx.beginPath();
@@ -1701,8 +2196,26 @@ class Matter{
             this.y,
             this.radius,
             0,
-            Math.PI *
-            2
+            Math.PI*2
+        );
+
+
+        ctx.fill();
+
+
+        ctx.globalAlpha =
+            .16;
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            this.x,
+            this.y,
+            this.radius*3.6,
+            0,
+            Math.PI*2
         );
 
 
@@ -1714,24 +2227,34 @@ class Matter{
 }
 
 
-function collectMatter(
-    item
-){
+function collectMatter(item){
+
+    const scale =
+        1 +
+        game.currentStage *
+        .10;
+
+
+    const massGain =
+        Math.round(
+            item.mass *
+            scale
+        );
+
 
     game.mass +=
-        item.massValue;
+        massGain;
 
 
     game.score +=
-        item.scoreValue *
+        item.score *
         game.combo;
 
 
     game.combo =
         Math.min(
-            20,
-            game.combo +
-            1
+            25,
+            game.combo+1
         );
 
 
@@ -1743,25 +2266,40 @@ function collectMatter(
 
 
     game.comboTimer =
-        2.5;
+        2.4;
 
 
-    game.maxMass =
+    game.highestMass =
         Math.max(
-            game.maxMass,
+            game.highestMass,
             game.mass
         );
 
 
-    cosmicExplosion(
+    explosion(
         item.x,
         item.y,
         item.color,
-        item.type ===
-            "gold"
-            ? 14
+        item.type==="gold"
+            ? 16
             : 5
     );
+
+
+    if(
+        item.type ===
+        "gold"
+    ){
+
+        addText(
+            item.x,
+            item.y,
+            "+"+
+            massGain.toLocaleString()+
+            " MASS",
+            item.color
+        );
+    }
 
 
     item.reset();
@@ -1771,128 +2309,42 @@ function collectMatter(
 }
 
 
-/* =========================================================
-   ENEMIES
-========================================================= */
-
-const enemyInfo = {
-
-    asteroid:{
-        name:"Asteroid",
-        color:"#9b8d7d",
-        radius:13,
-        speed:55,
-        damage:1,
-        absorbStage:1,
-        reward:300
-    },
-
-    comet:{
-        name:"Comet",
-        color:"#bceaff",
-        radius:10,
-        speed:160,
-        damage:1,
-        absorbStage:2,
-        reward:500
-    },
-
-    roguePlanet:{
-        name:"Rogue Planet",
-        color:"#9b6b62",
-        radius:20,
-        speed:48,
-        damage:1,
-        absorbStage:3,
-        reward:1500
-    },
-
-    neutron:{
-        name:"Neutron Star",
-        color:"#a6cfff",
-        radius:15,
-        speed:70,
-        damage:1,
-        absorbStage:4,
-        reward:3000
-    },
-
-    blackhole:{
-        name:"Black Hole",
-        color:"#b070ff",
-        radius:23,
-        speed:42,
-        damage:1,
-        absorbStage:6,
-        reward:6000
-    },
-
-    dwarfGalaxy:{
-        name:"Dwarf Galaxy",
-        color:"#88c5ff",
-        radius:28,
-        speed:38,
-        damage:1,
-        absorbStage:7,
-        reward:9000
-    },
-
-    rivalGalaxy:{
-        name:"Rival Galaxy",
-        color:"#ff8bd2",
-        radius:38,
-        speed:34,
-        damage:1,
-        absorbStage:8,
-        reward:18000
-    },
-
-    quasar:{
-        name:"Quasar",
-        color:"#bfa5ff",
-        radius:32,
-        speed:25,
-        damage:1,
-        absorbStage:9,
-        reward:30000
-    }
-};
-
+/* ==========================================================
+   ENEMY
+========================================================== */
 
 class Enemy{
 
-    constructor(
-        type
-    ){
+    constructor(type){
 
         this.type =
             type;
 
 
         const info =
-            enemyInfo[
+            enemyData[
                 type
             ];
 
 
-        this.radius =
-            info.radius *
-            random(
-                .9,
-                1.15
-            );
-
+        this.name =
+            info.name;
 
         this.color =
             info.color;
 
+        this.radius =
+            info.radius *
+            random(.9,1.13);
 
         this.speed =
             info.speed;
 
+        this.reward =
+            info.reward;
 
-        this.damage =
-            info.damage;
+        this.absorbStage =
+            info.absorbStage;
 
 
         this.alive =
@@ -1900,19 +2352,54 @@ class Enemy{
 
 
         this.rotation =
-            Math.random() *
-            Math.PI *
-            2;
-
-
-        this.rotationSpeed =
             random(
-                -.8,
-                .8
+                0,
+                Math.PI*2
             );
 
 
-        this.spawnEdge();
+        this.rotationSpeed =
+            random(-.9,.9);
+
+
+        this.hasGravity =
+            [
+                "neutronStar",
+                "magnetar",
+                "blackHole",
+                "wanderingBH",
+                "dwarfGalaxy",
+                "rivalGalaxy",
+                "quasar",
+                "rivalGroup",
+                "rivalCluster"
+            ].includes(
+                type
+            );
+
+
+        this.gravityRange =
+            type.includes("Galaxy") ||
+            type.includes("Cluster")
+                ? 6
+                : 5;
+
+
+        this.gravityPower =
+            (
+                type==="blackHole" ||
+                type==="wanderingBH"
+            )
+                ? 520
+                :
+                (
+                    type==="quasar"
+                        ? 580
+                        : 280
+                );
+
+
+        this.spawn();
 
 
         if(
@@ -1930,110 +2417,76 @@ class Enemy{
 
 
             this.vx =
-                Math.cos(
-                    angle
-                ) *
+                Math.cos(angle) *
                 this.speed;
 
 
             this.vy =
-                Math.sin(
-                    angle
-                ) *
+                Math.sin(angle) *
                 this.speed;
         }
 
         else{
 
             this.vx =
-                random(
-                    -10,
-                    10
-                );
-
+                random(-8,8);
 
             this.vy =
-                random(
-                    -10,
-                    10
-                );
+                random(-8,8);
         }
     }
 
 
-    spawnEdge(){
+    spawn(){
 
         const side =
             Math.floor(
-                Math.random() *
-                4
+                Math.random()*4
             );
 
 
-        if(
-            side === 0
-        ){
+        if(side===0){
 
             this.x =
-                random(
-                    0,
-                    width
-                );
+                random(0,width);
 
             this.y =
-                -60;
+                -80;
         }
 
 
-        if(
-            side === 1
-        ){
+        if(side===1){
 
             this.x =
-                width + 60;
+                width+80;
 
             this.y =
-                random(
-                    0,
-                    height
-                );
+                random(0,height);
         }
 
 
-        if(
-            side === 2
-        ){
+        if(side===2){
 
             this.x =
-                random(
-                    0,
-                    width
-                );
+                random(0,width);
 
             this.y =
-                height + 60;
+                height+80;
         }
 
 
-        if(
-            side === 3
-        ){
+        if(side===3){
 
             this.x =
-                -60;
+                -80;
 
             this.y =
-                random(
-                    0,
-                    height
-                );
+                random(0,height);
         }
     }
 
 
-    update(
-        dt
-    ){
+    update(dt){
 
         this.rotation +=
             this.rotationSpeed *
@@ -2049,7 +2502,7 @@ class Enemy{
             this.y;
 
 
-        const distance =
+        const d =
             Math.hypot(
                 dx,
                 dy
@@ -2066,30 +2519,37 @@ class Enemy{
 
 
             if(
-                this.type ===
-                "blackhole"
+                this.type==="blackHole" ||
+                this.type==="wanderingBH"
             ){
 
                 chase *=
-                    .75;
+                    .72;
+            }
+
+
+            if(
+                this.type==="quasar"
+            ){
+
+                chase *=
+                    .38;
             }
 
 
             this.vx +=
-                dx /
-                distance *
+                dx/d *
                 chase *
                 dt;
 
 
             this.vy +=
-                dy /
-                distance *
+                dy/d *
                 chase *
                 dt;
 
 
-            const velocity =
+            const speed =
                 Math.hypot(
                     this.vx,
                     this.vy
@@ -2097,53 +2557,47 @@ class Enemy{
 
 
             if(
-                velocity >
+                speed >
                 this.speed
             ){
 
                 this.vx =
-                    this.vx /
-                    velocity *
+                    this.vx/speed *
                     this.speed;
 
 
                 this.vy =
-                    this.vy /
-                    velocity *
+                    this.vy/speed *
                     this.speed;
             }
         }
 
 
-        /* Repulse enemy */
+        /* REPULSE */
 
         if(
             pointer.down &&
             game.energy > 0 &&
-            distance <
-            260
+            d < 280
         ){
 
-            const force =
+            const repel =
                 (
                     1 -
-                    distance /
-                    260
+                    d/280
                 ) *
-                600;
+                640;
 
 
             this.vx -=
-                dx /
-                distance *
-                force *
+                dx/d *
+                repel *
                 dt;
 
 
             this.vy -=
-                dy /
-                distance *
-                force *
+                dy/d *
+                repel *
                 dt;
         }
 
@@ -2165,27 +2619,44 @@ class Enemy{
             "quasar"
         ){
 
-            this.checkQuasarBeam();
+            this.quasarDamage();
         }
 
 
-        /* Player contact */
+        /* Magnetar pulse */
 
         if(
-            distance <
-            this.radius +
-            currentStage().radius
+            this.type ===
+            "magnetar"
         ){
 
-            const requiredStage =
-                enemyInfo[
-                    this.type
-                ].absorbStage;
+            if(
+                d <
+                115 &&
+                Math.sin(
+                    game.time*6
+                ) >
+                .78
+            ){
 
+                damagePlayer();
+            }
+        }
+
+
+        const collision =
+            this.radius +
+            getStage().radius;
+
+
+        if(
+            d <
+            collision
+        ){
 
             if(
                 game.currentStage >=
-                requiredStage
+                this.absorbStage
             ){
 
                 absorbEnemy(
@@ -2199,31 +2670,22 @@ class Enemy{
             damagePlayer();
 
 
-            const safe =
-                Math.max(
-                    1,
-                    distance
-                );
-
-
             this.vx -=
-                dx /
-                safe *
-                200;
+                dx/d *
+                230;
 
 
             this.vy -=
-                dy /
-                safe *
-                200;
+                dy/d *
+                230;
         }
 
 
         if(
-            this.x < -300 ||
-            this.x > width + 300 ||
-            this.y < -300 ||
-            this.y > height + 300
+            this.x < -450 ||
+            this.x > width+450 ||
+            this.y < -450 ||
+            this.y > height+450
         ){
 
             this.alive =
@@ -2232,9 +2694,9 @@ class Enemy{
     }
 
 
-    checkQuasarBeam(){
+    quasarDamage(){
 
-        const angle =
+        const beamAngle =
             this.rotation;
 
 
@@ -2247,47 +2709,40 @@ class Enemy{
             this.y;
 
 
-        const forwardX =
+        const fx =
             Math.cos(
-                angle
+                beamAngle
             );
 
-
-        const forwardY =
+        const fy =
             Math.sin(
-                angle
+                beamAngle
             );
 
 
         const projection =
-            dx *
-            forwardX +
-            dy *
-            forwardY;
+            dx*fx +
+            dy*fy;
 
 
         if(
-            projection <
-            0 ||
-            projection >
-            700
+            projection < 0 ||
+            projection > 800
         ){
+
             return;
         }
 
 
         const perpendicular =
             Math.abs(
-                dx *
-                forwardY -
-                dy *
-                forwardX
+                dx*fy -
+                dy*fx
             );
 
 
         if(
-            perpendicular <
-            12
+            perpendicular < 11
         ){
 
             damagePlayer();
@@ -2297,794 +2752,709 @@ class Enemy{
 
     draw(){
 
-        switch(
-            this.type
+        if(
+            this.type==="asteroid"
         ){
 
-            case "asteroid":
-                this.drawAsteroid();
-                break;
-
-            case "comet":
-                this.drawComet();
-                break;
-
-            case "roguePlanet":
-                this.drawPlanet();
-                break;
-
-            case "neutron":
-                this.drawNeutron();
-                break;
-
-            case "blackhole":
-                this.drawBlackHole();
-                break;
-
-            case "dwarfGalaxy":
-                this.drawGalaxy(
-                    .7
-                );
-                break;
-
-            case "rivalGalaxy":
-                this.drawGalaxy(
-                    1
-                );
-                break;
-
-            case "quasar":
-                this.drawQuasar();
-                break;
-        }
-    }
-
-
-    drawAsteroid(){
-
-        ctx.save();
-
-
-        ctx.translate(
-            this.x,
-            this.y
-        );
-
-
-        ctx.rotate(
-            this.rotation
-        );
-
-
-        ctx.fillStyle =
-            "#85766a";
-
-
-        ctx.strokeStyle =
-            "#b3a08d";
-
-
-        ctx.lineWidth =
-            1;
-
-
-        ctx.beginPath();
-
-
-        for(
-            let i = 0;
-            i < 8;
-            i++
-        ){
-
-            const a =
-                i /
-                8 *
-                Math.PI *
-                2;
-
-
-            const r =
-                this.radius *
-                random(
-                    .7,
-                    1
-                );
-
-
-            const x =
-                Math.cos(
-                    a
-                ) *
-                r;
-
-
-            const y =
-                Math.sin(
-                    a
-                ) *
-                r;
-
-
-            if(
-                i === 0
-            ){
-
-                ctx.moveTo(
-                    x,
-                    y
-                );
-            }
-
-            else{
-
-                ctx.lineTo(
-                    x,
-                    y
-                );
-            }
+            drawAsteroidEnemy(
+                this
+            );
         }
 
 
-        ctx.closePath();
-
-        ctx.fill();
-        ctx.stroke();
-
-
-        ctx.restore();
-    }
-
-
-    drawComet(){
-
-        ctx.save();
-
-
-        const speed =
-            Math.hypot(
-                this.vx,
-                this.vy
-            ) || 1;
-
-
-        const nx =
-            this.vx /
-            speed;
-
-
-        const ny =
-            this.vy /
-            speed;
-
-
-        const gradient =
-            ctx.createLinearGradient(
-                this.x,
-                this.y,
-                this.x -
-                nx *
-                100,
-                this.y -
-                ny *
-                100
-            );
-
-
-        gradient.addColorStop(
-            0,
-            "rgba(180,235,255,.8)"
-        );
-
-
-        gradient.addColorStop(
-            1,
-            "rgba(100,180,255,0)"
-        );
-
-
-        ctx.strokeStyle =
-            gradient;
-
-
-        ctx.lineWidth =
-            7;
-
-
-        ctx.beginPath();
-
-
-        ctx.moveTo(
-            this.x,
-            this.y
-        );
-
-
-        ctx.lineTo(
-            this.x -
-            nx *
-            100,
-            this.y -
-            ny *
-            100
-        );
-
-
-        ctx.stroke();
-
-
-        ctx.fillStyle =
-            "#eaffff";
-
-
-        ctx.shadowColor =
-            "#8fd8ff";
-
-
-        ctx.shadowBlur =
-            18;
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-            this.x,
-            this.y,
-            this.radius,
-            0,
-            Math.PI *
-            2
-        );
-
-
-        ctx.fill();
-
-
-        ctx.restore();
-    }
-
-
-    drawPlanet(){
-
-        ctx.save();
-
-
-        ctx.translate(
-            this.x,
-            this.y
-        );
-
-
-        const g =
-            ctx.createRadialGradient(
-                -7,
-                -7,
-                2,
-                0,
-                0,
-                this.radius
-            );
-
-
-        g.addColorStop(
-            0,
-            "#c79588"
-        );
-
-
-        g.addColorStop(
-            1,
-            "#4c2530"
-        );
-
-
-        ctx.fillStyle =
-            g;
-
-
-        ctx.shadowColor =
-            "#a84d60";
-
-
-        ctx.shadowBlur =
-            12;
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-            0,
-            0,
-            this.radius,
-            0,
-            Math.PI *
-            2
-        );
-
-
-        ctx.fill();
-
-
-        ctx.restore();
-    }
-
-
-    drawNeutron(){
-
-        ctx.save();
-
-
-        ctx.translate(
-            this.x,
-            this.y
-        );
-
-
-        ctx.shadowColor =
-            "#8cc5ff";
-
-
-        ctx.shadowBlur =
-            28;
-
-
-        ctx.fillStyle =
-            "#ffffff";
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-            0,
-            0,
-            this.radius *
-            .55,
-            0,
-            Math.PI *
-            2
-        );
-
-
-        ctx.fill();
-
-
-        ctx.strokeStyle =
-            "rgba(130,190,255,.65)";
-
-
-        ctx.lineWidth =
-            3;
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-            0,
-            0,
-            this.radius *
-            1.4,
-            0,
-            Math.PI *
-            2
-        );
-
-
-        ctx.stroke();
-
-
-        ctx.rotate(
-            this.rotation
-        );
-
-
-        ctx.strokeStyle =
-            "rgba(190,230,255,.8)";
-
-
-        ctx.beginPath();
-
-
-        ctx.moveTo(
-            0,
-            -60
-        );
-
-
-        ctx.lineTo(
-            0,
-            60
-        );
-
-
-        ctx.stroke();
-
-
-        ctx.restore();
-    }
-
-
-    drawBlackHole(){
-
-        ctx.save();
-
-
-        ctx.translate(
-            this.x,
-            this.y
-        );
-
-
-        ctx.rotate(
-            this.rotation
-        );
-
-
-        ctx.shadowColor =
-            "#a264ff";
-
-
-        ctx.shadowBlur =
-            24;
-
-
-        ctx.strokeStyle =
-            "#a36cff";
-
-
-        ctx.lineWidth =
-            5;
-
-
-        ctx.beginPath();
-
-
-        ctx.ellipse(
-            0,
-            0,
-            this.radius *
-            1.9,
-            this.radius *
-            .55,
-            0,
-            0,
-            Math.PI *
-            2
-        );
-
-
-        ctx.stroke();
-
-
-        ctx.fillStyle =
-            "#000";
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-            0,
-            0,
-            this.radius,
-            0,
-            Math.PI *
-            2
-        );
-
-
-        ctx.fill();
-
-
-        ctx.restore();
-    }
-
-
-    drawGalaxy(
-        scale
-    ){
-
-        ctx.save();
-
-
-        ctx.translate(
-            this.x,
-            this.y
-        );
-
-
-        ctx.rotate(
-            this.rotation
-        );
-
-
-        for(
-            let arm = 0;
-            arm < 3;
-            arm++
+        else if(
+            this.type==="comet"
         ){
 
-            ctx.strokeStyle =
-                arm === 0
-                    ? "rgba(255,140,210,.7)"
-                    : "rgba(130,185,255,.5)";
-
-
-            ctx.lineWidth =
-                4 *
-                scale;
-
-
-            ctx.beginPath();
-
-
-            for(
-                let i = 0;
-                i < 45;
-                i++
-            ){
-
-                const t =
-                    i /
-                    44 *
-                    Math.PI *
-                    2.4;
-
-
-                const r =
-                    t *
-                    this.radius *
-                    .38 *
-                    scale;
-
-
-                const a =
-                    t +
-                    arm *
-                    Math.PI *
-                    2 /
-                    3;
-
-
-                const x =
-                    Math.cos(
-                        a
-                    ) *
-                    r;
-
-
-                const y =
-                    Math.sin(
-                        a
-                    ) *
-                    r *
-                    .6;
-
-
-                if(
-                    i === 0
-                ){
-                    ctx.moveTo(
-                        x,
-                        y
-                    );
-                }
-
-                else{
-                    ctx.lineTo(
-                        x,
-                        y
-                    );
-                }
-            }
-
-
-            ctx.stroke();
+            drawCometEnemy(
+                this
+            );
         }
 
 
-        ctx.fillStyle =
-            "#fff4d1";
+        else if(
+            this.type==="roguePlanet"
+        ){
 
-
-        ctx.shadowColor =
-            this.color;
-
-
-        ctx.shadowBlur =
-            22;
-
-
-        ctx.beginPath();
-
-
-        ctx.arc(
-            0,
-            0,
-            this.radius *
-            .3,
-            0,
-            Math.PI *
-            2
-        );
-
-
-        ctx.fill();
-
-
-        ctx.restore();
-    }
-
-
-    drawQuasar(){
-
-        this.drawBlackHole();
-
-
-        ctx.save();
-
-
-        ctx.translate(
-            this.x,
-            this.y
-        );
-
-
-        ctx.rotate(
-            this.rotation
-        );
-
-
-        const beam =
-            ctx.createLinearGradient(
-                0,
-                0,
-                700,
-                0
+            drawRoguePlanet(
+                this
             );
+        }
 
 
-        beam.addColorStop(
-            0,
-            "rgba(220,210,255,.7)"
-        );
+        else if(
+            this.type==="neutronStar"
+        ){
+
+            drawNeutronStar(
+                this,
+                false
+            );
+        }
 
 
-        beam.addColorStop(
-            1,
-            "rgba(90,120,255,0)"
-        );
+        else if(
+            this.type==="magnetar"
+        ){
+
+            drawNeutronStar(
+                this,
+                true
+            );
+        }
 
 
-        ctx.strokeStyle =
-            beam;
+        else if(
+            this.type==="blackHole" ||
+            this.type==="wanderingBH"
+        ){
+
+            drawEnemyBlackHole(
+                this
+            );
+        }
 
 
-        ctx.lineWidth =
-            10;
+        else if(
+            this.type==="dwarfGalaxy" ||
+            this.type==="rivalGalaxy"
+        ){
+
+            drawEnemyGalaxy(
+                this
+            );
+        }
 
 
-        ctx.beginPath();
+        else if(
+            this.type==="quasar"
+        ){
+
+            drawQuasar(
+                this
+            );
+        }
 
 
-        ctx.moveTo(
-            0,
-            0
-        );
+        else if(
+            this.type==="rivalGroup" ||
+            this.type==="rivalCluster"
+        ){
 
-
-        ctx.lineTo(
-            700,
-            0
-        );
-
-
-        ctx.stroke();
-
-
-        ctx.restore();
+            drawEnemyCluster(
+                this
+            );
+        }
     }
 }
 
 
-/* =========================================================
-   ENEMY SPAWNING
-========================================================= */
+/* ==========================================================
+   ENEMY DRAWING
+========================================================== */
 
-function unlockedEnemyTypes(){
+function drawAsteroidEnemy(e){
 
-    const s =
-        game.currentStage;
+    ctx.save();
+
+    ctx.translate(
+        e.x,
+        e.y
+    );
+
+    ctx.rotate(
+        e.rotation
+    );
 
 
-    let pool =
-        [
-            "asteroid"
-        ];
+    ctx.fillStyle =
+        "#857568";
+
+    ctx.strokeStyle =
+        "#b2a08e";
+
+    ctx.lineWidth =
+        1;
 
 
-    if(
-        game.wave >=
-        2
+    ctx.beginPath();
+
+
+    for(
+        let i=0;
+        i<9;
+        i++
     ){
 
-        pool.push(
-            "comet"
-        );
+        const angle =
+            i/9 *
+            Math.PI*2;
+
+
+        const r =
+            e.radius *
+            (
+                .72 +
+                pseudo(
+                    i+e.radius
+                )*.28
+            );
+
+
+        const x =
+            Math.cos(angle)*r;
+
+        const y =
+            Math.sin(angle)*r;
+
+
+        if(i===0){
+
+            ctx.moveTo(
+                x,
+                y
+            );
+        }
+
+        else{
+
+            ctx.lineTo(
+                x,
+                y
+            );
+        }
     }
 
 
-    if(
-        s >=
-        1 ||
-        game.wave >=
+    ctx.closePath();
+
+    ctx.fill();
+    ctx.stroke();
+
+
+    ctx.restore();
+}
+
+
+function drawCometEnemy(e){
+
+    ctx.save();
+
+
+    const speed =
+        Math.hypot(
+            e.vx,
+            e.vy
+        ) || 1;
+
+
+    const nx =
+        e.vx/speed;
+
+    const ny =
+        e.vy/speed;
+
+
+    const gradient =
+        ctx.createLinearGradient(
+            e.x,
+            e.y,
+            e.x-nx*130,
+            e.y-ny*130
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "rgba(220,248,255,.95)"
+    );
+
+
+    gradient.addColorStop(
+        .3,
+        "rgba(110,205,255,.55)"
+    );
+
+
+    gradient.addColorStop(
+        1,
+        "rgba(80,170,255,0)"
+    );
+
+
+    ctx.strokeStyle =
+        gradient;
+
+    ctx.lineWidth =
+        8;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        e.x,
+        e.y
+    );
+
+    ctx.lineTo(
+        e.x-nx*130,
+        e.y-ny*130
+    );
+
+    ctx.stroke();
+
+
+    ctx.shadowColor =
+        "#a6e3ff";
+
+    ctx.shadowBlur =
+        20;
+
+    ctx.fillStyle =
+        "#f3ffff";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        e.x,
+        e.y,
+        e.radius,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.restore();
+}
+
+
+function drawRoguePlanet(e){
+
+    ctx.save();
+
+    ctx.translate(
+        e.x,
+        e.y
+    );
+
+
+    const gradient =
+        ctx.createRadialGradient(
+            -e.radius*.35,
+            -e.radius*.35,
+            2,
+            0,
+            0,
+            e.radius
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "#d89582"
+    );
+
+    gradient.addColorStop(
+        .45,
+        "#8e4d51"
+    );
+
+    gradient.addColorStop(
+        1,
+        "#251523"
+    );
+
+
+    ctx.fillStyle =
+        gradient;
+
+    ctx.shadowColor =
+        "#b15668";
+
+    ctx.shadowBlur =
+        14;
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        0,
+        e.radius,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.restore();
+}
+
+
+function drawNeutronStar(
+    e,
+    magnetar
+){
+
+    ctx.save();
+
+    ctx.translate(
+        e.x,
+        e.y
+    );
+
+
+    ctx.shadowColor =
+        magnetar
+            ? "#a58dff"
+            : "#8acbff";
+
+    ctx.shadowBlur =
+        32;
+
+
+    ctx.fillStyle =
+        "#ffffff";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        0,
+        e.radius*.5,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.strokeStyle =
+        magnetar
+            ? "rgba(173,138,255,.72)"
+            : "rgba(120,200,255,.65)";
+
+    ctx.lineWidth =
+        2;
+
+
+    for(
+        let i=0;
+        i<3;
+        i++
+    ){
+
+        ctx.beginPath();
+
+        ctx.ellipse(
+            0,
+            0,
+            e.radius*(1.1+i*.35),
+            e.radius*(.45+i*.14),
+            e.rotation+i*.7,
+            0,
+            Math.PI*2
+        );
+
+        ctx.stroke();
+    }
+
+
+    ctx.rotate(
+        e.rotation
+    );
+
+
+    ctx.strokeStyle =
+        "rgba(215,240,255,.75)";
+
+    ctx.lineWidth =
+        3;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        -75
+    );
+
+    ctx.lineTo(
+        0,
+        75
+    );
+
+    ctx.stroke();
+
+
+    ctx.restore();
+}
+
+
+function drawEnemyBlackHole(e){
+
+    ctx.save();
+
+    ctx.translate(
+        e.x,
+        e.y
+    );
+
+    ctx.rotate(
+        e.rotation
+    );
+
+
+    ctx.shadowColor =
+        "#9f63ff";
+
+    ctx.shadowBlur =
+        25;
+
+
+    ctx.strokeStyle =
+        "rgba(171,102,255,.75)";
+
+    ctx.lineWidth =
+        6;
+
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,
+        0,
+        e.radius*1.85,
+        e.radius*.48,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.stroke();
+
+
+    ctx.strokeStyle =
+        "rgba(97,167,255,.4)";
+
+    ctx.lineWidth =
+        2;
+
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,
+        0,
+        e.radius*2.05,
+        e.radius*.55,
+        .4,
+        0,
+        Math.PI*2
+    );
+
+    ctx.stroke();
+
+
+    ctx.fillStyle =
+        "#000";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        0,
+        e.radius,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.restore();
+}
+
+
+function drawEnemyGalaxy(e){
+
+    drawMiniGalaxy(
+        e.x,
+        e.y,
+        e.radius,
+        e.rotation,
+        e.color,
         3
+    );
+}
+
+
+function drawQuasar(e){
+
+    drawEnemyBlackHole(
+        e
+    );
+
+
+    ctx.save();
+
+    ctx.translate(
+        e.x,
+        e.y
+    );
+
+    ctx.rotate(
+        e.rotation
+    );
+
+
+    const beam =
+        ctx.createLinearGradient(
+            0,0,
+            800,0
+        );
+
+
+    beam.addColorStop(
+        0,
+        "rgba(235,225,255,.85)"
+    );
+
+
+    beam.addColorStop(
+        .3,
+        "rgba(154,176,255,.45)"
+    );
+
+
+    beam.addColorStop(
+        1,
+        "rgba(85,105,255,0)"
+    );
+
+
+    ctx.strokeStyle =
+        beam;
+
+    ctx.lineWidth =
+        12;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,0
+    );
+
+    ctx.lineTo(
+        800,0
+    );
+
+    ctx.stroke();
+
+
+    ctx.restore();
+}
+
+
+function drawEnemyCluster(e){
+
+    ctx.save();
+
+    ctx.translate(
+        e.x,
+        e.y
+    );
+
+
+    const count =
+        e.type==="rivalCluster"
+            ? 9
+            : 5;
+
+
+    for(
+        let i=0;
+        i<count;
+        i++
     ){
 
-        pool.push(
-            "roguePlanet"
+        const angle =
+            i/count *
+            Math.PI*2 +
+            e.rotation;
+
+
+        const d =
+            e.radius *
+            (
+                .3 +
+                (i%3)*.22
+            );
+
+
+        drawMiniGalaxy(
+            Math.cos(angle)*d,
+            Math.sin(angle)*d*.7,
+            e.radius*.22,
+            angle,
+            i%2
+                ? "#ffb0dc"
+                : "#9ac9ff",
+            2
         );
     }
 
 
-    if(
-        s >=
-        2 ||
-        game.wave >=
-        5
+    ctx.restore();
+}
+
+
+/* ==========================================================
+   ENEMY SPAWNING
+========================================================== */
+
+function availableEnemies(){
+
+    const pool = [];
+
+
+    for(
+        const [
+            key,
+            info
+        ]
+        of Object.entries(
+            enemyData
+        )
     ){
 
-        pool.push(
-            "neutron"
-        );
+        if(
+            game.wave >=
+            info.unlockWave &&
+            game.currentStage >=
+            info.unlockStage
+        ){
+
+            pool.push(
+                key
+            );
+        }
     }
 
 
     if(
-        s >=
-        3 ||
-        game.wave >=
-        7
+        pool.length===0
     ){
 
         pool.push(
-            "blackhole"
-        );
-    }
-
-
-    if(
-        s >=
-        4
-    ){
-
-        pool.push(
-            "dwarfGalaxy"
-        );
-    }
-
-
-    if(
-        s >=
-        6
-    ){
-
-        pool.push(
-            "rivalGalaxy"
-        );
-    }
-
-
-    if(
-        s >=
-        8
-    ){
-
-        pool.push(
-            "quasar"
+            "asteroid"
         );
     }
 
@@ -3096,16 +3466,33 @@ function unlockedEnemyTypes(){
 function spawnEnemy(){
 
     const pool =
-        unlockedEnemyTypes();
+        availableEnemies();
 
 
-    const type =
+    let type =
         pool[
             Math.floor(
                 Math.random() *
                 pool.length
             )
         ];
+
+
+    /*
+      Bias toward newer enemy
+      so progression is noticeable.
+    */
+
+    if(
+        pool.length>1 &&
+        Math.random()<.45
+    ){
+
+        type =
+            pool[
+                pool.length-1
+            ];
+    }
 
 
     enemies.push(
@@ -3116,80 +3503,185 @@ function spawnEnemy(){
 }
 
 
-function updateThreatLabel(){
+function updateThreat(){
 
     const pool =
-        unlockedEnemyTypes();
+        availableEnemies();
 
 
-    const labels =
-        pool.map(
-            type =>
-                enemyInfo[
-                    type
-                ].name
-        );
-
-
-    enemyLevel.textContent =
-        labels[
-            labels.length -
-            1
+    const newest =
+        pool[
+            pool.length-1
         ];
+
+
+    const info =
+        enemyData[
+            newest
+        ];
+
+
+    threatUI.textContent =
+        info.name;
+
+
+    if(
+        game.currentStage <
+        info.absorbStage
+    ){
+
+        threatInfo.textContent =
+            "อันตราย — ใช้ Repulse หรือหลบ";
+    }
+
+    else{
+
+        threatInfo.textContent =
+            "คุณใหญ่พอที่จะกลืนศัตรูชนิดนี้ได้";
+    }
 }
 
 
-/* =========================================================
+/* ==========================================================
    ABSORB ENEMY
-========================================================= */
+========================================================== */
 
-function absorbEnemy(
-    enemy
-){
+function absorbEnemy(enemy){
 
     enemy.alive =
         false;
 
 
-    const info =
-        enemyInfo[
-            enemy.type
-        ];
+    const gain =
+        Math.round(
+            enemy.reward *
+            (
+                1 +
+                game.currentStage*.04
+            )
+        );
 
 
     game.mass +=
-        info.reward;
+        gain;
 
 
     game.score +=
-        info.reward *
-        2;
+        gain*1.8;
 
 
-    cosmicExplosion(
+    game.enemiesAbsorbed++;
+
+
+    explosion(
         enemy.x,
         enemy.y,
-        info.color,
-        35
+        enemy.color,
+        40
+    );
+
+
+    addText(
+        enemy.x,
+        enemy.y,
+        "+"+
+        gain.toLocaleString()+
+        " MASS",
+        enemy.color
     );
 
 
     showToast(
-        "ABSORBED " +
-        info.name +
-        " +" +
-        info.reward.toLocaleString() +
-        " MASS"
+        "ABSORBED "+
+        enemy.name
     );
+
+
+    /*
+      Ring Galaxy:
+      collision-driven special morphology,
+      not a main evolutionary stage.
+    */
+
+    if(
+        (
+            enemy.type==="dwarfGalaxy" ||
+            enemy.type==="rivalGalaxy"
+        ) &&
+        game.currentStage >= 8 &&
+        game.currentStage <= 11 &&
+        Math.random() < .38
+    ){
+
+        triggerRingGalaxy();
+    }
 
 
     updateEvolution();
 }
 
 
-/* =========================================================
+/* ==========================================================
+   SPECIAL RING GALAXY EVENT
+========================================================== */
+
+function triggerRingGalaxy(){
+
+    game.ringEvent =
+        10;
+
+
+    specialEvent.textContent =
+        "⭕ COLLISION EVENT — RING GALAXY";
+
+
+    specialEvent.classList.add(
+        "show"
+    );
+
+
+    showToast(
+        "Galaxy collision created a stellar ring!"
+    );
+
+
+    explosion(
+        player.x,
+        player.y,
+        "#e1a7ff",
+        80
+    );
+}
+
+
+function updateRingEvent(dt){
+
+    if(
+        game.ringEvent<=0
+    ){
+
+        return;
+    }
+
+
+    game.ringEvent -=
+        dt;
+
+
+    if(
+        game.ringEvent<=0
+    ){
+
+        specialEvent.classList.remove(
+            "show"
+        );
+    }
+}
+
+
+/* ==========================================================
    DAMAGE
-========================================================= */
+========================================================== */
 
 function damagePlayer(){
 
@@ -3197,6 +3689,7 @@ function damagePlayer(){
         game.invulnerable >
         0
     ){
+
         return;
     }
 
@@ -3205,7 +3698,7 @@ function damagePlayer(){
 
 
     game.invulnerable =
-        1.8;
+        1.7;
 
 
     game.combo =
@@ -3216,11 +3709,11 @@ function damagePlayer(){
         0;
 
 
-    cosmicExplosion(
+    explosion(
         player.x,
         player.y,
-        "#ff6079",
-        30
+        "#ff617b",
+        35
     );
 
 
@@ -3230,8 +3723,7 @@ function damagePlayer(){
 
 
     if(
-        game.lives <=
-        0
+        game.lives<=0
     ){
 
         endGame();
@@ -3239,11 +3731,11 @@ function damagePlayer(){
 }
 
 
-/* =========================================================
-   PARTICLE EFFECTS
-========================================================= */
+/* ==========================================================
+   PARTICLES
+========================================================== */
 
-function cosmicExplosion(
+function explosion(
     x,
     y,
     color,
@@ -3251,91 +3743,75 @@ function cosmicExplosion(
 ){
 
     for(
-        let i = 0;
-        i < count;
+        let i=0;
+        i<count;
         i++
     ){
 
         const angle =
             Math.random() *
-            Math.PI *
-            2;
+            Math.PI*2;
 
 
         const speed =
             random(
-                25,
-                210
+                30,
+                230
             );
 
 
-        effects.push({
+        particles.push({
 
             x,
             y,
 
             vx:
-                Math.cos(
-                    angle
-                ) *
+                Math.cos(angle) *
                 speed,
 
             vy:
-                Math.sin(
-                    angle
-                ) *
+                Math.sin(angle) *
                 speed,
 
             life:
-                random(
-                    .4,
-                    1
-                ),
+                random(.4,1.1),
 
-            color,
+            maxLife:
+                1.1,
 
             radius:
-                random(
-                    1,
-                    3
-                )
+                random(1,3.2),
+
+            color
         });
     }
 }
 
 
-function updateEffects(
-    dt
-){
+function updateParticles(dt){
 
     for(
         const p
-        of effects
+        of particles
     ){
 
         p.x +=
-            p.vx *
-            dt;
-
+            p.vx*dt;
 
         p.y +=
-            p.vy *
-            dt;
+            p.vy*dt;
 
 
         p.vx *=
             Math.pow(
                 .92,
-                dt *
-                60
+                dt*60
             );
-
 
         p.vy *=
             Math.pow(
                 .92,
-                dt *
-                60
+                dt*60
             );
 
 
@@ -3344,33 +3820,35 @@ function updateEffects(
     }
 
 
-    effects =
-        effects.filter(
+    particles =
+        particles.filter(
             p =>
-                p.life >
-                0
+                p.life>0
         );
 }
 
 
-function drawEffects(){
+function drawParticles(){
 
     for(
         const p
-        of effects
+        of particles
     ){
 
         ctx.globalAlpha =
-            p.life;
+            clamp(
+                p.life /
+                p.maxLife,
+                0,
+                1
+            );
 
 
         ctx.fillStyle =
             p.color;
 
-
         ctx.shadowColor =
             p.color;
-
 
         ctx.shadowBlur =
             10;
@@ -3378,107 +3856,270 @@ function drawEffects(){
 
         ctx.beginPath();
 
-
         ctx.arc(
             p.x,
             p.y,
             p.radius,
             0,
-            Math.PI *
-            2
+            Math.PI*2
         );
-
 
         ctx.fill();
     }
 
 
-    ctx.globalAlpha =
-        1;
+    ctx.globalAlpha=1;
 
-
-    ctx.shadowBlur =
-        0;
+    ctx.shadowBlur=0;
 }
 
 
-/* =========================================================
-   PLAYER VISUAL
-========================================================= */
+/* ==========================================================
+   FLOATING TEXT
+========================================================== */
+
+function addText(
+    x,
+    y,
+    text,
+    color
+){
+
+    texts.push({
+
+        x,
+        y,
+
+        text,
+        color,
+
+        life:1
+    });
+}
+
+
+function updateTexts(dt){
+
+    for(
+        const t
+        of texts
+    ){
+
+        t.y -=
+            28*dt;
+
+        t.life -=
+            dt;
+    }
+
+
+    texts =
+        texts.filter(
+            t =>
+                t.life>0
+        );
+}
+
+
+function drawTexts(){
+
+    ctx.textAlign =
+        "center";
+
+    ctx.font =
+        "bold 11px system-ui";
+
+
+    for(
+        const t
+        of texts
+    ){
+
+        ctx.globalAlpha =
+            clamp(
+                t.life,
+                0,
+                1
+            );
+
+
+        ctx.fillStyle =
+            t.color;
+
+
+        ctx.fillText(
+            t.text,
+            t.x,
+            t.y
+        );
+    }
+
+
+    ctx.globalAlpha=1;
+}
+
+
+/* ==========================================================
+   PLAYER DRAW ROUTER
+========================================================== */
 
 function drawPlayer(){
 
-    const id =
-        currentStage().id;
+    const stage =
+        getStage();
 
 
     switch(
-        id
+        stage.id
     ){
 
         case "planet":
-            drawPlanetPlayer();
+
+            drawRockyPlanet();
+
             break;
 
-        case "gas":
+
+        case "gasGiant":
+
             drawGasGiant();
+
             break;
+
 
         case "star":
-            drawStarPlayer(
-                false
+
+            drawStar(
+                "yellow"
             );
+
             break;
+
 
         case "massiveStar":
-            drawStarPlayer(
-                true
+
+            drawStar(
+                "white"
             );
+
             break;
 
-        case "spiral":
-            drawGalaxyPlayer(
-                "spiral"
+
+        case "blueSupergiant":
+
+            drawStar(
+                "blue"
             );
+
             break;
 
-        case "barred":
-            drawGalaxyPlayer(
-                "barred"
-            );
+
+        case "hypergiant":
+
+            drawHypergiant();
+
             break;
 
-        case "elliptical":
-            drawElliptical();
-            break;
 
-        case "ring":
-            drawRingGalaxy();
-            break;
+        case "blackHole":
 
-        case "cluster":
-            drawCluster(
+            drawPlayerBlackHole(
                 false
             );
+
             break;
 
-        case "supercluster":
-            drawCluster(
+
+        case "superBlackHole":
+
+            drawPlayerBlackHole(
                 true
             );
+
+            break;
+
+
+        case "spiralGalaxy":
+
+            drawRealisticGalaxy(
+                "spiral"
+            );
+
+            break;
+
+
+        case "barredSpiral":
+
+            drawRealisticGalaxy(
+                "barred"
+            );
+
+            break;
+
+
+        case "lenticular":
+
+            drawLenticular();
+
+            break;
+
+
+        case "elliptical":
+
+            drawElliptical();
+
+            break;
+
+
+        case "galaxyGroup":
+
+            drawGalaxyGroup();
+
+            break;
+
+
+        case "galaxyCluster":
+
+            drawGalaxyCluster();
+
+            break;
+
+
+        case "supercluster":
+
+            drawSupercluster(
+                false
+            );
+
+            break;
+
+
+        case "cosmicWeb":
+
+            drawSupercluster(
+                true
+            );
+
             break;
     }
 
 
     if(
+        game.ringEvent>0 &&
+        game.currentStage>=8
+    ){
+
+        drawCollisionRing();
+    }
+
+
+    if(
         pointer.down &&
-        game.energy >
-        0
+        game.energy>0
     ){
 
         ctx.strokeStyle =
-            "rgba(110,220,255,.3)";
-
+            "rgba(100,215,255,.3)";
 
         ctx.lineWidth =
             2;
@@ -3486,37 +4127,33 @@ function drawPlayer(){
 
         ctx.beginPath();
 
-
         ctx.arc(
             player.x,
             player.y,
-            125 +
+            130+
             Math.sin(
-                game.time *
-                10
-            ) *
-            10,
+                game.time*10
+            )*11,
             0,
-            Math.PI *
-            2
+            Math.PI*2
         );
-
 
         ctx.stroke();
     }
 }
 
 
-/* Rocky Planet */
+/* ==========================================================
+   PLANETS
+========================================================== */
 
-function drawPlanetPlayer(){
+function drawRockyPlanet(){
 
     const r =
-        currentStage().radius;
+        getStage().radius;
 
 
     ctx.save();
-
 
     ctx.translate(
         player.x,
@@ -3524,85 +4161,93 @@ function drawPlanetPlayer(){
     );
 
 
-    const g =
+    const ocean =
         ctx.createRadialGradient(
-            -8,
-            -8,
+            -r*.35,
+            -r*.35,
             2,
             0,
             0,
-            r
+            r*1.05
         );
 
 
-    g.addColorStop(
+    ocean.addColorStop(
         0,
-        "#abf4ff"
+        "#b6f8ff"
     );
 
-
-    g.addColorStop(
-        .35,
-        "#3288ba"
+    ocean.addColorStop(
+        .3,
+        "#3c9bc8"
     );
 
+    ocean.addColorStop(
+        .67,
+        "#245b82"
+    );
 
-    g.addColorStop(
+    ocean.addColorStop(
         1,
-        "#08182d"
+        "#07182d"
     );
-
-
-    ctx.fillStyle =
-        g;
 
 
     ctx.shadowColor =
-        "#64d2ff";
-
+        "#58c9ff";
 
     ctx.shadowBlur =
-        18;
+        17;
+
+
+    ctx.fillStyle =
+        ocean;
 
 
     ctx.beginPath();
 
-
     ctx.arc(
+        0,0,r,
         0,
-        0,
-        r,
-        0,
-        Math.PI *
-        2
+        Math.PI*2
     );
-
 
     ctx.fill();
 
 
+    ctx.shadowBlur=0;
+
+
     ctx.fillStyle =
-        "#62bd80";
-
-
-    ctx.shadowBlur =
-        0;
+        "rgba(75,177,110,.78)";
 
 
     ctx.beginPath();
 
-
     ctx.ellipse(
-        -6,
-        -2,
-        7,
-        4,
+        -7,
+        -3,
+        8,
+        5,
         -.4,
         0,
-        Math.PI *
-        2
+        Math.PI*2
     );
 
+    ctx.fill();
+
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        8,
+        7,
+        6,
+        3.7,
+        .5,
+        0,
+        Math.PI*2
+    );
 
     ctx.fill();
 
@@ -3610,17 +4255,14 @@ function drawPlanetPlayer(){
     ctx.restore();
 }
 
-
-/* Gas Giant */
 
 function drawGasGiant(){
 
     const r =
-        currentStage().radius;
+        getStage().radius;
 
 
     ctx.save();
-
 
     ctx.translate(
         player.x,
@@ -3628,59 +4270,56 @@ function drawGasGiant(){
     );
 
 
-    ctx.shadowColor =
-        "#e8a45e";
-
-
-    ctx.shadowBlur =
-        20;
-
-
-    const g =
+    const gradient =
         ctx.createRadialGradient(
-            -7,
-            -8,
-            3,
+            -r*.25,
+            -r*.3,
+            2,
             0,
             0,
             r
         );
 
 
-    g.addColorStop(
+    gradient.addColorStop(
         0,
-        "#fff0c2"
+        "#fff2cf"
     );
 
-
-    g.addColorStop(
-        .55,
-        "#c4874e"
+    gradient.addColorStop(
+        .4,
+        "#d7a164"
     );
 
+    gradient.addColorStop(
+        .72,
+        "#99603d"
+    );
 
-    g.addColorStop(
+    gradient.addColorStop(
         1,
-        "#533127"
+        "#432a29"
     );
+
+
+    ctx.shadowColor =
+        "#df9f57";
+
+    ctx.shadowBlur =
+        21;
 
 
     ctx.fillStyle =
-        g;
+        gradient;
 
 
     ctx.beginPath();
 
-
     ctx.arc(
+        0,0,r,
         0,
-        0,
-        r,
-        0,
-        Math.PI *
-        2
+        Math.PI*2
     );
-
 
     ctx.fill();
 
@@ -3690,111 +4329,114 @@ function drawGasGiant(){
 
     ctx.beginPath();
 
-
     ctx.arc(
+        0,0,r,
         0,
-        0,
-        r,
-        0,
-        Math.PI *
-        2
+        Math.PI*2
     );
-
 
     ctx.clip();
 
 
-    ctx.shadowBlur =
-        0;
-
-
-    const colors =
-        [
-            "#9b603c",
-            "#efd09d",
-            "#80503b",
-            "#e9b779"
-        ];
+    const bands = [
+        [-19,5,"rgba(108,63,42,.52)"],
+        [-10,6,"rgba(255,223,170,.57)"],
+        [0,5,"rgba(120,67,43,.55)"],
+        [10,6,"rgba(237,193,132,.55)"],
+        [20,4,"rgba(112,64,48,.45)"]
+    ];
 
 
     for(
-        let i = 0;
-        i < 4;
-        i++
+        const band
+        of bands
     ){
 
         ctx.fillStyle =
-            colors[i];
-
-
-        ctx.globalAlpha =
-            .55;
+            band[2];
 
 
         ctx.fillRect(
             -r,
-            -17 +
-            i *
-            10,
-            r *
-            2,
-            5
+            band[0],
+            r*2,
+            band[1]
         );
     }
 
 
-    ctx.restore();
+    ctx.fillStyle =
+        "rgba(185,73,46,.88)";
 
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        11,
+        8,
+        8,
+        3.5,
+        -.15,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.restore();
 
     ctx.restore();
 }
 
 
-/* Stars */
+/* ==========================================================
+   STARS
+========================================================== */
 
-function drawStarPlayer(
-    massive
-){
+function drawStar(type){
 
     const r =
-        currentStage().radius;
+        getStage().radius;
 
+
+    let core =
+        "#fffde8";
+
+    let mid =
+        "#ffd862";
 
     let glow =
-        "#ffb84c";
+        "#ff982f";
 
 
-    let middle =
-        "#ffe26d";
+    if(type==="white"){
 
+        core =
+            "#ffffff";
 
-    if(
-        game.mass >
-        26000
-    ){
+        mid =
+            "#e7f2ff";
 
         glow =
             "#9bc8ff";
-
-        middle =
-            "#eef6ff";
     }
 
 
-    if(
-        massive
-    ){
+    if(type==="blue"){
+
+        core =
+            "#ffffff";
+
+        mid =
+            "#c8deff";
 
         glow =
-            "#669cff";
-
-        middle =
-            "#dbeaff";
+            "#5c90ff";
     }
 
 
     ctx.save();
-
 
     ctx.translate(
         player.x,
@@ -3802,62 +4444,45 @@ function drawStarPlayer(
     );
 
 
-    const outer =
+    const corona =
         ctx.createRadialGradient(
-            0,
-            0,
-            r *
-            .2,
-            0,
-            0,
-            r *
-            2.2
+            0,0,r*.2,
+            0,0,r*2.2
         );
 
 
-    outer.addColorStop(
+    corona.addColorStop(
         0,
-        "#ffffff"
+        core
     );
 
-
-    outer.addColorStop(
-        .3,
-        middle
+    corona.addColorStop(
+        .28,
+        mid
     );
 
-
-    outer.addColorStop(
-        .65,
-        glow +
-        "88"
+    corona.addColorStop(
+        .62,
+        glow+"88"
     );
 
-
-    outer.addColorStop(
+    corona.addColorStop(
         1,
-        glow +
-        "00"
+        glow+"00"
     );
 
 
     ctx.fillStyle =
-        outer;
+        corona;
 
 
     ctx.beginPath();
 
-
     ctx.arc(
+        0,0,r*2.2,
         0,
-        0,
-        r *
-        2.2,
-        0,
-        Math.PI *
-        2
+        Math.PI*2
     );
-
 
     ctx.fill();
 
@@ -3865,413 +4490,48 @@ function drawStarPlayer(
     ctx.shadowColor =
         glow;
 
-
     ctx.shadowBlur =
-        30;
+        34;
 
 
-    ctx.fillStyle =
-        middle;
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        0,
-        0,
-        r,
-        0,
-        Math.PI *
-        2
-    );
-
-
-    ctx.fill();
-
-
-    ctx.restore();
-}
-
-
-/* Spiral / Barred */
-
-function drawGalaxyPlayer(
-    mode
-){
-
-    const r =
-        currentStage().radius;
-
-
-    ctx.save();
-
-
-    ctx.translate(
-        player.x,
-        player.y
-    );
-
-
-    ctx.rotate(
-        game.time *
-        .16
-    );
-
-
-    if(
-        mode ===
-        "barred"
-    ){
-
-        ctx.strokeStyle =
-            "rgba(255,229,186,.85)";
-
-
-        ctx.lineWidth =
-            9;
-
-
-        ctx.beginPath();
-
-
-        ctx.moveTo(
-            -r *
-            .65,
-            0
-        );
-
-
-        ctx.lineTo(
-            r *
-            .65,
-            0
-        );
-
-
-        ctx.stroke();
-    }
-
-
-    for(
-        let arm = 0;
-        arm < 4;
-        arm++
-    ){
-
-        ctx.beginPath();
-
-
-        for(
-            let i = 0;
-            i < 60;
-            i++
-        ){
-
-            const t =
-                i /
-                59 *
-                Math.PI *
-                2.5;
-
-
-            const radius =
-                t *
-                r *
-                .28;
-
-
-            const angle =
-                t +
-                arm *
-                Math.PI /
-                2;
-
-
-            const x =
-                Math.cos(
-                    angle
-                ) *
-                radius;
-
-
-            const y =
-                Math.sin(
-                    angle
-                ) *
-                radius *
-                .62;
-
-
-            if(
-                i === 0
-            ){
-
-                ctx.moveTo(
-                    x,
-                    y
-                );
-            }
-
-            else{
-
-                ctx.lineTo(
-                    x,
-                    y
-                );
-            }
-        }
-
-
-        ctx.strokeStyle =
-            arm % 2
-                ? "rgba(126,183,255,.55)"
-                : "rgba(232,191,255,.55)";
-
-
-        ctx.lineWidth =
-            5;
-
-
-        ctx.shadowColor =
-            "#75baff";
-
-
-        ctx.shadowBlur =
-            12;
-
-
-        ctx.stroke();
-    }
-
-
-    ctx.fillStyle =
-        "#fff5ce";
-
-
-    ctx.shadowColor =
-        "#ffffff";
-
-
-    ctx.shadowBlur =
-        24;
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        0,
-        0,
-        r *
-        .22,
-        0,
-        Math.PI *
-        2
-    );
-
-
-    ctx.fill();
-
-
-    ctx.restore();
-}
-
-
-/* Elliptical */
-
-function drawElliptical(){
-
-    const r =
-        currentStage().radius;
-
-
-    ctx.save();
-
-
-    ctx.translate(
-        player.x,
-        player.y
-    );
-
-
-    const g =
+    const body =
         ctx.createRadialGradient(
-            0,
-            0,
+            -r*.2,
+            -r*.2,
             2,
             0,
             0,
-            r *
-            1.5
+            r
         );
 
 
-    g.addColorStop(
+    body.addColorStop(
         0,
-        "#fff9d8"
+        core
     );
 
-
-    g.addColorStop(
-        .28,
-        "rgba(255,223,166,.9)"
-    );
-
-
-    g.addColorStop(
-        .7,
-        "rgba(176,141,255,.3)"
-    );
-
-
-    g.addColorStop(
-        1,
-        "rgba(120,100,255,0)"
-    );
-
-
-    ctx.fillStyle =
-        g;
-
-
-    ctx.shadowColor =
-        "#c4a8ff";
-
-
-    ctx.shadowBlur =
-        25;
-
-
-    ctx.beginPath();
-
-
-    ctx.ellipse(
-        0,
-        0,
-        r *
-        1.45,
-        r *
-        .85,
-        game.time *
-        .05,
-        0,
-        Math.PI *
-        2
-    );
-
-
-    ctx.fill();
-
-
-    ctx.restore();
-}
-
-
-/* Ring Galaxy */
-
-function drawRingGalaxy(){
-
-    const r =
-        currentStage().radius;
-
-
-    ctx.save();
-
-
-    ctx.translate(
-        player.x,
-        player.y
-    );
-
-
-    ctx.rotate(
-        game.time *
-        .13
-    );
-
-
-    ctx.shadowColor =
-        "#79bcff";
-
-
-    ctx.shadowBlur =
-        25;
-
-
-    ctx.strokeStyle =
-        "rgba(110,188,255,.85)";
-
-
-    ctx.lineWidth =
-        12;
-
-
-    ctx.beginPath();
-
-
-    ctx.ellipse(
-        0,
-        0,
-        r *
-        1.3,
-        r *
-        .7,
-        0,
-        0,
-        Math.PI *
-        2
-    );
-
-
-    ctx.stroke();
-
-
-    ctx.strokeStyle =
-        "rgba(229,165,255,.55)";
-
-
-    ctx.lineWidth =
-        5;
-
-
-    ctx.beginPath();
-
-
-    ctx.ellipse(
-        0,
-        0,
-        r *
-        1.05,
-        r *
+    body.addColorStop(
         .55,
-        0,
-        0,
-        Math.PI *
-        2
+        mid
+    );
+
+    body.addColorStop(
+        1,
+        glow
     );
 
 
-    ctx.stroke();
-
-
     ctx.fillStyle =
-        "#fff8dc";
+        body;
 
 
     ctx.beginPath();
-
 
     ctx.arc(
+        0,0,r,
         0,
-        0,
-        r *
-        .18,
-        0,
-        Math.PI *
-        2
+        Math.PI*2
     );
-
 
     ctx.fill();
 
@@ -4280,18 +4540,18 @@ function drawRingGalaxy(){
 }
 
 
-/* Cluster / Supercluster */
+function drawHypergiant(){
 
-function drawCluster(
-    superCluster
-){
+    drawStar(
+        "blue"
+    );
 
-    const base =
-        currentStage().radius;
+
+    const r =
+        getStage().radius;
 
 
     ctx.save();
-
 
     ctx.translate(
         player.x,
@@ -4299,128 +4559,98 @@ function drawCluster(
     );
 
 
-    const count =
-        superCluster
-            ? 12
-            : 7;
+    ctx.strokeStyle =
+        "rgba(130,177,255,.42)";
+
+    ctx.lineWidth =
+        3;
 
 
     for(
-        let i = 0;
-        i < count;
+        let i=0;
+        i<7;
         i++
     ){
 
-        const angle =
-            i /
-            count *
-            Math.PI *
-            2 +
-            game.time *
-            (
-                superCluster
-                    ? .025
-                    : .05
-            );
-
-
-        const ring =
-            superCluster
-                ? (
-                    i % 3 +
-                    1
-                )
-                : (
-                    i % 2 +
-                    1
-                );
-
-
-        const distance =
-            base *
-            .48 *
-            ring;
-
-
-        const x =
-            Math.cos(
-                angle
-            ) *
-            distance;
-
-
-        const y =
-            Math.sin(
-                angle
-            ) *
-            distance *
-            .75;
-
-
-        const r =
-            superCluster
-                ? 10
-                : 9;
-
-
-        ctx.fillStyle =
-            i % 2
-                ? "#8dbfff"
-                : "#e7c4ff";
-
-
-        ctx.shadowColor =
-            ctx.fillStyle;
-
-
-        ctx.shadowBlur =
-            13;
+        const start =
+            game.time*.4 +
+            i/7 *
+            Math.PI*2;
 
 
         ctx.beginPath();
 
-
         ctx.arc(
-            x,
-            y,
-            r,
             0,
-            Math.PI *
-            2
+            0,
+            r+
+            10+
+            Math.sin(
+                game.time*3+i
+            )*5,
+            start,
+            start+.45
         );
 
-
-        ctx.fill();
+        ctx.stroke();
     }
+
+
+    ctx.restore();
+}
+
+
+/* ==========================================================
+   BLACK HOLES
+========================================================== */
+
+function drawPlayerBlackHole(
+    supermassive
+){
+
+    const r =
+        getStage().radius;
+
+
+    ctx.save();
+
+    ctx.translate(
+        player.x,
+        player.y
+    );
+
+    ctx.rotate(
+        game.time *
+        (
+            supermassive
+                ? .9
+                : 1.4
+        )
+    );
 
 
     const halo =
         ctx.createRadialGradient(
-            0,
-            0,
-            10,
-            0,
-            0,
-            base *
-            2.2
+            0,0,r,
+            0,0,r*3.5
         );
 
 
     halo.addColorStop(
         0,
-        "rgba(255,255,240,.38)"
+        "rgba(0,0,0,1)"
     );
-
 
     halo.addColorStop(
-        .4,
-        "rgba(105,165,255,.09)"
+        .3,
+        supermassive
+            ? "rgba(82,91,196,.25)"
+            : "rgba(136,64,163,.23)"
     );
-
 
     halo.addColorStop(
         1,
-        "rgba(80,120,255,0)"
+        "rgba(0,0,0,0)"
     );
 
 
@@ -4430,17 +4660,223 @@ function drawCluster(
 
     ctx.beginPath();
 
-
     ctx.arc(
+        0,0,r*3.5,
         0,
-        0,
-        base *
-        2.2,
-        0,
-        Math.PI *
-        2
+        Math.PI*2
     );
 
+    ctx.fill();
+
+
+    ctx.shadowColor =
+        supermassive
+            ? "#7eb9ff"
+            : "#ff9b58";
+
+    ctx.shadowBlur =
+        32;
+
+
+    ctx.strokeStyle =
+        supermassive
+            ? "rgba(116,178,255,.8)"
+            : "rgba(255,151,78,.82)";
+
+    ctx.lineWidth =
+        supermassive
+            ? 8
+            : 6;
+
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,0,
+        r*2.25,
+        r*.5,
+        .18,
+        0,
+        Math.PI*2
+    );
+
+    ctx.stroke();
+
+
+    ctx.strokeStyle =
+        "rgba(244,192,255,.47)";
+
+    ctx.lineWidth =
+        3;
+
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,0,
+        r*1.78,
+        r*.38,
+        -.38,
+        0,
+        Math.PI*2
+    );
+
+    ctx.stroke();
+
+
+    ctx.fillStyle =
+        "#000";
+
+    ctx.shadowColor =
+        "#000";
+
+    ctx.shadowBlur =
+        18;
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,0,r,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.strokeStyle =
+        supermassive
+            ? "rgba(216,238,255,.9)"
+            : "rgba(255,220,174,.85)";
+
+    ctx.lineWidth =
+        1.5;
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,0,r+4,
+        0,
+        Math.PI*2
+    );
+
+    ctx.stroke();
+
+
+    ctx.restore();
+
+
+    if(supermassive){
+
+        drawBlackHoleJets(
+            r
+        );
+    }
+}
+
+
+function drawBlackHoleJets(r){
+
+    ctx.save();
+
+    ctx.translate(
+        player.x,
+        player.y
+    );
+
+
+    const length =
+        r*4;
+
+
+    const top =
+        ctx.createLinearGradient(
+            0,-r,
+            0,-length
+        );
+
+
+    top.addColorStop(
+        0,
+        "rgba(185,224,255,.55)"
+    );
+
+    top.addColorStop(
+        1,
+        "rgba(70,120,255,0)"
+    );
+
+
+    ctx.fillStyle =
+        top;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -5,-r
+    );
+
+    ctx.lineTo(
+        -14,-length
+    );
+
+    ctx.lineTo(
+        14,-length
+    );
+
+    ctx.lineTo(
+        5,-r
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+
+    const bottom =
+        ctx.createLinearGradient(
+            0,r,
+            0,length
+        );
+
+
+    bottom.addColorStop(
+        0,
+        "rgba(185,224,255,.55)"
+    );
+
+    bottom.addColorStop(
+        1,
+        "rgba(70,120,255,0)"
+    );
+
+
+    ctx.fillStyle =
+        bottom;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        -5,r
+    );
+
+    ctx.lineTo(
+        -14,length
+    );
+
+    ctx.lineTo(
+        14,length
+    );
+
+    ctx.lineTo(
+        5,r
+    );
+
+    ctx.closePath();
 
     ctx.fill();
 
@@ -4449,80 +4885,1383 @@ function drawCluster(
 }
 
 
-/* =========================================================
-   BACKGROUND
-========================================================= */
+/* ==========================================================
+   REALISTIC GALAXIES
+========================================================== */
 
-function drawBackground(){
+function drawRealisticGalaxy(mode){
 
-    ctx.fillStyle =
-        "rgba(1,3,10,.28)";
+    const stage =
+        getStage();
+
+    const r =
+        stage.radius;
 
 
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
+    ctx.save();
+
+    ctx.translate(
+        player.x,
+        player.y
     );
 
 
-    for(
-        const star
-        of stars
+    ctx.rotate(
+        game.time*.07
+    );
+
+
+    /*
+       Diffuse outer halo
+    */
+
+    const halo =
+        ctx.createRadialGradient(
+            0,0,r*.1,
+            0,0,r*2.25
+        );
+
+
+    halo.addColorStop(
+        0,
+        "rgba(255,239,196,.32)"
+    );
+
+    halo.addColorStop(
+        .25,
+        "rgba(170,190,255,.16)"
+    );
+
+    halo.addColorStop(
+        .7,
+        "rgba(86,108,189,.055)"
+    );
+
+    halo.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+
+    ctx.fillStyle =
+        halo;
+
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,0,
+        r*2.25,
+        r*1.3,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+       Central bar for barred spiral
+    */
+
+    if(
+        mode==="barred"
     ){
 
-        ctx.globalAlpha =
-            star.alpha *
-            (
-                .75 +
-                Math.sin(
-                    game.time *
-                    1.2 +
-                    star.phase
-                ) *
-                .25
+        const bar =
+            ctx.createLinearGradient(
+                -r*.85,0,
+                r*.85,0
             );
 
 
-        ctx.fillStyle =
-            "#d8e9ff";
+        bar.addColorStop(
+            0,
+            "rgba(255,219,170,0)"
+        );
+
+        bar.addColorStop(
+            .5,
+            "rgba(255,235,194,.9)"
+        );
+
+        bar.addColorStop(
+            1,
+            "rgba(255,219,170,0)"
+        );
+
+
+        ctx.strokeStyle =
+            bar;
+
+        ctx.lineWidth =
+            10;
 
 
         ctx.beginPath();
 
-
-        ctx.arc(
-            star.x,
-            star.y,
-            star.size,
-            0,
-            Math.PI *
-            2
+        ctx.moveTo(
+            -r*.95,0
         );
 
+        ctx.lineTo(
+            r*.95,0
+        );
+
+        ctx.stroke();
+    }
+
+
+    /*
+       Dust lanes + spiral arms
+    */
+
+    const arms =
+        mode==="barred"
+            ? 2
+            : 4;
+
+
+    const starCount =
+        mode==="barred"
+            ? 260
+            : 300;
+
+
+    for(
+        let i=0;
+        i<starCount;
+        i++
+    ){
+
+        const arm =
+            i % arms;
+
+
+        const t =
+            (
+                Math.floor(
+                    i/arms
+                ) /
+                Math.ceil(
+                    starCount/arms
+                )
+            ) *
+            Math.PI *
+            4.2;
+
+
+        const noise =
+            pseudo(
+                i*7.31 +
+                arm*13.4
+            );
+
+
+        const radial =
+            r *
+            (
+                .16 +
+                t /
+                (
+                    Math.PI*4.2
+                ) *
+                1.85
+            );
+
+
+        const scatter =
+            (
+                noise-.5
+            ) *
+            r *
+            .28;
+
+
+        const angle =
+            t +
+            arm *
+            Math.PI*2/arms +
+            (
+                mode==="barred"
+                    ? .2
+                    : 0
+            );
+
+
+        const x =
+            Math.cos(angle) *
+            (
+                radial+
+                scatter
+            );
+
+
+        const y =
+            Math.sin(angle) *
+            (
+                radial+
+                scatter
+            ) *
+            .62;
+
+
+        const hot =
+            pseudo(
+                i*19.2
+            );
+
+
+        if(hot>.90){
+
+            ctx.fillStyle =
+                "#ff9dcf";
+
+            ctx.shadowColor =
+                "#ff7dbf";
+        }
+
+        else if(hot>.62){
+
+            ctx.fillStyle =
+                "#8ecbff";
+
+            ctx.shadowColor =
+                "#72b6ff";
+        }
+
+        else{
+
+            ctx.fillStyle =
+                "#e7eeff";
+
+            ctx.shadowColor =
+                "#b6d1ff";
+        }
+
+
+        const size =
+            .45 +
+            pseudo(
+                i*29.7
+            ) *
+            1.4;
+
+
+        ctx.shadowBlur =
+            size>1.3
+                ? 6
+                : 0;
+
+
+        ctx.globalAlpha =
+            .42 +
+            pseudo(
+                i*41.2
+            )*.55;
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,y,size,
+            0,
+            Math.PI*2
+        );
 
         ctx.fill();
     }
 
 
-    ctx.globalAlpha =
-        1;
+    ctx.globalAlpha=1;
+
+
+    /*
+       Central stellar bulge
+    */
+
+    const bulge =
+        ctx.createRadialGradient(
+            -r*.08,
+            -r*.08,
+            2,
+            0,0,
+            r*.65
+        );
+
+
+    bulge.addColorStop(
+        0,
+        "#ffffff"
+    );
+
+    bulge.addColorStop(
+        .18,
+        "#fff5ce"
+    );
+
+    bulge.addColorStop(
+        .55,
+        "rgba(255,194,111,.48)"
+    );
+
+    bulge.addColorStop(
+        1,
+        "rgba(255,175,86,0)"
+    );
+
+
+    ctx.fillStyle =
+        bulge;
+
+
+    ctx.shadowColor =
+        "#ffe1a5";
+
+    ctx.shadowBlur =
+        25;
+
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,0,
+        r*.66,
+        r*.37,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+       Dark dust lane
+    */
+
+    ctx.shadowBlur=0;
+
+
+    ctx.strokeStyle =
+        "rgba(20,15,28,.36)";
+
+    ctx.lineWidth =
+        3;
+
+
+    for(
+        let arm=0;
+        arm<arms;
+        arm++
+    ){
+
+        ctx.beginPath();
+
+
+        for(
+            let i=0;
+            i<45;
+            i++
+        ){
+
+            const t =
+                i/44 *
+                Math.PI*3.1;
+
+
+            const radial =
+                r *
+                (
+                    .35 +
+                    t /
+                    (
+                        Math.PI*3.1
+                    ) *
+                    1.45
+                );
+
+
+            const angle =
+                t +
+                arm *
+                Math.PI*2/arms +
+                .09;
+
+
+            const x =
+                Math.cos(angle) *
+                radial;
+
+
+            const y =
+                Math.sin(angle) *
+                radial *
+                .62;
+
+
+            if(i===0){
+
+                ctx.moveTo(
+                    x,y
+                );
+            }
+
+            else{
+
+                ctx.lineTo(
+                    x,y
+                );
+            }
+        }
+
+
+        ctx.stroke();
+    }
+
+
+    ctx.restore();
 }
 
 
-/* =========================================================
-   UPDATE GAME
-========================================================= */
+/* ==========================================================
+   LENTICULAR
+========================================================== */
 
-function update(
-    dt
+function drawLenticular(){
+
+    const r =
+        getStage().radius;
+
+
+    ctx.save();
+
+    ctx.translate(
+        player.x,
+        player.y
+    );
+
+    ctx.rotate(
+        game.time*.03
+    );
+
+
+    const halo =
+        ctx.createRadialGradient(
+            0,0,5,
+            0,0,r*2
+        );
+
+
+    halo.addColorStop(
+        0,
+        "rgba(255,240,198,.65)"
+    );
+
+    halo.addColorStop(
+        .3,
+        "rgba(235,197,149,.28)"
+    );
+
+    halo.addColorStop(
+        .7,
+        "rgba(160,170,220,.07)"
+    );
+
+    halo.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+
+    ctx.fillStyle =
+        halo;
+
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,0,
+        r*2,
+        r*.68,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.strokeStyle =
+        "rgba(72,48,46,.55)";
+
+    ctx.lineWidth =
+        6;
+
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,0,
+        r*1.45,
+        r*.22,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.stroke();
+
+
+    const core =
+        ctx.createRadialGradient(
+            0,0,1,
+            0,0,r*.62
+        );
+
+
+    core.addColorStop(
+        0,
+        "#ffffff"
+    );
+
+    core.addColorStop(
+        .22,
+        "#fff2c8"
+    );
+
+    core.addColorStop(
+        1,
+        "rgba(228,178,107,0)"
+    );
+
+
+    ctx.fillStyle =
+        core;
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,0,r*.62,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.restore();
+}
+
+
+/* ==========================================================
+   ELLIPTICAL
+========================================================== */
+
+function drawElliptical(){
+
+    const r =
+        getStage().radius;
+
+
+    ctx.save();
+
+    ctx.translate(
+        player.x,
+        player.y
+    );
+
+
+    const rotation =
+        game.time*.015;
+
+
+    ctx.rotate(
+        rotation
+    );
+
+
+    const glow =
+        ctx.createRadialGradient(
+            0,0,3,
+            0,0,r*1.7
+        );
+
+
+    glow.addColorStop(
+        0,
+        "#ffffff"
+    );
+
+    glow.addColorStop(
+        .14,
+        "#fff1c5"
+    );
+
+    glow.addColorStop(
+        .45,
+        "rgba(222,170,103,.58)"
+    );
+
+    glow.addColorStop(
+        .8,
+        "rgba(174,126,91,.15)"
+    );
+
+    glow.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+
+    ctx.fillStyle =
+        glow;
+
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,0,
+        r*1.7,
+        r*1.1,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    /*
+       Old stellar population
+    */
+
+    for(
+        let i=0;
+        i<190;
+        i++
+    ){
+
+        const angle =
+            pseudo(
+                i*13.4
+            ) *
+            Math.PI*2;
+
+
+        const radius =
+            Math.sqrt(
+                pseudo(
+                    i*7.8
+                )
+            ) *
+            r*1.45;
+
+
+        const x =
+            Math.cos(angle) *
+            radius;
+
+
+        const y =
+            Math.sin(angle) *
+            radius *
+            .63;
+
+
+        ctx.globalAlpha =
+            .2+
+            pseudo(
+                i*31.2
+            )*.6;
+
+
+        ctx.fillStyle =
+            pseudo(
+                i*17
+            )>.8
+            ? "#fff4cf"
+            : "#e7bd84";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,y,
+            .45+
+            pseudo(
+                i*21
+            )*.9,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+    }
+
+
+    ctx.globalAlpha=1;
+
+    ctx.restore();
+}
+
+
+/* ==========================================================
+   RING COLLISION VISUAL
+========================================================== */
+
+function drawCollisionRing(){
+
+    const r =
+        getStage().radius;
+
+
+    ctx.save();
+
+    ctx.translate(
+        player.x,
+        player.y
+    );
+
+    ctx.rotate(
+        game.time*.11
+    );
+
+
+    ctx.shadowColor =
+        "#d68cff";
+
+    ctx.shadowBlur =
+        24;
+
+
+    ctx.strokeStyle =
+        "rgba(124,194,255,.68)";
+
+    ctx.lineWidth =
+        10;
+
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+        0,0,
+        r*2.1,
+        r*1.15,
+        0,
+        0,
+        Math.PI*2
+    );
+
+    ctx.stroke();
+
+
+    for(
+        let i=0;
+        i<55;
+        i++
+    ){
+
+        const angle =
+            i/55 *
+            Math.PI*2;
+
+
+        const x =
+            Math.cos(angle) *
+            r*2.08;
+
+
+        const y =
+            Math.sin(angle) *
+            r*1.14;
+
+
+        ctx.fillStyle =
+            i%5===0
+            ? "#ff96cf"
+            : "#9bcfff";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x,y,
+            1+
+            pseudo(i*5)*1.5,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+    }
+
+
+    ctx.restore();
+}
+
+
+/* ==========================================================
+   MINI GALAXY
+========================================================== */
+
+function drawMiniGalaxy(
+    x,
+    y,
+    r,
+    rotation,
+    color="#9fc9ff",
+    arms=3
 ){
 
-    if(
-        game.state !==
-        "playing"
+    ctx.save();
+
+    ctx.translate(
+        x,y
+    );
+
+    ctx.rotate(
+        rotation
+    );
+
+
+    ctx.globalAlpha =
+        .78;
+
+
+    for(
+        let arm=0;
+        arm<arms;
+        arm++
     ){
+
+        ctx.strokeStyle =
+            arm%2
+            ? "rgba(157,200,255,.5)"
+            : color;
+
+
+        ctx.lineWidth =
+            Math.max(
+                1.2,
+                r*.07
+            );
+
+
+        ctx.beginPath();
+
+
+        for(
+            let i=0;
+            i<22;
+            i++
+        ){
+
+            const t =
+                i/21 *
+                Math.PI*2.3;
+
+
+            const radius =
+                t*r*.19;
+
+
+            const angle =
+                t+
+                arm*
+                Math.PI*2/arms;
+
+
+            const px =
+                Math.cos(angle)*
+                radius;
+
+
+            const py =
+                Math.sin(angle)*
+                radius*.6;
+
+
+            if(i===0){
+
+                ctx.moveTo(
+                    px,py
+                );
+            }
+
+            else{
+
+                ctx.lineTo(
+                    px,py
+                );
+            }
+        }
+
+
+        ctx.stroke();
+    }
+
+
+    ctx.globalAlpha=1;
+
+
+    ctx.fillStyle =
+        "#fff5d1";
+
+    ctx.shadowColor =
+        color;
+
+    ctx.shadowBlur =
+        10;
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,0,
+        Math.max(
+            2,
+            r*.14
+        ),
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.restore();
+}
+
+
+/* ==========================================================
+   GALAXY GROUP
+========================================================== */
+
+function drawGalaxyGroup(){
+
+    const r =
+        getStage().radius;
+
+
+    ctx.save();
+
+    ctx.translate(
+        player.x,
+        player.y
+    );
+
+
+    const positions = [
+        [0,0,1],
+        [-.72,-.27,.58],
+        [.78,.15,.64],
+        [-.22,.75,.46],
+        [.28,-.72,.42],
+        [1.1,-.45,.32]
+    ];
+
+
+    for(
+        let i=0;
+        i<positions.length;
+        i++
+    ){
+
+        const p =
+            positions[i];
+
+
+        drawMiniGalaxy(
+            p[0]*r,
+            p[1]*r,
+            r*p[2],
+            game.time*
+            (
+                i%2
+                ? -.035
+                : .04
+            ),
+            i%2
+                ? "#d5a5ff"
+                : "#91c8ff",
+            i===0
+                ? 4
+                : 2
+        );
+    }
+
+
+    ctx.restore();
+}
+
+
+/* ==========================================================
+   CLUSTER
+========================================================== */
+
+function drawGalaxyCluster(){
+
+    const r =
+        getStage().radius;
+
+
+    ctx.save();
+
+    ctx.translate(
+        player.x,
+        player.y
+    );
+
+
+    const clusterGlow =
+        ctx.createRadialGradient(
+            0,0,5,
+            0,0,r*2.3
+        );
+
+
+    clusterGlow.addColorStop(
+        0,
+        "rgba(255,238,193,.18)"
+    );
+
+    clusterGlow.addColorStop(
+        .4,
+        "rgba(111,158,255,.06)"
+    );
+
+    clusterGlow.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+
+    ctx.fillStyle =
+        clusterGlow;
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,0,r*2.3,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    for(
+        let i=0;
+        i<18;
+        i++
+    ){
+
+        const angle =
+            pseudo(
+                i*12.3
+            ) *
+            Math.PI*2;
+
+
+        const d =
+            Math.sqrt(
+                pseudo(
+                    i*7.2
+                )
+            ) *
+            r*1.65;
+
+
+        const size =
+            r*
+            (
+                .13+
+                pseudo(
+                    i*18.6
+                )*.16
+            );
+
+
+        drawMiniGalaxy(
+            Math.cos(angle)*d,
+            Math.sin(angle)*d*.72,
+            size,
+            game.time*.02+
+            i,
+            i%3===0
+                ? "#e0b5ff"
+                : "#91c6ff",
+            2+
+            i%3
+        );
+    }
+
+
+    ctx.restore();
+}
+
+
+/* ==========================================================
+   SUPERCLUSTER / COSMIC WEB
+========================================================== */
+
+function drawSupercluster(
+    cosmicWeb
+){
+
+    const r =
+        getStage().radius;
+
+
+    ctx.save();
+
+    ctx.translate(
+        player.x,
+        player.y
+    );
+
+
+    const nodes =
+        cosmicWeb
+        ? 17
+        : 11;
+
+
+    const positions =
+        [];
+
+
+    for(
+        let i=0;
+        i<nodes;
+        i++
+    ){
+
+        const angle =
+            pseudo(
+                i*7.17
+            ) *
+            Math.PI*2;
+
+
+        const radius =
+            (
+                .25+
+                pseudo(
+                    i*14.8
+                )*1.55
+            ) *
+            r;
+
+
+        positions.push({
+
+            x:
+                Math.cos(angle)*
+                radius,
+
+            y:
+                Math.sin(angle)*
+                radius*.72
+        });
+    }
+
+
+    /*
+       Cosmic filaments
+    */
+
+    ctx.lineWidth =
+        cosmicWeb
+            ? 3
+            : 2;
+
+
+    for(
+        let i=0;
+        i<positions.length;
+        i++
+    ){
+
+        for(
+            let j=i+1;
+            j<positions.length;
+            j++
+        ){
+
+            const a =
+                positions[i];
+
+            const b =
+                positions[j];
+
+
+            const d =
+                Math.hypot(
+                    a.x-b.x,
+                    a.y-b.y
+                );
+
+
+            if(
+                d <
+                r*
+                (
+                    cosmicWeb
+                        ? 1.15
+                        : .9
+                )
+            ){
+
+                const gradient =
+                    ctx.createLinearGradient(
+                        a.x,a.y,
+                        b.x,b.y
+                    );
+
+
+                gradient.addColorStop(
+                    0,
+                    "rgba(123,149,255,.12)"
+                );
+
+                gradient.addColorStop(
+                    .5,
+                    cosmicWeb
+                        ? "rgba(231,145,255,.3)"
+                        : "rgba(139,172,255,.2)"
+                );
+
+                gradient.addColorStop(
+                    1,
+                    "rgba(123,149,255,.12)"
+                );
+
+
+                ctx.strokeStyle =
+                    gradient;
+
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    a.x,a.y
+                );
+
+                ctx.lineTo(
+                    b.x,b.y
+                );
+
+                ctx.stroke();
+            }
+        }
+    }
+
+
+    /*
+       Galaxy cluster nodes
+    */
+
+    for(
+        let i=0;
+        i<positions.length;
+        i++
+    ){
+
+        const p =
+            positions[i];
+
+
+        const nodeRadius =
+            r*
+            (
+                .10+
+                pseudo(
+                    i*23.2
+                )*.07
+            );
+
+
+        const glow =
+            ctx.createRadialGradient(
+                p.x,p.y,1,
+                p.x,p.y,
+                nodeRadius*2.7
+            );
+
+
+        glow.addColorStop(
+            0,
+            "#fff3cb"
+        );
+
+        glow.addColorStop(
+            .25,
+            i%2
+                ? "rgba(217,150,255,.55)"
+                : "rgba(115,178,255,.55)"
+        );
+
+        glow.addColorStop(
+            1,
+            "rgba(0,0,0,0)"
+        );
+
+
+        ctx.fillStyle =
+            glow;
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            p.x,p.y,
+            nodeRadius*2.7,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "#fff9dc";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            p.x,p.y,
+            Math.max(
+                1.5,
+                nodeRadius*.22
+            ),
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+    }
+
+
+    ctx.restore();
+}
+
+
+/* ==========================================================
+   GAME UPDATE
+========================================================== */
+
+function updateGame(dt){
+
+    if(
+        game.state!=="playing"
+    ){
+
         return;
     }
 
@@ -4533,10 +6272,8 @@ function update(
 
     const newWave =
         Math.floor(
-            game.time /
-            20
-        ) +
-        1;
+            game.time/22
+        )+1;
 
 
     if(
@@ -4549,14 +6286,18 @@ function update(
 
 
         showToast(
-            "WAVE " +
+            "WAVE "+
             game.wave
         );
 
 
-        updateThreatLabel();
+        updateThreat();
     }
 
+
+    /*
+       Smooth follow
+    */
 
     if(
         pointer.active
@@ -4564,7 +6305,6 @@ function update(
 
         player.targetX =
             pointer.x;
-
 
         player.targetY =
             pointer.y;
@@ -4574,68 +6314,63 @@ function update(
     const follow =
         Math.min(
             1,
-            dt *
-            7
+            dt*7
         );
 
 
     player.x +=
         (
-            player.targetX -
+            player.targetX-
             player.x
-        ) *
+        )*
         follow;
 
 
     player.y +=
         (
-            player.targetY -
+            player.targetY-
             player.y
-        ) *
+        )*
         follow;
 
 
     const radius =
-        currentStage().radius;
+        getStage().radius;
 
 
     player.x =
         clamp(
             player.x,
             radius,
-            width -
-            radius
+            width-radius
         );
 
 
     player.y =
         clamp(
             player.y,
-            80 +
-            radius,
-            height -
-            radius
+            80+radius,
+            height-radius
         );
 
 
-    /* Energy */
+    /*
+       Energy
+    */
 
     if(
         pointer.down &&
-        game.energy >
-        0
+        game.energy>0
     ){
 
         game.energy -=
-            35 *
-            dt;
+            34*dt;
     }
 
     else{
 
         game.energy +=
-            20 *
-            dt;
+            21*dt;
     }
 
 
@@ -4648,8 +6383,7 @@ function update(
 
 
     if(
-        game.energy <=
-        0
+        game.energy<=0
     ){
 
         pointer.down =
@@ -4657,11 +6391,12 @@ function update(
     }
 
 
-    /* combo */
+    /*
+       Combo
+    */
 
     if(
-        game.comboTimer >
-        0
+        game.comboTimer>0
     ){
 
         game.comboTimer -=
@@ -4669,8 +6404,7 @@ function update(
 
 
         if(
-            game.comboTimer <=
-            0
+            game.comboTimer<=0
         ){
 
             game.combo =
@@ -4682,20 +6416,20 @@ function update(
     game.invulnerable =
         Math.max(
             0,
-            game.invulnerable -
-            dt
+            game.invulnerable-dt
         );
 
 
-    /* spawn enemy */
+    /*
+       Enemy spawning
+    */
 
     game.nextEnemy -=
         dt;
 
 
     if(
-        game.nextEnemy <=
-        0
+        game.nextEnemy<=0
     ){
 
         spawnEnemy();
@@ -4703,15 +6437,13 @@ function update(
 
         game.nextEnemy =
             Math.max(
-                1.6,
-                5 -
-                game.wave *
-                .18
+                1.5,
+                5.2-
+                game.wave*.18-
+                game.currentStage*.05
             );
     }
 
-
-    /* update matter */
 
     for(
         const item
@@ -4723,8 +6455,6 @@ function update(
         );
     }
 
-
-    /* update enemy */
 
     for(
         const enemy
@@ -4739,12 +6469,22 @@ function update(
 
     enemies =
         enemies.filter(
-            enemy =>
-                enemy.alive
+            e =>
+                e.alive
         );
 
 
-    updateEffects(
+    updateParticles(
+        dt
+    );
+
+
+    updateTexts(
+        dt
+    );
+
+
+    updateRingEvent(
         dt
     );
 
@@ -4752,9 +6492,8 @@ function update(
     game.score +=
         dt *
         (
-            1 +
-            game.currentStage *
-            .4
+            1+
+            game.currentStage*.4
         );
 
 
@@ -4762,9 +6501,9 @@ function update(
 }
 
 
-/* =========================================================
+/* ==========================================================
    HUD
-========================================================= */
+========================================================== */
 
 function updateHUD(){
 
@@ -4781,8 +6520,12 @@ function updateHUD(){
 
 
     comboUI.textContent =
-        "×" +
+        "×"+
         game.combo;
+
+
+    stageUI.textContent =
+        getStage().name;
 
 
     waveUI.textContent =
@@ -4792,85 +6535,77 @@ function updateHUD(){
     lifeUI.textContent =
         "♥".repeat(
             game.lives
-        ) +
+        )+
         "♡".repeat(
             Math.max(
                 0,
-                3 -
-                game.lives
+                3-game.lives
             )
         );
 
 
-    const s =
-        currentStage();
-
-
-    stageUI.textContent =
-        s.name;
+    const stage =
+        getStage();
 
 
     stageNameUI.textContent =
-        s.icon +
-        " " +
-        s.name;
+        stage.icon+
+        " "+
+        stage.name;
 
 
     massText.textContent =
         Math.floor(
             game.mass
-        ).toLocaleString() +
+        ).toLocaleString()+
         " MASS";
 
 
     energyText.textContent =
         Math.round(
             game.energy
-        ) +
+        )+
         "%";
 
 
     energyBar.style.width =
-        game.energy +
+        game.energy+
         "%";
 
 
     if(
         game.currentStage <
-        stages.length -
-        1
+        stages.length-1
     ){
 
         const next =
             stages[
-                game.currentStage +
-                1
+                game.currentStage+1
             ];
 
 
         const progress =
             (
-                game.mass -
-                s.min
+                game.mass-
+                stage.min
             ) /
             (
-                next.min -
-                s.min
+                next.min-
+                stage.min
             );
 
 
         massBar.style.width =
             clamp(
-                progress *
-                100,
+                progress*100,
                 0,
                 100
-            ) +
+            )+
             "%";
 
 
         nextStageUI.textContent =
-            "Next: " +
+            "Next: "+
             next.name;
 
 
@@ -4885,7 +6620,7 @@ function updateHUD(){
 
 
         nextStageUI.textContent =
-            "KEEP GROWING";
+            "MAX COSMIC SCALE";
 
 
         massGoal.textContent =
@@ -4894,9 +6629,9 @@ function updateHUD(){
 }
 
 
-/* =========================================================
-   DRAW
-========================================================= */
+/* ==========================================================
+   DRAW WORLD
+========================================================== */
 
 function draw(){
 
@@ -4921,24 +6656,23 @@ function draw(){
     }
 
 
-    drawEffects();
-
+    drawParticles();
 
     drawPlayer();
+
+    drawTexts();
 }
 
 
-/* =========================================================
-   GAME LOOP
-========================================================= */
+/* ==========================================================
+   MAIN LOOP
+========================================================== */
 
-function loop(
-    now
-){
+function loop(now){
 
     let dt =
         (
-            now -
+            now-
             lastTime
         ) /
         1000;
@@ -4955,7 +6689,7 @@ function loop(
         );
 
 
-    update(
+    updateGame(
         dt
     );
 
@@ -4969,9 +6703,9 @@ function loop(
 }
 
 
-/* =========================================================
+/* ==========================================================
    START GAME
-========================================================= */
+========================================================== */
 
 function startGame(){
 
@@ -4979,71 +6713,60 @@ function startGame(){
         "playing";
 
 
-    game.mass =
-        0;
-
-
     game.score =
         0;
 
+    game.mass =
+        0;
 
     game.combo =
         1;
 
+    game.bestCombo =
+        1;
 
     game.comboTimer =
         0;
 
-
-    game.bestCombo =
-        1;
-
-
     game.lives =
         3;
-
 
     game.energy =
         100;
 
-
     game.time =
         0;
-
 
     game.wave =
         1;
 
-
     game.invulnerable =
         0;
-
-
-    game.nextEnemy =
-        4;
-
 
     game.currentStage =
         0;
 
+    game.nextEnemy =
+        4;
 
-    game.maxMass =
+    game.ringEvent =
+        0;
+
+    game.enemiesAbsorbed =
+        0;
+
+    game.highestMass =
         0;
 
 
     player.x =
-        width /
-        2;
-
+        width/2;
 
     player.y =
-        height /
-        2;
-
+        height/2;
 
     player.targetX =
         player.x;
-
 
     player.targetY =
         player.y;
@@ -5052,30 +6775,25 @@ function startGame(){
     pointer.x =
         player.x;
 
-
     pointer.y =
         player.y;
-
 
     pointer.down =
         false;
 
 
-    matter =
-        [];
+    matter = [];
 
+    enemies = [];
 
-    enemies =
-        [];
+    particles = [];
 
-
-    effects =
-        [];
+    texts = [];
 
 
     for(
-        let i = 0;
-        i < 150;
+        let i=0;
+        i<175;
         i++
     ){
 
@@ -5083,6 +6801,11 @@ function startGame(){
             new Matter()
         );
     }
+
+
+    specialEvent.classList.remove(
+        "show"
+    );
 
 
     overlay.classList.add(
@@ -5094,22 +6817,22 @@ function startGame(){
         performance.now();
 
 
-    updateThreatLabel();
+    updateThreat();
 
     updateHUD();
 }
 
 
-/* =========================================================
+/* ==========================================================
    END GAME
-========================================================= */
+========================================================== */
 
 function endGame(){
 
     if(
-        game.state !==
-        "playing"
+        game.state!=="playing"
     ){
+
         return;
     }
 
@@ -5138,11 +6861,20 @@ function endGame(){
 
     description.innerHTML =
         `
-        คุณวิวัฒนาการถึง
-        <strong>${currentStage().name}</strong><br>
-        Mass สูงสุด:
-        <strong>${Math.floor(game.mass).toLocaleString()}</strong><br>
-        กดเล่นอีกครั้งเพื่อไปให้ไกลกว่าเดิม
+        Final form:
+        <strong>
+            ${getStage().name}
+        </strong><br>
+
+        Mass:
+        <strong>
+            ${Math.floor(game.mass).toLocaleString()}
+        </strong><br>
+
+        Enemies absorbed:
+        <strong>
+            ${game.enemiesAbsorbed}
+        </strong>
         `;
 
 
@@ -5151,16 +6883,14 @@ function endGame(){
 }
 
 
-/* =========================================================
+/* ==========================================================
    TOAST
-========================================================= */
+========================================================== */
 
-function showToast(
-    message
-){
+function showToast(text){
 
     toast.textContent =
-        message;
+        text;
 
 
     toast.classList.add(
@@ -5175,32 +6905,38 @@ function showToast(
 
     toastTimer =
         setTimeout(
-            () => {
-
+            ()=>{
                 toast.classList.remove(
                     "show"
                 );
-
             },
-            1300
+            1350
         );
 }
 
 
-/* =========================================================
+/* ==========================================================
    RANKING
-========================================================= */
+========================================================== */
 
 function readRanking(){
 
     try{
 
-        return JSON.parse(
-            localStorage.getItem(
-                STORAGE_KEY
-            ) ||
-            "[]"
-        );
+        const data =
+            JSON.parse(
+                localStorage.getItem(
+                    STORAGE_KEY
+                ) ||
+                "[]"
+            );
+
+
+        return Array.isArray(
+            data
+        )
+            ? data
+            : [];
     }
 
     catch{
@@ -5223,7 +6959,7 @@ function saveRanking(){
 
 
     localStorage.setItem(
-        "cosmic-player-name",
+        "cosmic-player-name-v5",
         name
     );
 
@@ -5247,7 +6983,7 @@ function saveRanking(){
             ),
 
         stage:
-            currentStage().name
+            getStage().name
     });
 
 
@@ -5256,7 +6992,7 @@ function saveRanking(){
             a,
             b
         ) =>
-            b.mass -
+            b.mass-
             a.mass
     );
 
@@ -5283,7 +7019,7 @@ function renderRanking(){
 
 
     if(
-        !data.length
+        data.length===0
     ){
 
         const li =
@@ -5309,7 +7045,7 @@ function renderRanking(){
         (
             row,
             index
-        ) => {
+        )=>{
 
             const li =
                 document.createElement(
@@ -5336,23 +7072,20 @@ function renderRanking(){
 
 
             mass.className =
-                "scoreText";
+                "rankMass";
 
 
             place.textContent =
-                index < 3
-                    ?
-                    [
-                        "🥇",
-                        "🥈",
-                        "🥉"
-                    ][index]
-                    :
-                    "#" +
-                    (
-                        index +
-                        1
-                    );
+                index<3
+                ? [
+                    "🥇",
+                    "🥈",
+                    "🥉"
+                ][index]
+                : "#"+
+                  (
+                    index+1
+                  );
 
 
             name.textContent =
@@ -5362,7 +7095,7 @@ function renderRanking(){
             mass.textContent =
                 Number(
                     row.mass
-                ).toLocaleString() +
+                ).toLocaleString()+
                 " M";
 
 
@@ -5381,17 +7114,14 @@ function renderRanking(){
 }
 
 
-/* =========================================================
+/* ==========================================================
    POINTER
-========================================================= */
+========================================================== */
 
-function movePointer(
-    event
-){
+function updatePointer(event){
 
     pointer.x =
         event.clientX;
-
 
     pointer.y =
         event.clientY;
@@ -5404,7 +7134,6 @@ function movePointer(
     player.targetX =
         pointer.x;
 
-
     player.targetY =
         pointer.y;
 }
@@ -5412,38 +7141,60 @@ function movePointer(
 
 canvas.addEventListener(
     "pointermove",
-    movePointer
+    updatePointer
 );
 
 
 canvas.addEventListener(
     "pointerdown",
-    event => {
+    event=>{
 
-        movePointer(
+        updatePointer(
             event
         );
 
 
         pointer.down =
             true;
+
+
+        try{
+
+            canvas.setPointerCapture(
+                event.pointerId
+            );
+
+        }
+
+        catch{}
     }
 );
 
 
 canvas.addEventListener(
     "pointerup",
-    () => {
+    event=>{
 
         pointer.down =
             false;
+
+
+        try{
+
+            canvas.releasePointerCapture(
+                event.pointerId
+            );
+
+        }
+
+        catch{}
     }
 );
 
 
 canvas.addEventListener(
     "pointercancel",
-    () => {
+    ()=>{
 
         pointer.down =
             false;
@@ -5451,25 +7202,23 @@ canvas.addEventListener(
 );
 
 
-/* =========================================================
+/* ==========================================================
    KEYBOARD
-========================================================= */
+========================================================== */
 
 addEventListener(
     "keydown",
-    event => {
+    event=>{
 
         if(
-            event.code ===
-            "Space"
+            event.code==="Space"
         ){
 
             event.preventDefault();
 
 
             if(
-                game.state ===
-                "playing"
+                game.state==="playing"
             ){
 
                 pointer.down =
@@ -5482,11 +7231,10 @@ addEventListener(
 
 addEventListener(
     "keyup",
-    event => {
+    event=>{
 
         if(
-            event.code ===
-            "Space"
+            event.code==="Space"
         ){
 
             pointer.down =
@@ -5498,7 +7246,7 @@ addEventListener(
 
 addEventListener(
     "blur",
-    () => {
+    ()=>{
 
         pointer.down =
             false;
@@ -5506,9 +7254,9 @@ addEventListener(
 );
 
 
-/* =========================================================
-   START BUTTON
-========================================================= */
+/* ==========================================================
+   START
+========================================================== */
 
 startBtn.addEventListener(
     "click",
@@ -5516,13 +7264,13 @@ startBtn.addEventListener(
 );
 
 
-/* =========================================================
-   INITIAL SCREEN
-========================================================= */
+/* ==========================================================
+   INITIAL MENU
+========================================================== */
 
 playerName.value =
     localStorage.getItem(
-        "cosmic-player-name"
+        "cosmic-player-name-v5"
     ) ||
     "";
 
@@ -5531,8 +7279,8 @@ renderRanking();
 
 
 for(
-    let i = 0;
-    i < 120;
+    let i=0;
+    i<130;
     i++
 ){
 
@@ -5543,6 +7291,8 @@ for(
 
 
 updateHUD();
+
+updateThreat();
 
 
 requestAnimationFrame(
