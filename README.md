@@ -1,3 +1,3 @@
 ## 🎮 Link to Play
 
-[▶️ Play Now]([https://panithan1991.github.io/test2/](https://panithan1991.github.io/Cosmic-Evolution/))
+[▶️ Play Now](https://panithan1991.github.io/Cosmic-Evolution/)
