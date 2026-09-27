@@ -5,567 +5,682 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-<title>Gravity Swarm — Firefly Arena</title>
+<title>Gravity Evolution — Cosmic Swarm</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
+* {
+    box-sizing: border-box;
+}
 
-    html,
-    body {
-        margin: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: #02050f;
-        font-family:
-            Inter,
-            system-ui,
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            sans-serif;
-        color: white;
-    }
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #01040b;
+    color: white;
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
 
-    canvas {
-        display: block;
-        width: 100%;
-        height: 100%;
-        touch-action: none;
-        cursor: crosshair;
-    }
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    touch-action: none;
+}
+
+/* =========================
+   TOP HUD
+========================= */
+
+.hud {
+    position: fixed;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+
+    padding: 8px;
+
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(11,20,42,.91),
+            rgba(4,10,24,.78)
+        );
+
+    backdrop-filter: blur(16px);
+
+    box-shadow:
+        0 18px 55px rgba(0,0,0,.4);
+
+    z-index: 10;
+}
+
+.hud-box {
+    min-width: 92px;
+
+    padding: 7px 13px;
+
+    text-align: center;
+
+    border-right:
+        1px solid rgba(255,255,255,.09);
+}
+
+.hud-box:last-child {
+    border-right: 0;
+}
+
+.hud-box small {
+    display: block;
+
+    margin-bottom: 2px;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+
+    color: #8399b8;
+
+    text-transform: uppercase;
+}
+
+.hud-box strong {
+    font-size: 17px;
+
+    color: #f8fbff;
+}
+
+#mass {
+    color: #70f1da;
+}
+
+#combo {
+    color: #ffe06f;
+}
+
+#stage {
+    color: #89cfff;
+
+    font-size: 13px;
+}
+
+#life {
+    color: #ff728a;
+    letter-spacing: 2px;
+}
+
+/* =========================
+   EVOLUTION PANEL
+========================= */
+
+.evolution-panel {
+    position: fixed;
+
+    left: 18px;
+    bottom: 18px;
+
+    width: min(350px, calc(100vw - 36px));
+
+    padding: 15px 17px;
+
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 17px;
+
+    background: rgba(4,10,25,.77);
+
+    backdrop-filter: blur(14px);
+
+    box-shadow:
+        0 18px 55px rgba(0,0,0,.3);
+
+    z-index: 10;
+}
+
+.evo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.evo-title {
+    font-size: 11px;
+    font-weight: 900;
+
+    letter-spacing: 1.4px;
+
+    color: #d6e8ff;
+}
+
+.evo-next {
+    color: #7186a5;
+
+    font-size: 10px;
+}
+
+.mass-track {
+    height: 9px;
+
+    margin-top: 9px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.08);
+}
+
+#massBar {
+    width: 0%;
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #50e9cd,
+            #69bdff,
+            #ab83ff
+        );
+
+    box-shadow:
+        0 0 17px rgba(85,222,255,.45);
+
+    transition: width .15s linear;
+}
+
+.mass-info {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 7px;
+
+    color: #7890b2;
+
+    font-size: 10px;
+}
+
+.energy-title {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 13px;
+    margin-bottom: 6px;
+
+    color: #8299ba;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.1px;
+}
+
+.energy-track {
+    height: 6px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.08);
+}
+
+#energyBar {
+    width: 100%;
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #74e9ff,
+            #5bf2c6
+        );
+}
+
+.controls {
+    margin-top: 9px;
+
+    color: #667d9f;
+
+    font-size: 10px;
+    line-height: 1.55;
+}
+
+/* =========================
+   BUFFS
+========================= */
+
+.power-status {
+    position: fixed;
+
+    right: 18px;
+    bottom: 18px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    gap: 7px;
+
+    z-index: 10;
+}
+
+.buff {
+    padding: 7px 11px;
+
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 999px;
+
+    background: rgba(5,13,31,.82);
+
+    color: #d9e8ff;
+
+    font-size: 10px;
+}
+
+/* =========================
+   OVERLAY
+========================= */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(17,49,67,.32),
+            rgba(1,4,12,.78)
+        );
+
+    backdrop-filter: blur(8px);
+
+    z-index: 30;
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+.card {
+    width: min(590px, 100%);
+
+    max-height: 92vh;
+
+    overflow-y: auto;
+
+    padding: 32px;
+
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 26px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(14,25,48,.97),
+            rgba(5,11,25,.97)
+        );
+
+    box-shadow:
+        0 40px 100px rgba(0,0,0,.56);
+}
+
+.eyebrow {
+    color: #65edd7;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    letter-spacing: 3px;
+}
+
+h1 {
+    margin: 9px 0 12px;
+
+    font-size: clamp(38px, 7vw, 66px);
+    line-height: .92;
+
+    letter-spacing: -3px;
+}
+
+h1 span {
+    color: #6af0d9;
+}
+
+.description {
+    margin-bottom: 19px;
+
+    color: #9aadc7;
+
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+.evolution-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 5px;
+
+    margin-bottom: 20px;
+}
+
+.evolution-item {
+    padding: 9px 5px;
+
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 10px;
+
+    text-align: center;
+
+    background: rgba(255,255,255,.035);
+}
+
+.evolution-item .icon {
+    font-size: 20px;
+}
+
+.evolution-item b {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 8px;
+
+    color: #c9daee;
+}
+
+.evolution-item small {
+    display: block;
+
+    margin-top: 2px;
+
+    color: #687d9c;
+
+    font-size: 7px;
+}
+
+.name-label {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: #7d94b5;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+#playerName {
+    width: 100%;
+
+    margin-top: 6px;
+
+    padding: 12px 14px;
+
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 11px;
+
+    outline: none;
+
+    background: rgba(255,255,255,.05);
+
+    color: white;
+
+    font-size: 14px;
+}
+
+#playerName:focus {
+    border-color: #5ce8d0;
+}
+
+#startBtn {
+    width: 100%;
+
+    padding: 14px;
+
+    border: 0;
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            90deg,
+            #57e5cb,
+            #70c7ff
+        );
+
+    color: #04141b;
+
+    font-size: 13px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+}
+
+#startBtn:hover {
+    transform: translateY(-1px);
+}
+
+.result-box {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 7px;
+
+    margin: 16px 0;
+}
+
+.result-box > div {
+    padding: 10px 6px;
+
+    text-align: center;
+
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 10px;
+
+    background: rgba(255,255,255,.035);
+}
+
+.result-box small {
+    display: block;
+
+    color: #6f85a5;
+
+    font-size: 8px;
+}
+
+.result-box strong {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 15px;
+}
+
+.ranking-title {
+    margin-top: 20px;
+    margin-bottom: 8px;
+
+    color: #7187a8;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+#rankingList {
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+#rankingList li {
+    display: grid;
+
+    grid-template-columns:
+        35px 1fr auto;
+
+    align-items: center;
+
+    padding: 8px 4px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.055);
+
+    color: #9dafc8;
+
+    font-size: 11px;
+}
+
+#rankingList .score {
+    color: white;
+    font-weight: 800;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+    position: fixed;
+
+    top: 96px;
+    left: 50%;
+
+    transform:
+        translate(-50%, -8px);
+
+    padding: 9px 15px;
+
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 999px;
+
+    background: rgba(4,13,30,.9);
+
+    color: white;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: .2s;
+
+    z-index: 20;
+}
+
+.toast.show {
+    opacity: 1;
+
+    transform:
+        translate(-50%, 0);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 760px) {
 
     .hud {
-        position: fixed;
-        top: 18px;
-        left: 50%;
-        transform: translateX(-50%);
+        width: calc(100% - 16px);
 
-        display: flex;
-        gap: 10px;
-
-        padding: 10px;
-
-        border: 1px solid rgba(255,255,255,.12);
-        border-radius: 18px;
-
-        background:
-            linear-gradient(
-                180deg,
-                rgba(13,24,45,.86),
-                rgba(5,12,28,.72)
-            );
-
-        backdrop-filter: blur(14px);
-
-        z-index: 5;
-
-        box-shadow:
-            0 15px 45px rgba(0,0,0,.32);
+        top: 8px;
     }
 
     .hud-box {
-        min-width: 95px;
+        flex: 1;
 
-        padding: 7px 14px;
+        min-width: 0;
 
-        text-align: center;
-
-        border-right: 1px solid rgba(255,255,255,.10);
-    }
-
-    .hud-box:last-child {
-        border-right: none;
+        padding: 5px 2px;
     }
 
     .hud-box small {
-        display: block;
-
-        color: #8ca4c5;
-
-        font-size: 10px;
-        font-weight: 700;
-
-        letter-spacing: 1.4px;
-
-        text-transform: uppercase;
+        font-size: 7px;
     }
 
     .hud-box strong {
-        display: block;
-
-        margin-top: 2px;
-
-        color: #f7fbff;
-
-        font-size: 20px;
+        font-size: 12px;
     }
 
-    .combo strong {
-        color: #ffe17a;
+    #stage {
+        font-size: 9px;
     }
 
-    .swarm strong {
-        color: #73f6da;
-    }
+    .evolution-panel {
+        left: 9px;
+        bottom: 9px;
 
-    .life strong {
-        color: #ff738a;
-        letter-spacing: 3px;
-    }
+        width: 245px;
 
-    .energy-panel {
-        position: fixed;
-
-        left: 22px;
-        bottom: 22px;
-
-        width: min(320px, calc(100vw - 44px));
-
-        padding: 15px 17px;
-
-        border: 1px solid rgba(255,255,255,.12);
-        border-radius: 16px;
-
-        background: rgba(4,11,28,.72);
-
-        backdrop-filter: blur(12px);
-
-        z-index: 5;
-    }
-
-    .energy-row {
-        display: flex;
-        justify-content: space-between;
-
-        margin-bottom: 8px;
-
-        font-size: 11px;
-        font-weight: 700;
-
-        color: #b5c7e0;
-
-        letter-spacing: 1px;
-    }
-
-    .energy-track {
-        height: 8px;
-
-        overflow: hidden;
-
-        border-radius: 999px;
-
-        background: rgba(255,255,255,.1);
-    }
-
-    #energyBar {
-        width: 100%;
-        height: 100%;
-
-        border-radius: inherit;
-
-        background:
-            linear-gradient(
-                90deg,
-                #5cf7df,
-                #69b9ff
-            );
-
-        box-shadow:
-            0 0 15px rgba(87,235,255,.65);
-
-        transition: width .08s linear;
-    }
-
-    .instruction {
-        margin-top: 9px;
-
-        font-size: 11px;
-        line-height: 1.55;
-
-        color: #7f94b4;
+        padding: 11px;
     }
 
     .power-status {
-        position: fixed;
-
-        right: 22px;
-        bottom: 22px;
-
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-
-        gap: 7px;
-
-        z-index: 5;
+        right: 9px;
+        bottom: 9px;
     }
 
-    .buff {
-        padding: 7px 11px;
-
-        border: 1px solid rgba(255,255,255,.13);
-        border-radius: 999px;
-
-        background: rgba(7,15,33,.78);
-
-        font-size: 11px;
-
-        color: #dbe9ff;
-    }
-
-    .overlay {
-        position: fixed;
-        inset: 0;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        padding: 20px;
-
-        z-index: 20;
-
-        background:
-            radial-gradient(
-                circle at center,
-                rgba(14,44,63,.25),
-                rgba(1,4,12,.72)
-            );
-
-        backdrop-filter: blur(7px);
-    }
-
-    .overlay.hidden {
-        display: none;
+    .evolution-list {
+        grid-template-columns:
+            repeat(5, 1fr);
     }
 
     .card {
-        width: min(570px, 100%);
-
-        max-height: 92vh;
-        overflow-y: auto;
-
-        padding: 34px;
-
-        border: 1px solid rgba(255,255,255,.13);
-        border-radius: 28px;
-
-        background:
-            linear-gradient(
-                145deg,
-                rgba(13,24,48,.96),
-                rgba(5,11,26,.96)
-            );
-
-        box-shadow:
-            0 35px 100px rgba(0,0,0,.55);
+        padding: 23px;
     }
-
-    .eyebrow {
-        color: #64efd5;
-
-        font-size: 11px;
-        font-weight: 800;
-
-        letter-spacing: 3px;
-    }
-
-    h1 {
-        margin: 10px 0 10px;
-
-        font-size: clamp(34px, 7vw, 64px);
-        line-height: .95;
-
-        letter-spacing: -3px;
-    }
-
-    h1 span {
-        color: #72f5dc;
-    }
-
-    .description {
-        margin-bottom: 22px;
-
-        line-height: 1.65;
-
-        color: #a7b8d0;
-
-        font-size: 14px;
-    }
-
-    .name-label {
-        display: block;
-
-        margin-bottom: 14px;
-
-        color: #899ebb;
-
-        font-size: 11px;
-        font-weight: 700;
-
-        letter-spacing: 1px;
-    }
-
-    #playerName {
-        width: 100%;
-
-        margin-top: 7px;
-        padding: 13px 15px;
-
-        border: 1px solid rgba(255,255,255,.14);
-        border-radius: 12px;
-
-        outline: none;
-
-        background: rgba(255,255,255,.055);
-
-        color: white;
-
-        font-size: 15px;
-    }
-
-    #playerName:focus {
-        border-color: #6bf4da;
-
-        box-shadow:
-            0 0 0 3px rgba(107,244,218,.1);
-    }
-
-    #startBtn {
-        width: 100%;
-
-        padding: 15px 20px;
-
-        border: none;
-        border-radius: 13px;
-
-        cursor: pointer;
-
-        background:
-            linear-gradient(
-                90deg,
-                #57e7cf,
-                #6fc7ff
-            );
-
-        color: #05131a;
-
-        font-size: 14px;
-        font-weight: 900;
-
-        letter-spacing: 1px;
-
-        transition:
-            transform .15s ease,
-            box-shadow .15s ease;
-    }
-
-    #startBtn:hover {
-        transform: translateY(-2px);
-
-        box-shadow:
-            0 12px 35px rgba(76,225,208,.25);
-    }
-
-    .howto {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-
-        gap: 8px;
-
-        margin-top: 17px;
-    }
-
-    .howto div {
-        padding: 11px;
-
-        border: 1px solid rgba(255,255,255,.08);
-        border-radius: 11px;
-
-        color: #91a5c0;
-
-        background: rgba(255,255,255,.035);
-
-        font-size: 11px;
-        line-height: 1.5;
-    }
-
-    .howto b {
-        color: white;
-    }
-
-    .result-box {
-        display: grid;
-        grid-template-columns: repeat(3,1fr);
-
-        gap: 8px;
-
-        margin: 18px 0;
-    }
-
-    .result-box > div {
-        padding: 12px;
-
-        text-align: center;
-
-        border: 1px solid rgba(255,255,255,.08);
-        border-radius: 12px;
-
-        background: rgba(255,255,255,.04);
-    }
-
-    .result-box small {
-        display: block;
-
-        color: #7890b0;
-
-        font-size: 9px;
-
-        letter-spacing: 1px;
-    }
-
-    .result-box strong {
-        display: block;
-
-        margin-top: 3px;
-
-        font-size: 18px;
-    }
-
-    .ranking-title {
-        margin: 25px 0 10px;
-
-        font-size: 11px;
-        font-weight: 800;
-
-        color: #8298b9;
-
-        letter-spacing: 2px;
-    }
-
-    #rankingList {
-        margin: 0;
-        padding: 0;
-
-        list-style: none;
-    }
-
-    #rankingList li {
-        display: grid;
-
-        grid-template-columns: 36px 1fr auto;
-
-        align-items: center;
-
-        gap: 8px;
-
-        padding: 9px 5px;
-
-        border-bottom: 1px solid rgba(255,255,255,.06);
-
-        color: #aec0d9;
-
-        font-size: 12px;
-    }
-
-    #rankingList li:first-child {
-        color: #ffe071;
-    }
-
-    #rankingList .score {
-        color: white;
-        font-weight: 800;
-    }
-
-    .toast {
-        position: fixed;
-
-        top: 105px;
-        left: 50%;
-
-        transform:
-            translate(-50%, -10px);
-
-        padding: 9px 15px;
-
-        border: 1px solid rgba(255,255,255,.13);
-        border-radius: 999px;
-
-        opacity: 0;
-
-        background: rgba(4,14,29,.88);
-
-        color: white;
-
-        font-size: 12px;
-        font-weight: 700;
-
-        pointer-events: none;
-
-        transition: .2s;
-
-        z-index: 8;
-    }
-
-    .toast.show {
-        transform:
-            translate(-50%, 0);
-
-        opacity: 1;
-    }
-
-    @media (max-width: 720px) {
-
-        .hud {
-            top: 10px;
-            width: calc(100% - 20px);
-
-            gap: 0;
-
-            justify-content: space-around;
-        }
-
-        .hud-box {
-            min-width: 0;
-
-            flex: 1;
-
-            padding: 6px 4px;
-        }
-
-        .hud-box strong {
-            font-size: 15px;
-        }
-
-        .hud-box small {
-            font-size: 8px;
-        }
-
-        .energy-panel {
-            left: 10px;
-            bottom: 10px;
-
-            width: 220px;
-        }
-
-        .power-status {
-            right: 10px;
-            bottom: 10px;
-        }
-
-        .card {
-            padding: 25px;
-        }
-    }
+}
 </style>
 </head>
 
 <body>
 
 <canvas id="canvas"></canvas>
+
+
+<!-- ======================
+     HUD
+======================= -->
 
 <div class="hud">
 
@@ -574,14 +689,21 @@
         <strong id="score">0</strong>
     </div>
 
-    <div class="hud-box combo">
+    <div class="hud-box">
+        <small>Mass</small>
+        <strong id="mass">0</strong>
+    </div>
+
+    <div class="hud-box">
         <small>Combo</small>
         <strong id="combo">×1</strong>
     </div>
 
-    <div class="hud-box swarm">
-        <small>Swarm</small>
-        <strong id="swarm">0</strong>
+    <div class="hud-box">
+        <small>Evolution</small>
+        <strong id="stage">
+            ROCKY PLANET
+        </strong>
     </div>
 
     <div class="hud-box">
@@ -589,7 +711,7 @@
         <strong id="wave">1</strong>
     </div>
 
-    <div class="hud-box life">
+    <div class="hud-box">
         <small>Life</small>
         <strong id="life">♥♥♥</strong>
     </div>
@@ -597,53 +719,199 @@
 </div>
 
 
-<div class="energy-panel">
+<!-- ======================
+     EVOLUTION PANEL
+======================= -->
 
-    <div class="energy-row">
+<div class="evolution-panel">
+
+    <div class="evo-header">
+
+        <span
+            id="evolutionName"
+            class="evo-title">
+            🪨 ROCKY PLANET
+        </span>
+
+        <span
+            id="nextEvolution"
+            class="evo-next">
+            Next: 10,000
+        </span>
+
+    </div>
+
+    <div class="mass-track">
+
+        <div id="massBar"></div>
+
+    </div>
+
+    <div class="mass-info">
+
+        <span id="massCurrent">
+            0 MASS
+        </span>
+
+        <span id="massGoal">
+            10,000
+        </span>
+
+    </div>
+
+
+    <div class="energy-title">
+
         <span>REPULSE ENERGY</span>
-        <span id="energyText">100%</span>
+
+        <span id="energyText">
+            100%
+        </span>
+
     </div>
 
     <div class="energy-track">
+
         <div id="energyBar"></div>
+
     </div>
 
-    <div class="instruction">
-        เลื่อนเมาส์เพื่อควบคุม Gravity Core<br>
-        กดเมาส์ค้าง / กด SPACE เพื่อผลักทุกสิ่งออก
+    <div class="controls">
+        MOVE = เลื่อนเมาส์<br>
+        REPULSE = กดเมาส์ค้าง / SPACE
     </div>
 
 </div>
 
 
-<div id="powerStatus" class="power-status"></div>
+<div
+    id="powerStatus"
+    class="power-status">
+</div>
 
-<div id="toast" class="toast"></div>
+
+<div
+    id="toast"
+    class="toast">
+</div>
 
 
-<div id="overlay" class="overlay">
+<!-- ======================
+     MENU
+======================= -->
 
-    <div class="card">
+<div
+    id="overlay"
+    class="overlay">
+
+    <section class="card">
 
         <div class="eyebrow">
-            GRAVITY SWARM
+            COSMIC EVOLUTION
         </div>
 
         <h1 id="overlayTitle">
-            FIREFLY<br>
-            <span>ARENA</span>
+            GRAVITY<br>
+            <span>EVOLUTION</span>
         </h1>
 
-        <p id="overlayText" class="description">
-            ควบคุมสนามแรงโน้มถ่วงเพื่อรวบรวมหิ่งห้อย
-            สร้างฝูงขนาดใหญ่ หลบหลุมดำ
-            และรักษา Combo ให้นานที่สุด
+        <p
+            id="overlayText"
+            class="description">
+
+            เริ่มจากดาวเคราะห์ขนาดเล็ก
+            ดูดกลืนพลังงานและสะสม Mass
+            เพื่อวิวัฒนาการไปจนถึง
+            Supermassive Black Hole
+
         </p>
 
-        <div id="resultBox"
-             class="result-box"
-             hidden>
+
+        <div class="evolution-list">
+
+            <div class="evolution-item">
+
+                <div class="icon">
+                    🪨
+                </div>
+
+                <b>PLANET</b>
+
+                <small>
+                    0
+                </small>
+
+            </div>
+
+
+            <div class="evolution-item">
+
+                <div class="icon">
+                    🪐
+                </div>
+
+                <b>GAS GIANT</b>
+
+                <small>
+                    10K
+                </small>
+
+            </div>
+
+
+            <div class="evolution-item">
+
+                <div class="icon">
+                    ☀️
+                </div>
+
+                <b>STAR</b>
+
+                <small>
+                    20K
+                </small>
+
+            </div>
+
+
+            <div class="evolution-item">
+
+                <div class="icon">
+                    ⚫
+                </div>
+
+                <b>BLACK HOLE</b>
+
+                <small>
+                    50K
+                </small>
+
+            </div>
+
+
+            <div class="evolution-item">
+
+                <div class="icon">
+                    🌌
+                </div>
+
+                <b>SUPER BH</b>
+
+                <small>
+                    100K+
+                </small>
+
+            </div>
+
         </div>
+
+
+        <div
+            id="resultBox"
+            class="result-box"
+            hidden>
+        </div>
+
 
         <label class="name-label">
 
@@ -651,52 +919,38 @@
 
             <input
                 id="playerName"
-                maxlength="15"
-                placeholder="Space"
-                autocomplete="nickname">
+                maxlength="16"
+                autocomplete="nickname"
+                placeholder="Space">
 
         </label>
 
+
         <button id="startBtn">
-            START GRAVITY CORE
+
+            BEGIN COSMIC EVOLUTION
+
         </button>
 
-        <div class="howto">
-
-            <div>
-                <b>MOVE</b><br>
-                ขยับเมาส์เพื่อพา Gravity Core
-            </div>
-
-            <div>
-                <b>CAPTURE</b><br>
-                ดูดหิ่งห้อยเข้าศูนย์กลาง
-            </div>
-
-            <div>
-                <b>REPULSE</b><br>
-                กดค้างเพื่อผลัก Black Hole
-            </div>
-
-            <div>
-                <b>POWER-UP</b><br>
-                เก็บพลังพิเศษเพื่อเอาตัวรอด
-            </div>
-
-        </div>
 
         <div class="ranking-title">
+
             LOCAL TOP 10
+
         </div>
 
         <ol id="rankingList"></ol>
 
-    </div>
+    </section>
 
 </div>
 
 
 <script>
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
 const canvas =
     document.getElementById("canvas");
@@ -708,11 +962,14 @@ const ctx =
 const scoreUI =
     document.getElementById("score");
 
+const massUI =
+    document.getElementById("mass");
+
 const comboUI =
     document.getElementById("combo");
 
-const swarmUI =
-    document.getElementById("swarm");
+const stageUI =
+    document.getElementById("stage");
 
 const waveUI =
     document.getElementById("wave");
@@ -720,14 +977,26 @@ const waveUI =
 const lifeUI =
     document.getElementById("life");
 
+const massBar =
+    document.getElementById("massBar");
+
+const massCurrent =
+    document.getElementById("massCurrent");
+
+const massGoal =
+    document.getElementById("massGoal");
+
+const evolutionName =
+    document.getElementById("evolutionName");
+
+const nextEvolution =
+    document.getElementById("nextEvolution");
+
 const energyBar =
     document.getElementById("energyBar");
 
 const energyText =
     document.getElementById("energyText");
-
-const powerStatus =
-    document.getElementById("powerStatus");
 
 const overlay =
     document.getElementById("overlay");
@@ -750,9 +1019,16 @@ const resultBox =
 const rankingList =
     document.getElementById("rankingList");
 
+const powerStatus =
+    document.getElementById("powerStatus");
+
 const toast =
     document.getElementById("toast");
 
+
+/* =====================================================
+   WORLD
+===================================================== */
 
 let width;
 let height;
@@ -762,72 +1038,9 @@ let stars = [];
 
 let fireflies = [];
 let blackHoles = [];
-let powerUps = [];
 let particles = [];
+let powerUps = [];
 let floatingTexts = [];
-
-
-const pointer = {
-
-    x: window.innerWidth / 2,
-    y: window.innerHeight / 2,
-
-    active: false,
-    down: false
-
-};
-
-
-const core = {
-
-    x: window.innerWidth / 2,
-    y: window.innerHeight / 2,
-
-    targetX: window.innerWidth / 2,
-    targetY: window.innerHeight / 2,
-
-    radius: 25
-
-};
-
-
-const game = {
-
-    state: "menu",
-
-    score: 0,
-
-    combo: 1,
-    bestCombo: 1,
-
-    comboTimer: 0,
-
-    time: 0,
-
-    wave: 1,
-
-    lives: 3,
-
-    energy: 100,
-
-    invulnerable: 0,
-
-    shield: 0,
-
-    slow: 0,
-
-    superGravity: 0,
-
-    nextBlackHole: 7,
-
-    nextPowerUp: 10,
-
-    maxSwarm: 45,
-
-    maxSwarmReached: 0
-
-};
-
 
 let lastTime =
     performance.now();
@@ -835,113 +1048,198 @@ let lastTime =
 let toastTimer;
 
 
-const RANKING_KEY =
-    "gravity-swarm-ranking-v1";
+/* =====================================================
+   PLAYER
+===================================================== */
+
+const pointer = {
+
+    x:
+        innerWidth / 2,
+
+    y:
+        innerHeight / 2,
+
+    active:
+        false,
+
+    down:
+        false
+};
 
 
-function resize() {
+const core = {
 
-    dpr =
-        Math.min(
-            window.devicePixelRatio || 1,
-            2
-        );
+    x:
+        innerWidth / 2,
 
-    width =
-        window.innerWidth;
+    y:
+        innerHeight / 2,
 
-    height =
-        window.innerHeight;
+    targetX:
+        innerWidth / 2,
 
-    canvas.width =
-        width * dpr;
+    targetY:
+        innerHeight / 2,
 
-    canvas.height =
-        height * dpr;
+    radius:
+        22
+};
 
-    canvas.style.width =
-        width + "px";
 
-    canvas.style.height =
-        height + "px";
+/* =====================================================
+   GAME STATE
+===================================================== */
 
-    ctx.setTransform(
-        dpr,
+const game = {
+
+    state:
+        "menu",
+
+    score:
         0,
+
+    mass:
         0,
-        dpr,
+
+    stage:
+        "planet",
+
+    combo:
+        1,
+
+    bestCombo:
+        1,
+
+    comboTimer:
         0,
+
+    time:
+        0,
+
+    wave:
+        1,
+
+    lives:
+        3,
+
+    energy:
+        100,
+
+    invulnerable:
+        0,
+
+    shield:
+        0,
+
+    slow:
+        0,
+
+    superGravity:
+        0,
+
+    nextBlackHole:
+        8,
+
+    nextPowerUp:
+        11,
+
+    maxSwarm:
+        60,
+
+    maxSwarmReached:
+        0,
+
+    absorbedBlackHoles:
         0
-    );
-
-    createStars();
-
-}
+};
 
 
-window.addEventListener(
-    "resize",
-    resize
-);
+const RANKING_KEY =
+    "gravity-evolution-ranking-v1";
 
 
-function createStars() {
+/* =====================================================
+   EVOLUTION DATA
+===================================================== */
 
-    stars = [];
+const EVOLUTION = {
 
-    const count =
-        Math.floor(
-            width * height / 9000
-        );
+    planet: {
+        name:
+            "ROCKY PLANET",
 
-    for (
-        let i = 0;
-        i < count;
-        i++
-    ) {
+        icon:
+            "🪨",
 
-        stars.push({
+        min:
+            0,
 
-            x:
-                Math.random() * width,
+        next:
+            10000
+    },
 
-            y:
-                Math.random() * height,
+    gasGiant: {
+        name:
+            "GAS GIANT",
 
-            size:
-                .4 + Math.random() * 1.7,
+        icon:
+            "🪐",
 
-            alpha:
-                .15 + Math.random() * .55,
+        min:
+            10000,
 
-            phase:
-                Math.random() *
-                Math.PI * 2
+        next:
+            20000
+    },
 
-        });
+    star: {
+        name:
+            "STAR",
 
+        icon:
+            "☀️",
+
+        min:
+            20000,
+
+        next:
+            50000
+    },
+
+    blackHole: {
+        name:
+            "BLACK HOLE",
+
+        icon:
+            "⚫",
+
+        min:
+            50000,
+
+        next:
+            100000
+    },
+
+    superBlackHole: {
+        name:
+            "SUPERMASSIVE BLACK HOLE",
+
+        icon:
+            "🌌",
+
+        min:
+            100000,
+
+        next:
+            null
     }
-
-}
-
-
-resize();
+};
 
 
-function distance(
-    x1,
-    y1,
-    x2,
-    y2
-) {
-
-    return Math.hypot(
-        x2 - x1,
-        y2 - y1
-    );
-
-}
-
+/* =====================================================
+   BASIC HELPERS
+===================================================== */
 
 function clamp(
     value,
@@ -956,58 +1254,631 @@ function clamp(
             value
         )
     );
-
 }
 
+
+function distance(
+    x1,
+    y1,
+    x2,
+    y2
+) {
+
+    return Math.hypot(
+        x2 - x1,
+        y2 - y1
+    );
+}
+
+
+function random(
+    min,
+    max
+) {
+
+    return (
+        min +
+        Math.random() *
+        (
+            max -
+            min
+        )
+    );
+}
+
+
+/* =====================================================
+   RESIZE
+===================================================== */
+
+function resize() {
+
+    dpr =
+        Math.min(
+            devicePixelRatio || 1,
+            2
+        );
+
+    width =
+        innerWidth;
+
+    height =
+        innerHeight;
+
+
+    canvas.width =
+        Math.round(
+            width * dpr
+        );
+
+    canvas.height =
+        Math.round(
+            height * dpr
+        );
+
+
+    canvas.style.width =
+        width + "px";
+
+    canvas.style.height =
+        height + "px";
+
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+
+    createStars();
+}
+
+
+addEventListener(
+    "resize",
+    resize
+);
+
+
+resize();
+
+
+/* =====================================================
+   BACKGROUND STARS
+===================================================== */
+
+function createStars() {
+
+    stars = [];
+
+    const count =
+        Math.floor(
+            width *
+            height /
+            7500
+        );
+
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
+
+        stars.push({
+
+            x:
+                Math.random() *
+                width,
+
+            y:
+                Math.random() *
+                height,
+
+            size:
+                random(
+                    .4,
+                    1.7
+                ),
+
+            alpha:
+                random(
+                    .12,
+                    .65
+                ),
+
+            phase:
+                Math.random() *
+                Math.PI *
+                2
+        });
+    }
+}
+
+
+/* =====================================================
+   EVOLUTION
+===================================================== */
+
+function getEvolutionStage() {
+
+    if (
+        game.mass >=
+        100000
+    ) {
+        return "superBlackHole";
+    }
+
+    if (
+        game.mass >=
+        50000
+    ) {
+        return "blackHole";
+    }
+
+    if (
+        game.mass >=
+        20000
+    ) {
+        return "star";
+    }
+
+    if (
+        game.mass >=
+        10000
+    ) {
+        return "gasGiant";
+    }
+
+    return "planet";
+}
+
+
+function updateEvolution() {
+
+    const newStage =
+        getEvolutionStage();
+
+
+    if (
+        newStage ===
+        game.stage
+    ) {
+        return;
+    }
+
+
+    game.stage =
+        newStage;
+
+
+    const info =
+        EVOLUTION[
+            newStage
+        ];
+
+
+    showToast(
+        "✦ EVOLUTION — " +
+        info.name
+    );
+
+
+    burst(
+        core.x,
+        core.y,
+        "#ffffff",
+        100
+    );
+
+
+    evolutionShockwave();
+
+    updateHUD();
+}
+
+
+function evolutionShockwave() {
+
+    for (
+        let i = 0;
+        i < 80;
+        i++
+    ) {
+
+        const angle =
+            Math.random() *
+            Math.PI *
+            2;
+
+
+        particles.push({
+
+            x:
+                core.x,
+
+            y:
+                core.y,
+
+            vx:
+                Math.cos(
+                    angle
+                ) *
+                random(
+                    120,
+                    420
+                ),
+
+            vy:
+                Math.sin(
+                    angle
+                ) *
+                random(
+                    120,
+                    420
+                ),
+
+            life:
+                random(
+                    .6,
+                    1.4
+                ),
+
+            maxLife:
+                1.4,
+
+            size:
+                random(
+                    1,
+                    5
+                ),
+
+            color:
+                "#ffffff"
+        });
+    }
+}
+
+
+/* =====================================================
+   GRAVITY STATS
+===================================================== */
+
+function getGravityStats() {
+
+    let stats;
+
+
+    switch (
+        game.stage
+    ) {
+
+        case "gasGiant":
+
+            stats = {
+                range: 360,
+                power: 580
+            };
+
+            break;
+
+
+        case "star":
+
+            stats = {
+                range: 430,
+                power: 780
+            };
+
+            break;
+
+
+        case "blackHole":
+
+            stats = {
+                range: 540,
+                power: 1100
+            };
+
+            break;
+
+
+        case "superBlackHole": {
+
+            const bonus =
+                Math.log10(
+                    Math.max(
+                        1,
+                        game.mass /
+                        100000
+                    )
+                );
+
+
+            stats = {
+
+                range:
+                    670 +
+                    bonus *
+                    120,
+
+                power:
+                    1600 +
+                    bonus *
+                    650
+            };
+
+            break;
+        }
+
+
+        default:
+
+            stats = {
+                range: 290,
+                power: 450
+            };
+    }
+
+
+    if (
+        game.superGravity >
+        0
+    ) {
+
+        stats.range *=
+            1.35;
+
+        stats.power *=
+            1.45;
+    }
+
+
+    return stats;
+}
+
+
+/* =====================================================
+   CORE SIZE
+===================================================== */
+
+function getCoreRadius() {
+
+    switch (
+        game.stage
+    ) {
+
+        case "gasGiant":
+
+            return 30;
+
+
+        case "star":
+
+            return 35;
+
+
+        case "blackHole":
+
+            return 32;
+
+
+        case "superBlackHole":
+
+            return clamp(
+                42 +
+                Math.log10(
+                    Math.max(
+                        1,
+                        game.mass /
+                        100000
+                    )
+                ) *
+                25,
+                42,
+                85
+            );
+
+
+        default:
+
+            return 23;
+    }
+}
+
+
+/* =====================================================
+   STAR COLOR
+===================================================== */
+
+function getStarColor() {
+
+    const m =
+        game.mass;
+
+
+    if (
+        m < 27000
+    ) {
+
+        return {
+            core:
+                "#fff1bd",
+
+            mid:
+                "#ffb64f",
+
+            glow:
+                "#ff7b35",
+
+            label:
+                "ORANGE STAR"
+        };
+    }
+
+
+    if (
+        m < 35000
+    ) {
+
+        return {
+            core:
+                "#fffce0",
+
+            mid:
+                "#ffd85c",
+
+            glow:
+                "#ffc12e",
+
+            label:
+                "YELLOW STAR"
+        };
+    }
+
+
+    if (
+        m < 43000
+    ) {
+
+        return {
+            core:
+                "#ffffff",
+
+            mid:
+                "#e6f1ff",
+
+            glow:
+                "#a8d4ff",
+
+            label:
+                "WHITE STAR"
+        };
+    }
+
+
+    return {
+
+        core:
+            "#ffffff",
+
+        mid:
+            "#bfdcff",
+
+        glow:
+            "#579aff",
+
+        label:
+            "BLUE-WHITE STAR"
+    };
+}
+
+
+/* =====================================================
+   RANDOM EDGE
+===================================================== */
 
 function randomEdgePosition() {
 
     const edge =
         Math.floor(
-            Math.random() * 4
+            Math.random() *
+            4
         );
 
-    if (edge === 0)
-        return {
-            x: Math.random() * width,
-            y: -20
-        };
 
-    if (edge === 1)
-        return {
-            x: width + 20,
-            y: Math.random() * height
-        };
+    if (
+        edge === 0
+    ) {
 
-    if (edge === 2)
         return {
-            x: Math.random() * width,
-            y: height + 20
+            x:
+                Math.random() *
+                width,
+
+            y:
+                -20
         };
+    }
+
+
+    if (
+        edge === 1
+    ) {
+
+        return {
+            x:
+                width + 20,
+
+            y:
+                Math.random() *
+                height
+        };
+    }
+
+
+    if (
+        edge === 2
+    ) {
+
+        return {
+            x:
+                Math.random() *
+                width,
+
+            y:
+                height + 20
+        };
+    }
+
 
     return {
-        x: -20,
-        y: Math.random() * height
-    };
 
+        x:
+            -20,
+
+        y:
+            Math.random() *
+            height
+    };
 }
 
+
+/* =====================================================
+   FIREFLY TYPE
+===================================================== */
 
 function getFireflyType() {
 
     const r =
         Math.random();
 
-    if (r < .06)
-        return "gold";
 
-    if (r < .25)
+    if (
+        r < .055
+    ) {
+        return "gold";
+    }
+
+
+    if (
+        r < .23
+    ) {
         return "swift";
+    }
+
 
     return "normal";
-
 }
 
+
+/* =====================================================
+   FIREFLY
+===================================================== */
 
 class Firefly {
 
@@ -1016,36 +1887,56 @@ class Firefly {
         const p =
             randomEdgePosition();
 
-        this.x = p.x;
-        this.y = p.y;
+
+        this.x =
+            p.x;
+
+        this.y =
+            p.y;
+
 
         this.vx =
-            (Math.random() - .5) * 45;
+            random(
+                -40,
+                40
+            );
 
         this.vy =
-            (Math.random() - .5) * 45;
+            random(
+                -40,
+                40
+            );
+
 
         this.phase =
             Math.random() *
-            Math.PI * 2;
+            Math.PI *
+            2;
+
 
         this.type =
             getFireflyType();
 
+
         this.state =
             "free";
+
 
         this.alive =
             true;
 
+
         this.orbitAngle =
             0;
+
 
         this.orbitRadius =
             70;
 
+
         this.orbitSpeed =
             1;
+
 
         if (
             this.type ===
@@ -1053,18 +1944,21 @@ class Firefly {
         ) {
 
             this.color =
-                "#ffe169";
+                "#ffe36b";
 
             this.value =
                 100;
 
-            this.speed =
-                125;
+            this.massValue =
+                1000;
 
             this.size =
-                3.7;
+                4;
 
+            this.maxSpeed =
+                135;
         }
+
 
         else if (
             this.type ===
@@ -1072,57 +1966,67 @@ class Firefly {
         ) {
 
             this.color =
-                "#63b9ff";
+                "#6bbcff";
 
             this.value =
                 25;
 
-            this.speed =
-                185;
+            this.massValue =
+                250;
 
             this.size =
-                3;
+                3.1;
 
+            this.maxSpeed =
+                190;
         }
+
 
         else {
 
             this.color =
-                "#68f6d3";
+                "#69f3d1";
 
             this.value =
                 10;
 
-            this.speed =
-                140;
+            this.massValue =
+                100;
 
             this.size =
                 2.7;
 
+            this.maxSpeed =
+                145;
         }
-
     }
 
 
-    update(dt) {
+    update(
+        dt
+    ) {
 
         if (
             this.state ===
             "orbit"
         ) {
 
-            this.updateOrbit(dt);
+            this.updateOrbit(
+                dt
+            );
 
             return;
-
         }
 
 
         const dx =
-            core.x - this.x;
+            core.x -
+            this.x;
 
         const dy =
-            core.y - this.y;
+            core.y -
+            this.y;
+
 
         const dist =
             Math.hypot(
@@ -1131,61 +2035,52 @@ class Firefly {
             ) || 1;
 
 
-        const gravityRange =
-            game.superGravity > 0
-                ? 430
-                : 300;
+        const gravity =
+            getGravityStats();
 
 
         if (
             dist <
-            gravityRange
+            gravity.range
         ) {
 
             const falloff =
                 1 -
                 dist /
-                gravityRange;
+                gravity.range;
 
-            const gravity =
-                (
-                    game.superGravity > 0
-                        ? 760
-                        : 470
-                ) *
+
+            const force =
+                gravity.power *
                 falloff;
 
 
             this.vx +=
-                (
-                    dx /
-                    dist
-                ) *
-                gravity *
+                dx /
+                dist *
+                force *
                 dt;
+
 
             this.vy +=
-                (
-                    dy /
-                    dist
-                ) *
-                gravity *
+                dy /
+                dist *
+                force *
                 dt;
-
         }
 
 
-        const repel =
-            pointer.down &&
-            game.energy > 0;
-
+        /* REPULSE */
 
         if (
-            repel &&
-            dist < 245
+            pointer.down &&
+            game.energy >
+            0 &&
+            dist <
+            245
         ) {
 
-            const power =
+            const repel =
                 (
                     1 -
                     dist /
@@ -1195,23 +2090,21 @@ class Firefly {
 
 
             this.vx -=
-                (
-                    dx /
-                    dist
-                ) *
-                power *
+                dx /
+                dist *
+                repel *
                 dt;
+
 
             this.vy -=
-                (
-                    dy /
-                    dist
-                ) *
-                power *
+                dy /
+                dist *
+                repel *
                 dt;
-
         }
 
+
+        /* ENEMY BLACK HOLES */
 
         for (
             const hole
@@ -1220,17 +2113,20 @@ class Firefly {
 
             if (
                 !hole.alive
-            )
+            ) {
                 continue;
+            }
 
 
             const hx =
                 hole.x -
                 this.x;
 
+
             const hy =
                 hole.y -
                 this.y;
+
 
             const hd =
                 Math.hypot(
@@ -1244,34 +2140,27 @@ class Firefly {
                 hole.influence
             ) {
 
-                const power =
+                const force =
                     (
                         1 -
                         hd /
                         hole.influence
                     ) *
-                    (
-                        430 +
-                        game.wave * 25
-                    );
+                    460;
 
 
                 this.vx +=
-                    (
-                        hx /
-                        hd
-                    ) *
-                    power *
+                    hx /
+                    hd *
+                    force *
                     dt;
+
 
                 this.vy +=
-                    (
-                        hy /
-                        hd
-                    ) *
-                    power *
+                    hy /
+                    hd *
+                    force *
                     dt;
-
             }
 
 
@@ -1284,11 +2173,11 @@ class Firefly {
                     false;
 
                 return;
-
             }
-
         }
 
+
+        /* RANDOM FLOAT */
 
         this.vx +=
             Math.sin(
@@ -1303,7 +2192,7 @@ class Firefly {
         this.vy +=
             Math.cos(
                 game.time *
-                1.6 +
+                1.5 +
                 this.phase
             ) *
             7 *
@@ -1319,23 +2208,19 @@ class Firefly {
 
         if (
             speed >
-            this.speed
+            this.maxSpeed
         ) {
 
             this.vx =
-                (
-                    this.vx /
-                    speed
-                ) *
-                this.speed;
+                this.vx /
+                speed *
+                this.maxSpeed;
+
 
             this.vy =
-                (
-                    this.vy /
-                    speed
-                ) *
-                this.speed;
-
+                this.vy /
+                speed *
+                this.maxSpeed;
         }
 
 
@@ -1343,69 +2228,88 @@ class Firefly {
             this.vx *
             dt;
 
+
         this.y +=
             this.vy *
             dt;
 
 
+        /* WRAP */
+
         if (
             this.x < -40
-        )
+        ) {
             this.x =
                 width + 40;
+        }
+
 
         if (
             this.x >
             width + 40
-        )
+        ) {
             this.x =
                 -40;
+        }
+
 
         if (
             this.y < -40
-        )
+        ) {
             this.y =
                 height + 40;
+        }
+
 
         if (
             this.y >
             height + 40
-        )
+        ) {
             this.y =
                 -40;
+        }
+
+
+        /* CAPTURE */
+
+        const captureRadius =
+            getCoreRadius() +
+            10;
 
 
         if (
-            dist < 31 &&
-            !repel
+            dist <
+            captureRadius &&
+            !pointer.down
         ) {
 
             captureFirefly(
                 this
             );
-
         }
-
     }
 
 
-    updateOrbit(dt) {
+    updateOrbit(
+        dt
+    ) {
 
         this.orbitAngle +=
             this.orbitSpeed *
             dt;
 
 
-        const repelExpansion =
+        const ringExpansion =
             pointer.down &&
-            game.energy > 0
-                ? 24
+            game.energy >
+            0
+                ? 22
                 : 0;
 
 
         const r =
             this.orbitRadius +
-            repelExpansion;
+            ringExpansion;
 
 
         this.x =
@@ -1424,6 +2328,40 @@ class Firefly {
             r;
 
 
+        /* BLACK HOLE PLAYER
+           gradually pulls orbit inward */
+
+        if (
+            game.stage ===
+            "blackHole" ||
+            game.stage ===
+            "superBlackHole"
+        ) {
+
+            this.orbitRadius -=
+                dt *
+                (
+                    game.stage ===
+                    "superBlackHole"
+                        ? 7
+                        : 4
+                );
+
+
+            if (
+                this.orbitRadius <
+                getCoreRadius() +
+                10
+            ) {
+
+                this.alive =
+                    false;
+            }
+        }
+
+
+        /* ENEMY BLACK HOLES */
+
         for (
             const hole
             of blackHoles
@@ -1431,8 +2369,9 @@ class Firefly {
 
             if (
                 !hole.alive
-            )
+            ) {
                 continue;
+            }
 
 
             const d =
@@ -1447,7 +2386,7 @@ class Firefly {
             if (
                 d <
                 hole.radius +
-                55
+                45
             ) {
 
                 releaseFromOrbit(
@@ -1456,11 +2395,8 @@ class Firefly {
                 );
 
                 return;
-
             }
-
         }
-
     }
 
 
@@ -1472,10 +2408,11 @@ class Firefly {
         ctx.shadowColor =
             this.color;
 
+
         ctx.shadowBlur =
             this.state ===
             "orbit"
-                ? 18
+                ? 17
                 : 10;
 
 
@@ -1485,6 +2422,7 @@ class Firefly {
 
         ctx.beginPath();
 
+
         ctx.arc(
             this.x,
             this.y,
@@ -1493,117 +2431,142 @@ class Firefly {
             Math.PI * 2
         );
 
+
         ctx.fill();
 
 
         ctx.globalAlpha =
-            .25;
+            .22;
 
 
         ctx.beginPath();
 
+
         ctx.arc(
             this.x,
             this.y,
-            this.size * 3.6,
+            this.size *
+            3.7,
             0,
             Math.PI * 2
         );
+
 
         ctx.fill();
 
 
         ctx.restore();
-
     }
-
 }
 
+
+/* =====================================================
+   ENEMY BLACK HOLE
+===================================================== */
 
 class BlackHole {
 
     constructor() {
 
         this.radius =
-            Math.min(
-                26 +
-                game.wave * 1.5,
-                44
-            );
+            random(
+                20,
+                31
+            ) +
+            game.wave *
+            .8;
+
 
         this.influence =
-            this.radius * 6;
+            this.radius *
+            6;
 
 
         do {
 
             this.x =
-                80 +
-                Math.random() *
-                Math.max(
-                    1,
-                    width - 160
+                random(
+                    70,
+                    Math.max(
+                        71,
+                        width - 70
+                    )
                 );
 
+
             this.y =
-                120 +
-                Math.random() *
-                Math.max(
-                    1,
-                    height - 220
+                random(
+                    110,
+                    Math.max(
+                        111,
+                        height - 90
+                    )
                 );
 
         }
-
         while (
             distance(
                 this.x,
                 this.y,
                 core.x,
                 core.y
-            ) < 240
+            ) <
+            250
         );
 
 
         this.vx =
-            (Math.random() - .5) *
-            35;
+            random(
+                -30,
+                30
+            );
+
 
         this.vy =
-            (Math.random() - .5) *
-            35;
+            random(
+                -30,
+                30
+            );
 
-        this.spin = 0;
+
+        this.spin =
+            Math.random() *
+            Math.PI *
+            2;
+
 
         this.alive =
             true;
-
     }
 
 
-    update(dt) {
+    update(
+        dt
+    ) {
 
-        const slowFactor =
-            game.slow > 0
-                ? .38
+        const slow =
+            game.slow >
+            0
+                ? .35
                 : 1;
 
 
         this.x +=
             this.vx *
             dt *
-            slowFactor;
+            slow;
+
 
         this.y +=
             this.vy *
             dt *
-            slowFactor;
+            slow;
 
 
         this.spin +=
             dt *
-            1.5 *
-            slowFactor;
+            1.4 *
+            slow;
 
 
         if (
@@ -1612,76 +2575,27 @@ class BlackHole {
             this.x >
             width -
             this.radius
-        )
-            this.vx *= -1;
+        ) {
+
+            this.vx *=
+                -1;
+        }
 
 
         if (
             this.y <
-            this.radius +
-            80 ||
+            90 ||
             this.y >
             height -
             this.radius
-        )
-            this.vy *= -1;
-
-
-        if (
-            pointer.down &&
-            game.energy > 0
         ) {
 
-            const dx =
-                this.x -
-                core.x;
-
-            const dy =
-                this.y -
-                core.y;
-
-            const d =
-                Math.hypot(
-                    dx,
-                    dy
-                ) || 1;
-
-
-            if (
-                d < 190
-            ) {
-
-                const push =
-                    (
-                        1 -
-                        d / 190
-                    ) *
-                    230;
-
-
-                this.vx +=
-                    (
-                        dx /
-                        d
-                    ) *
-                    push *
-                    dt;
-
-
-                this.vy +=
-                    (
-                        dy /
-                        d
-                    ) *
-                    push *
-                    dt;
-
-            }
-
+            this.vy *=
+                -1;
         }
 
 
-        const coreDistance =
+        const d =
             distance(
                 this.x,
                 this.y,
@@ -1690,72 +2604,146 @@ class BlackHole {
             );
 
 
+        /* PLAYER IS BLACK HOLE
+           CAN ABSORB SMALLER HOLES */
+
         if (
-            coreDistance <
+            (
+                game.stage ===
+                "blackHole" ||
+                game.stage ===
+                "superBlackHole"
+            ) &&
+            d <
+            getCoreRadius() +
             this.radius +
-            core.radius
+            8
         ) {
 
-            if (
-                game.shield > 0
-            ) {
+            absorbEnemyBlackHole(
+                this
+            );
 
-                this.alive =
-                    false;
-
-                burst(
-                    this.x,
-                    this.y,
-                    "#79f5e0",
-                    40
-                );
-
-                addFloatingText(
-                    this.x,
-                    this.y,
-                    "SHIELD BLOCK!",
-                    "#79f5e0"
-                );
-
-                return;
-
-            }
+            return;
+        }
 
 
-            damageCore();
+        /* REPULSE */
+
+        if (
+            pointer.down &&
+            game.energy >
+            0 &&
+            d <
+            220
+        ) {
 
             const dx =
                 this.x -
                 core.x;
 
+
             const dy =
                 this.y -
                 core.y;
 
-            const d =
-                Math.hypot(
-                    dx,
-                    dy
-                ) || 1;
+
+            const safe =
+                Math.max(
+                    d,
+                    1
+                );
+
+
+            const push =
+                (
+                    1 -
+                    d /
+                    220
+                ) *
+                340;
 
 
             this.vx +=
-                (
-                    dx /
-                    d
-                ) *
-                280;
+                dx /
+                safe *
+                push *
+                dt;
 
 
             this.vy +=
-                (
-                    dy /
-                    d
-                ) *
-                280;
-
+                dy /
+                safe *
+                push *
+                dt;
         }
 
+
+        /* DAMAGE */
+
+        if (
+            d <
+            this.radius +
+            getCoreRadius()
+        ) {
+
+            if (
+                game.shield >
+                0
+            ) {
+
+                this.alive =
+                    false;
+
+
+                burst(
+                    this.x,
+                    this.y,
+                    "#76ecff",
+                    40
+                );
+
+
+                showToast(
+                    "🛡 SHIELD DESTROYED BLACK HOLE"
+                );
+
+
+                return;
+            }
+
+
+            damageCore();
+
+
+            const dx =
+                this.x -
+                core.x;
+
+
+            const dy =
+                this.y -
+                core.y;
+
+
+            const safe =
+                Math.max(
+                    d,
+                    1
+                );
+
+
+            this.vx +=
+                dx /
+                safe *
+                260;
+
+
+            this.vy +=
+                dy /
+                safe *
+                260;
+        }
     }
 
 
@@ -1763,17 +2751,19 @@ class BlackHole {
 
         ctx.save();
 
+
         ctx.translate(
             this.x,
             this.y
         );
+
 
         ctx.rotate(
             this.spin
         );
 
 
-        const gradient =
+        const glow =
             ctx.createRadialGradient(
                 0,
                 0,
@@ -1781,50 +2771,58 @@ class BlackHole {
                 0,
                 0,
                 this.influence *
-                .52
+                .48
             );
 
 
-        gradient.addColorStop(
+        glow.addColorStop(
             0,
             "rgba(0,0,0,1)"
         );
 
-        gradient.addColorStop(
+
+        glow.addColorStop(
             .18,
-            "rgba(16,4,25,.95)"
+            "rgba(20,4,35,.94)"
         );
 
-        gradient.addColorStop(
+
+        glow.addColorStop(
             .45,
-            "rgba(109,45,158,.16)"
+            "rgba(110,55,175,.13)"
         );
 
-        gradient.addColorStop(
+
+        glow.addColorStop(
             1,
-            "rgba(80,50,160,0)"
+            "rgba(70,50,160,0)"
         );
 
 
         ctx.fillStyle =
-            gradient;
+            glow;
 
 
         ctx.beginPath();
 
+
         ctx.arc(
             0,
             0,
-            this.influence * .52,
+            this.influence *
+            .48,
             0,
-            Math.PI * 2
+            Math.PI *
+            2
         );
+
 
         ctx.fill();
 
 
         ctx.strokeStyle =
-            "rgba(181,106,255,.45)";
+            "rgba(179,99,255,.55)";
+
 
         ctx.lineWidth =
             3;
@@ -1832,34 +2830,20 @@ class BlackHole {
 
         ctx.beginPath();
 
-        ctx.ellipse(
-            0,
-            0,
-            this.radius * 1.7,
-            this.radius * .7,
-            .35,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.stroke();
-
-
-        ctx.strokeStyle =
-            "rgba(91,202,255,.25)";
-
-
-        ctx.beginPath();
 
         ctx.ellipse(
             0,
             0,
-            this.radius * 1.9,
-            this.radius * .65,
-            -0.45,
+            this.radius *
+            1.8,
+            this.radius *
+            .58,
+            .33,
             0,
-            Math.PI * 2
+            Math.PI *
+            2
         );
+
 
         ctx.stroke();
 
@@ -1869,7 +2853,8 @@ class BlackHole {
 
 
         ctx.shadowColor =
-            "#8d5dff";
+            "#8c57ff";
+
 
         ctx.shadowBlur =
             18;
@@ -1877,23 +2862,28 @@ class BlackHole {
 
         ctx.beginPath();
 
+
         ctx.arc(
             0,
             0,
             this.radius,
             0,
-            Math.PI * 2
+            Math.PI *
+            2
         );
+
 
         ctx.fill();
 
 
         ctx.restore();
-
     }
-
 }
 
+
+/* =====================================================
+   POWER UPS
+===================================================== */
 
 class PowerUp {
 
@@ -1904,7 +2894,7 @@ class PowerUp {
                 "shield",
                 "slow",
                 "gravity",
-                "burst"
+                "mass"
             ];
 
 
@@ -1918,28 +2908,32 @@ class PowerUp {
 
 
         this.x =
-            70 +
-            Math.random() *
-            Math.max(
-                1,
-                width - 140
+            random(
+                70,
+                Math.max(
+                    71,
+                    width - 70
+                )
             );
 
 
         this.y =
-            120 +
-            Math.random() *
-            Math.max(
-                1,
-                height - 220
+            random(
+                120,
+                Math.max(
+                    121,
+                    height - 100
+                )
             );
 
 
         this.life =
-            12;
+            13;
+
 
         this.angle =
             0;
+
 
         this.alive =
             true;
@@ -1948,25 +2942,24 @@ class PowerUp {
         const data = {
 
             shield: [
-                "#69e8ff",
+                "#74eaff",
                 "S"
             ],
 
             slow: [
-                "#b486ff",
+                "#b18aff",
                 "T"
             ],
 
             gravity: [
-                "#67ffc9",
+                "#68ffd2",
                 "G"
             ],
 
-            burst: [
-                "#ffd765",
-                "B"
+            mass: [
+                "#ffe36e",
+                "M"
             ]
-
         };
 
 
@@ -1977,27 +2970,31 @@ class PowerUp {
             data[
                 this.type
             ];
-
     }
 
 
-    update(dt) {
+    update(
+        dt
+    ) {
 
-        this.life -= dt;
+        this.life -=
+            dt;
+
 
         this.angle +=
-            dt * 2;
+            dt *
+            2;
 
 
         if (
-            this.life <= 0
+            this.life <=
+            0
         ) {
 
             this.alive =
                 false;
 
             return;
-
         }
 
 
@@ -2007,18 +3004,19 @@ class PowerUp {
                 this.y,
                 core.x,
                 core.y
-            ) < 38
+            ) <
+            getCoreRadius() +
+            18
         ) {
 
             applyPowerUp(
                 this.type
             );
 
+
             this.alive =
                 false;
-
         }
-
     }
 
 
@@ -2026,10 +3024,12 @@ class PowerUp {
 
         ctx.save();
 
+
         ctx.translate(
             this.x,
             this.y
         );
+
 
         ctx.rotate(
             this.angle
@@ -2039,47 +3039,54 @@ class PowerUp {
         ctx.shadowColor =
             this.color;
 
+
         ctx.shadowBlur =
-            22;
+            20;
 
 
         ctx.strokeStyle =
             this.color;
+
 
         ctx.lineWidth =
             2;
 
 
         ctx.fillStyle =
-            "rgba(5,13,28,.85)";
+            "rgba(4,12,28,.9)";
 
 
         ctx.beginPath();
 
+
         ctx.moveTo(
             0,
-            -17
+            -16
         );
 
+
         ctx.lineTo(
-            17,
+            16,
             0
         );
+
 
         ctx.lineTo(
             0,
-            17
+            16
         );
 
+
         ctx.lineTo(
-            -17,
+            -16,
             0
         );
+
 
         ctx.closePath();
 
-        ctx.fill();
 
+        ctx.fill();
         ctx.stroke();
 
 
@@ -2091,11 +3098,14 @@ class PowerUp {
         ctx.fillStyle =
             this.color;
 
+
         ctx.font =
-            "bold 12px sans-serif";
+            "bold 11px sans-serif";
+
 
         ctx.textAlign =
             "center";
+
 
         ctx.textBaseline =
             "middle";
@@ -2109,11 +3119,13 @@ class PowerUp {
 
 
         ctx.restore();
-
     }
-
 }
 
+
+/* =====================================================
+   CAPTURE
+===================================================== */
 
 function captureFirefly(
     firefly
@@ -2121,13 +3133,6 @@ function captureFirefly(
 
     const orbitCount =
         getOrbitCount();
-
-
-    if (
-        orbitCount >=
-        game.maxSwarm
-    )
-        return;
 
 
     firefly.state =
@@ -2145,14 +3150,18 @@ function captureFirefly(
 
     const ring =
         Math.floor(
-            orbitCount / 12
+            orbitCount /
+            14
         );
 
 
     firefly.orbitRadius =
-        65 +
-        ring * 24 +
-        Math.random() * 12;
+        getCoreRadius() +
+        38 +
+        ring *
+        22 +
+        Math.random() *
+        9;
 
 
     firefly.orbitSpeed =
@@ -2162,30 +3171,30 @@ function captureFirefly(
                 ? -1
                 : 1
         ) *
-        (
-            .75 +
-            Math.random() *
-            .65
+        random(
+            .7,
+            1.35
         );
 
 
-    const multiplier =
+    const scoreGain =
+        firefly.value *
         game.combo;
 
 
-    const points =
-        firefly.value *
-        multiplier;
-
-
     game.score +=
-        points;
+        scoreGain;
+
+
+    game.mass +=
+        firefly.massValue;
 
 
     game.combo =
         Math.min(
-            10,
-            game.combo + 1
+            15,
+            game.combo +
+            1
         );
 
 
@@ -2197,14 +3206,25 @@ function captureFirefly(
 
 
     game.comboTimer =
-        2.5;
+        2.6;
 
 
     game.maxSwarmReached =
         Math.max(
             game.maxSwarmReached,
-            orbitCount + 1
+            orbitCount +
+            1
         );
+
+
+    addFloatingText(
+        firefly.x,
+        firefly.y,
+        "+" +
+        firefly.massValue +
+        " MASS",
+        firefly.color
+    );
 
 
     burst(
@@ -2214,16 +3234,7 @@ function captureFirefly(
         firefly.type ===
             "gold"
             ? 18
-            : 8
-    );
-
-
-    addFloatingText(
-        firefly.x,
-        firefly.y,
-        "+" +
-        points,
-        firefly.color
+            : 7
     );
 
 
@@ -2233,14 +3244,18 @@ function captureFirefly(
     ) {
 
         showToast(
-            "✦ GOLD FIREFLY +" +
-            points
+            "✦ GOLD ENERGY +1,000 MASS"
         );
-
     }
 
+
+    updateEvolution();
 }
 
+
+/* =====================================================
+   RELEASE ORBIT
+===================================================== */
 
 function releaseFromOrbit(
     firefly,
@@ -2255,9 +3270,11 @@ function releaseFromOrbit(
         hole.x -
         firefly.x;
 
+
     const dy =
         hole.y -
         firefly.y;
+
 
     const d =
         Math.hypot(
@@ -2267,39 +3284,94 @@ function releaseFromOrbit(
 
 
     firefly.vx =
-        (
-            dx /
-            d
-        ) *
-        160;
+        dx /
+        d *
+        150;
 
 
     firefly.vy =
-        (
-            dy /
-            d
-        ) *
-        160;
+        dy /
+        d *
+        150;
 
 
     game.combo =
         1;
 
+
     game.comboTimer =
         0;
+}
+
+
+/* =====================================================
+   BLACK HOLE ABSORB
+===================================================== */
+
+function absorbEnemyBlackHole(
+    hole
+) {
+
+    hole.alive =
+        false;
+
+
+    const massGain =
+        game.stage ===
+        "superBlackHole"
+            ? 7000
+            : 5000;
+
+
+    game.mass +=
+        massGain;
+
+
+    game.score +=
+        massGain *
+        2;
+
+
+    game.absorbedBlackHoles++;
+
+
+    burst(
+        hole.x,
+        hole.y,
+        "#b987ff",
+        70
+    );
+
+
+    addFloatingText(
+        core.x,
+        core.y -
+        40,
+        "+" +
+        massGain +
+        " MASS",
+        "#cf9cff"
+    );
 
 
     showToast(
-        "SWARM LOST — COMBO RESET"
+        "⚫ BLACK HOLE ABSORBED"
     );
 
+
+    updateEvolution();
 }
 
+
+/* =====================================================
+   ORBIT COUNT
+===================================================== */
 
 function getOrbitCount() {
 
     let count =
         0;
+
 
     for (
         const f
@@ -2307,26 +3379,32 @@ function getOrbitCount() {
     ) {
 
         if (
+            f.alive &&
             f.state ===
-            "orbit" &&
-            f.alive
-        )
-            count++;
+            "orbit"
+        ) {
 
+            count++;
+        }
     }
 
-    return count;
 
+    return count;
 }
 
+
+/* =====================================================
+   DAMAGE
+===================================================== */
 
 function damageCore() {
 
     if (
         game.invulnerable >
         0
-    )
+    ) {
         return;
+    }
 
 
     game.lives--;
@@ -2347,26 +3425,29 @@ function damageCore() {
     burst(
         core.x,
         core.y,
-        "#ff607b",
-        35
+        "#ff617d",
+        40
     );
 
 
     showToast(
-        "CORE DAMAGED!"
+        "CORE DAMAGED"
     );
 
 
     if (
-        game.lives <= 0
+        game.lives <=
+        0
     ) {
 
         endGame();
-
     }
-
 }
 
+
+/* =====================================================
+   POWER-UP
+===================================================== */
 
 function applyPowerUp(
     type
@@ -2378,12 +3459,12 @@ function applyPowerUp(
     ) {
 
         game.shield =
-            8;
+            9;
+
 
         showToast(
-            "🛡 SHIELD 8 SEC"
+            "🛡 SHIELD ACTIVATED"
         );
-
     }
 
 
@@ -2395,10 +3476,10 @@ function applyPowerUp(
         game.slow =
             7;
 
-        showToast(
-            "⏱ TIME SLOW"
-        );
 
+        showToast(
+            "⏱ TIME DISTORTION"
+        );
     }
 
 
@@ -2410,63 +3491,60 @@ function applyPowerUp(
         game.superGravity =
             8;
 
+
         showToast(
             "✦ SUPER GRAVITY"
         );
-
     }
 
 
     if (
         type ===
-        "burst"
+        "mass"
     ) {
 
-        game.energy =
-            100;
+        const gain =
+            2500;
 
 
-        for (
-            const f
-            of fireflies
-        ) {
+        game.mass +=
+            gain;
 
-            if (
-                f.state ===
-                "free" &&
-                distance(
-                    f.x,
-                    f.y,
-                    core.x,
-                    core.y
-                ) < 240
-            ) {
 
-                captureFirefly(
-                    f
-                );
-
-            }
-
-        }
+        game.score +=
+            gain;
 
 
         burst(
             core.x,
             core.y,
             "#ffe36c",
-            55
+            45
+        );
+
+
+        addFloatingText(
+            core.x,
+            core.y -
+            35,
+            "+2,500 MASS",
+            "#ffe36c"
         );
 
 
         showToast(
-            "⚡ GRAVITY BURST"
+            "✦ DARK MATTER +2,500 MASS"
         );
 
-    }
 
+        updateEvolution();
+    }
 }
 
+
+/* =====================================================
+   PARTICLES
+===================================================== */
 
 function burst(
     x,
@@ -2483,13 +3561,15 @@ function burst(
 
         const angle =
             Math.random() *
-            Math.PI * 2;
+            Math.PI *
+            2;
 
 
         const speed =
-            30 +
-            Math.random() *
-            190;
+            random(
+                35,
+                220
+            );
 
 
         particles.push({
@@ -2510,23 +3590,23 @@ function burst(
                 speed,
 
             life:
-                .4 +
-                Math.random() *
-                .6,
+                random(
+                    .4,
+                    1
+                ),
 
-            maxLife: 1,
+            maxLife:
+                1,
 
             size:
-                1 +
-                Math.random() *
-                3,
+                random(
+                    1,
+                    3.5
+                ),
 
             color
-
         });
-
     }
-
 }
 
 
@@ -2540,35 +3620,42 @@ function updateParticles(
     ) {
 
         p.x +=
-            p.vx * dt;
+            p.vx *
+            dt;
+
 
         p.y +=
-            p.vy * dt;
+            p.vy *
+            dt;
+
 
         p.vx *=
             Math.pow(
                 .92,
-                dt * 60
+                dt *
+                60
             );
+
 
         p.vy *=
             Math.pow(
                 .92,
-                dt * 60
+                dt *
+                60
             );
+
 
         p.life -=
             dt;
-
     }
 
 
     particles =
         particles.filter(
             p =>
-                p.life > 0
+                p.life >
+                0
         );
-
 }
 
 
@@ -2591,8 +3678,10 @@ function drawParticles() {
         ctx.fillStyle =
             p.color;
 
+
         ctx.shadowColor =
             p.color;
+
 
         ctx.shadowBlur =
             10;
@@ -2600,27 +3689,33 @@ function drawParticles() {
 
         ctx.beginPath();
 
+
         ctx.arc(
             p.x,
             p.y,
             p.size,
             0,
-            Math.PI * 2
+            Math.PI *
+            2
         );
 
-        ctx.fill();
 
+        ctx.fill();
     }
 
 
     ctx.globalAlpha =
         1;
 
+
     ctx.shadowBlur =
         0;
-
 }
 
+
+/* =====================================================
+   FLOAT TEXT
+===================================================== */
 
 function addFloatingText(
     x,
@@ -2637,10 +3732,9 @@ function addFloatingText(
         text,
         color,
 
-        life: 1
-
+        life:
+            1
     });
-
 }
 
 
@@ -2654,20 +3748,21 @@ function updateFloatingTexts(
     ) {
 
         t.y -=
-            28 * dt;
+            28 *
+            dt;
+
 
         t.life -=
             dt;
-
     }
 
 
     floatingTexts =
         floatingTexts.filter(
             t =>
-                t.life > 0
+                t.life >
+                0
         );
-
 }
 
 
@@ -2676,8 +3771,9 @@ function drawFloatingTexts() {
     ctx.textAlign =
         "center";
 
+
     ctx.font =
-        "bold 13px sans-serif";
+        "bold 12px sans-serif";
 
 
     for (
@@ -2688,6 +3784,7 @@ function drawFloatingTexts() {
         ctx.globalAlpha =
             t.life;
 
+
         ctx.fillStyle =
             t.color;
 
@@ -2697,15 +3794,17 @@ function drawFloatingTexts() {
             t.x,
             t.y
         );
-
     }
 
 
     ctx.globalAlpha =
         1;
-
 }
 
+
+/* =====================================================
+   TOAST
+===================================================== */
 
 function showToast(
     message
@@ -2713,6 +3812,7 @@ function showToast(
 
     toast.textContent =
         message;
+
 
     toast.classList.add(
         "show"
@@ -2726,31 +3826,36 @@ function showToast(
 
     toastTimer =
         setTimeout(
-            () =>
-                toast
-                    .classList
-                    .remove(
-                        "show"
-                    ),
-            1300
-        );
+            () => {
 
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            1350
+        );
 }
 
 
+/* =====================================================
+   SPAWN
+===================================================== */
+
 function spawnBlackHole() {
 
-    const maxHoles =
+    const max =
         Math.min(
             1 +
             Math.floor(
-                game.wave / 2
+                game.wave /
+                2
             ),
             6
         );
 
 
-    const active =
+    const current =
         blackHoles.filter(
             h =>
                 h.alive
@@ -2758,20 +3863,27 @@ function spawnBlackHole() {
 
 
     if (
-        active <
-        maxHoles
+        current <
+        max
     ) {
 
         blackHoles.push(
             new BlackHole()
         );
 
-        showToast(
-            "⚠ BLACK HOLE DETECTED"
-        );
 
+        if (
+            game.stage !==
+            "blackHole" &&
+            game.stage !==
+            "superBlackHole"
+        ) {
+
+            showToast(
+                "⚠ BLACK HOLE DETECTED"
+            );
+        }
     }
-
 }
 
 
@@ -2780,7 +3892,6 @@ function spawnPowerUp() {
     powerUps.push(
         new PowerUp()
     );
-
 }
 
 
@@ -2788,9 +3899,10 @@ function ensureFireflies() {
 
     const target =
         Math.min(
-            110 +
-            game.wave * 8,
-            180
+            125 +
+            game.wave *
+            7,
+            210
         );
 
 
@@ -2802,11 +3914,13 @@ function ensureFireflies() {
         fireflies.push(
             new Firefly()
         );
-
     }
-
 }
 
+
+/* =====================================================
+   START
+===================================================== */
 
 function startGame() {
 
@@ -2817,57 +3931,88 @@ function startGame() {
     game.score =
         0;
 
+
+    game.mass =
+        0;
+
+
+    game.stage =
+        "planet";
+
+
     game.combo =
         1;
+
 
     game.bestCombo =
         1;
 
+
     game.comboTimer =
         0;
+
 
     game.time =
         0;
 
+
     game.wave =
         1;
+
 
     game.lives =
         3;
 
+
     game.energy =
         100;
+
 
     game.invulnerable =
         0;
 
+
     game.shield =
         0;
+
 
     game.slow =
         0;
 
+
     game.superGravity =
         0;
 
+
     game.nextBlackHole =
-        7;
+        8;
+
 
     game.nextPowerUp =
         10;
+
 
     game.maxSwarmReached =
         0;
 
 
+    game.absorbedBlackHoles =
+        0;
+
+
     core.x =
-        width / 2;
+        width /
+        2;
+
 
     core.y =
-        height / 2;
+        height /
+        2;
+
 
     core.targetX =
         core.x;
+
 
     core.targetY =
         core.y;
@@ -2876,42 +4021,63 @@ function startGame() {
     pointer.x =
         core.x;
 
+
     pointer.y =
         core.y;
+
 
     pointer.down =
         false;
 
 
-    fireflies = [];
-    blackHoles = [];
-    powerUps = [];
-    particles = [];
-    floatingTexts = [];
+    fireflies =
+        [];
+
+
+    blackHoles =
+        [];
+
+
+    particles =
+        [];
+
+
+    powerUps =
+        [];
+
+
+    floatingTexts =
+        [];
 
 
     for (
         let i = 0;
-        i < 120;
+        i < 130;
         i++
     ) {
 
         const f =
             new Firefly();
 
+
         f.x =
             Math.random() *
             width;
+
 
         f.y =
             Math.random() *
             height;
 
+
         fireflies.push(
             f
         );
-
     }
+
+
+    resultBox.hidden =
+        true;
 
 
     overlay.classList.add(
@@ -2919,23 +4085,26 @@ function startGame() {
     );
 
 
-    resultBox.hidden =
-        true;
-
-
     lastTime =
         performance.now();
 
+
+    updateHUD();
 }
 
+
+/* =====================================================
+   END
+===================================================== */
 
 function endGame() {
 
     if (
         game.state !==
         "playing"
-    )
+    ) {
         return;
+    }
 
 
     game.state =
@@ -2958,11 +4127,11 @@ function endGame() {
 
 
     overlayTitle.innerHTML =
-        "GRAVITY<br><span>COLLAPSED</span>";
+        "COSMIC<br><span>COLLAPSE</span>";
 
 
     overlayText.textContent =
-        "สนามแรงโน้มถ่วงพังทลายแล้ว ลองอีกครั้งเพื่อทำลายสถิติของคุณ";
+        "วิวัฒนาการครั้งนี้จบลงแล้ว ลองอีกครั้งเพื่อสร้างวัตถุที่มีมวลมากกว่าเดิม";
 
 
     resultBox.hidden =
@@ -2985,20 +4154,34 @@ function endGame() {
 
         <div>
 
-            <small>WAVE</small>
+            <small>MASS</small>
 
             <strong>
-                ${game.wave}
+                ${Math.floor(
+                    game.mass
+                ).toLocaleString()}
             </strong>
 
         </div>
 
         <div>
 
-            <small>MAX SWARM</small>
+            <small>STAGE</small>
 
             <strong>
-                ${game.maxSwarmReached}
+                ${EVOLUTION[
+                    game.stage
+                ].name}
+            </strong>
+
+        </div>
+
+        <div>
+
+            <small>BLACK HOLES</small>
+
+            <strong>
+                ${game.absorbedBlackHoles}
             </strong>
 
         </div>
@@ -3007,10 +4190,13 @@ function endGame() {
 
 
     startBtn.textContent =
-        "PLAY AGAIN";
-
+        "EVOLVE AGAIN";
 }
 
+
+/* =====================================================
+   UPDATE GAME
+===================================================== */
 
 function updateGame(
     dt
@@ -3019,8 +4205,9 @@ function updateGame(
     if (
         game.state !==
         "playing"
-    )
+    ) {
         return;
+    }
 
 
     game.time +=
@@ -3029,8 +4216,10 @@ function updateGame(
 
     const newWave =
         Math.floor(
-            game.time / 20
-        ) + 1;
+            game.time /
+            22
+        ) +
+        1;
 
 
     if (
@@ -3046,9 +4235,10 @@ function updateGame(
             "WAVE " +
             game.wave
         );
-
     }
 
+
+    /* CORE FOLLOW */
 
     if (
         pointer.active
@@ -3057,16 +4247,17 @@ function updateGame(
         core.targetX =
             pointer.x;
 
+
         core.targetY =
             pointer.y;
-
     }
 
 
     const follow =
         Math.min(
             1,
-            dt * 7
+            dt *
+            7
         );
 
 
@@ -3086,39 +4277,47 @@ function updateGame(
         follow;
 
 
+    const radius =
+        getCoreRadius();
+
+
     core.x =
         clamp(
             core.x,
-            30,
-            width - 30
+            radius,
+            width -
+            radius
         );
 
 
     core.y =
         clamp(
             core.y,
-            85,
-            height - 30
+            80 +
+            radius,
+            height -
+            radius
         );
 
 
+    /* ENERGY */
+
     if (
         pointer.down &&
-        game.energy > 0
+        game.energy >
+        0
     ) {
 
         game.energy -=
             34 *
             dt;
-
     }
 
     else {
 
         game.energy +=
-            20 *
+            21 *
             dt;
-
     }
 
 
@@ -3131,7 +4330,20 @@ function updateGame(
 
 
     if (
-        game.comboTimer > 0
+        game.energy <=
+        0
+    ) {
+
+        pointer.down =
+            false;
+    }
+
+
+    /* COMBO */
+
+    if (
+        game.comboTimer >
+        0
     ) {
 
         game.comboTimer -=
@@ -3139,16 +4351,17 @@ function updateGame(
 
 
         if (
-            game.comboTimer <= 0
+            game.comboTimer <=
+            0
         ) {
 
             game.combo =
                 1;
-
         }
-
     }
 
+
+    /* BUFF TIMERS */
 
     game.invulnerable =
         Math.max(
@@ -3182,12 +4395,15 @@ function updateGame(
         );
 
 
+    /* SPAWN BLACK HOLE */
+
     game.nextBlackHole -=
         dt;
 
 
     if (
-        game.nextBlackHole <= 0
+        game.nextBlackHole <=
+        0
     ) {
 
         spawnBlackHole();
@@ -3195,67 +4411,68 @@ function updateGame(
 
         game.nextBlackHole =
             Math.max(
-                3.4,
+                3.5,
                 9 -
                 game.wave *
-                .55
+                .5
             );
-
     }
 
+
+    /* POWER UPS */
 
     game.nextPowerUp -=
         dt;
 
 
     if (
-        game.nextPowerUp <= 0
+        game.nextPowerUp <=
+        0
     ) {
 
         spawnPowerUp();
 
 
         game.nextPowerUp =
-            11 +
-            Math.random() *
-            5;
-
+            random(
+                10,
+                15
+            );
     }
 
 
+    /* OBJECT UPDATES */
+
     for (
-        const firefly
+        const f
         of fireflies
     ) {
 
-        firefly.update(
+        f.update(
             dt
         );
-
     }
 
 
     for (
-        const hole
+        const h
         of blackHoles
     ) {
 
-        hole.update(
+        h.update(
             dt
         );
-
     }
 
 
     for (
-        const power
+        const p
         of powerUps
     ) {
 
-        power.update(
+        p.update(
             dt
         );
-
     }
 
 
@@ -3293,19 +4510,24 @@ function updateGame(
     ensureFireflies();
 
 
+    /* SURVIVAL SCORE */
+
     game.score +=
         dt *
         (
             1 +
             getOrbitCount() *
-            .035
+            .04
         );
 
 
     updateHUD();
-
 }
 
+
+/* =====================================================
+   HUD
+===================================================== */
 
 function updateHUD() {
 
@@ -3315,13 +4537,15 @@ function updateHUD() {
         ).toLocaleString();
 
 
+    massUI.textContent =
+        Math.floor(
+            game.mass
+        ).toLocaleString();
+
+
     comboUI.textContent =
         "×" +
         game.combo;
-
-
-    swarmUI.textContent =
-        getOrbitCount();
 
 
     waveUI.textContent =
@@ -3341,6 +4565,44 @@ function updateHUD() {
         );
 
 
+    const info =
+        EVOLUTION[
+            game.stage
+        ];
+
+
+    let stageLabel =
+        info.name;
+
+
+    if (
+        game.stage ===
+        "star"
+    ) {
+
+        stageLabel =
+            getStarColor()
+                .label;
+    }
+
+
+    stageUI.textContent =
+        stageLabel;
+
+
+    evolutionName.textContent =
+        info.icon +
+        " " +
+        stageLabel;
+
+
+    massCurrent.textContent =
+        Math.floor(
+            game.mass
+        ).toLocaleString() +
+        " MASS";
+
+
     energyBar.style.width =
         game.energy +
         "%";
@@ -3353,52 +4615,184 @@ function updateHUD() {
         "%";
 
 
+    /* EVOLUTION PROGRESS */
+
+    if (
+        info.next
+    ) {
+
+        const progress =
+            clamp(
+                (
+                    game.mass -
+                    info.min
+                ) /
+                (
+                    info.next -
+                    info.min
+                ) *
+                100,
+                0,
+                100
+            );
+
+
+        massBar.style.width =
+            progress +
+            "%";
+
+
+        massGoal.textContent =
+            info.next.toLocaleString();
+
+
+        const nextStage =
+            getNextStage(
+                game.stage
+            );
+
+
+        nextEvolution.textContent =
+            "Next: " +
+            EVOLUTION[
+                nextStage
+            ].name +
+            " " +
+            info.next.toLocaleString();
+    }
+
+
+    else {
+
+        const bonus =
+            clamp(
+                (
+                    Math.log10(
+                        Math.max(
+                            1,
+                            game.mass /
+                            100000
+                        )
+                    ) /
+                    1
+                ) *
+                100,
+                0,
+                100
+            );
+
+
+        massBar.style.width =
+            Math.max(
+                12,
+                bonus
+            ) +
+            "%";
+
+
+        massGoal.textContent =
+            "∞";
+
+
+        nextEvolution.textContent =
+            "KEEP GROWING";
+    }
+
+
+    /* BUFFS */
+
     powerStatus.innerHTML =
         "";
 
 
     if (
-        game.shield > 0
+        game.shield >
+        0
     ) {
 
         powerStatus.innerHTML +=
             `<div class="buff">
-                🛡 Shield ${game.shield.toFixed(1)}s
+                🛡 Shield
+                ${game.shield.toFixed(1)}s
             </div>`;
-
     }
 
 
     if (
-        game.slow > 0
+        game.slow >
+        0
     ) {
 
         powerStatus.innerHTML +=
             `<div class="buff">
-                ⏱ Time Slow ${game.slow.toFixed(1)}s
+                ⏱ Time Slow
+                ${game.slow.toFixed(1)}s
             </div>`;
-
     }
 
 
     if (
-        game.superGravity > 0
+        game.superGravity >
+        0
     ) {
 
         powerStatus.innerHTML +=
             `<div class="buff">
-                ✦ Super Gravity ${game.superGravity.toFixed(1)}s
+                ✦ Super Gravity
+                ${game.superGravity.toFixed(1)}s
             </div>`;
-
     }
-
 }
 
+
+function getNextStage(
+    stage
+) {
+
+    if (
+        stage ===
+        "planet"
+    ) {
+        return "gasGiant";
+    }
+
+
+    if (
+        stage ===
+        "gasGiant"
+    ) {
+        return "star";
+    }
+
+
+    if (
+        stage ===
+        "star"
+    ) {
+        return "blackHole";
+    }
+
+
+    if (
+        stage ===
+        "blackHole"
+    ) {
+        return "superBlackHole";
+    }
+
+
+    return "superBlackHole";
+}
+
+
+/* =====================================================
+   BACKGROUND
+===================================================== */
 
 function drawBackground() {
 
     ctx.fillStyle =
-        "rgba(2,5,15,.27)";
+        "rgba(1,4,11,.24)";
 
 
     ctx.fillRect(
@@ -3409,13 +4803,19 @@ function drawBackground() {
     );
 
 
+    /* subtle galaxy glow */
+
     const glow =
         ctx.createRadialGradient(
-            width * .5,
-            height * .45,
+            width *
+            .52,
+            height *
+            .46,
             30,
-            width * .5,
-            height * .45,
+            width *
+            .52,
+            height *
+            .46,
             Math.max(
                 width,
                 height
@@ -3426,7 +4826,7 @@ function drawBackground() {
 
     glow.addColorStop(
         0,
-        "rgba(18,62,77,.05)"
+        "rgba(28,62,93,.07)"
     );
 
 
@@ -3448,6 +4848,8 @@ function drawBackground() {
     );
 
 
+    /* stars */
+
     for (
         const star
         of stars
@@ -3456,13 +4858,13 @@ function drawBackground() {
         const alpha =
             star.alpha *
             (
-                .65 +
-                .35 *
+                .7 +
                 Math.sin(
                     game.time *
-                    1.3 +
+                    1.4 +
                     star.phase
-                )
+                ) *
+                .3
             );
 
 
@@ -3471,7 +4873,7 @@ function drawBackground() {
 
 
         ctx.fillStyle =
-            "#bcdcff";
+            "#cfe4ff";
 
 
         ctx.beginPath();
@@ -3482,206 +4884,94 @@ function drawBackground() {
             star.y,
             star.size,
             0,
-            Math.PI * 2
+            Math.PI *
+            2
         );
 
 
         ctx.fill();
-
     }
 
 
     ctx.globalAlpha =
         1;
-
 }
 
+
+/* =====================================================
+   CORE DRAW ROUTER
+===================================================== */
 
 function drawCore() {
 
     ctx.save();
 
-    ctx.translate(
-        core.x,
-        core.y
-    );
-
 
     if (
-        game.invulnerable > 0 &&
+        game.invulnerable >
+        0 &&
         Math.floor(
             game.invulnerable *
             10
-        ) % 2 === 0
+        ) %
+        2 ===
+        0
     ) {
 
         ctx.globalAlpha =
-            .35;
-
+            .4;
     }
 
 
-    const pulse =
-        1 +
-        Math.sin(
-            game.time *
-            5
-        ) *
-        .05;
-
-
-    const coreGradient =
-        ctx.createRadialGradient(
-            -5,
-            -5,
-            3,
-            0,
-            0,
-            34
-        );
-
-
-    coreGradient.addColorStop(
-        0,
-        "#ecffff"
-    );
-
-
-    coreGradient.addColorStop(
-        .18,
-        "#93fff0"
-    );
-
-
-    coreGradient.addColorStop(
-        .55,
-        "#25cbbd"
-    );
-
-
-    coreGradient.addColorStop(
-        1,
-        "rgba(36,203,190,0)"
-    );
-
-
-    ctx.fillStyle =
-        coreGradient;
-
-
-    ctx.shadowColor =
-        "#56ffe1";
-
-    ctx.shadowBlur =
-        30;
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        0,
-        0,
-        40 * pulse,
-        0,
-        Math.PI * 2
-    );
-
-
-    ctx.fill();
-
-
-    ctx.fillStyle =
-        "#d9fff9";
-
-
-    ctx.shadowBlur =
-        13;
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        0,
-        0,
-        9,
-        0,
-        Math.PI * 2
-    );
-
-
-    ctx.fill();
-
-
-    ctx.strokeStyle =
-        "rgba(107,255,230,.45)";
-
-
-    ctx.lineWidth =
-        1.5;
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        0,
-        0,
-        27,
-        0,
-        Math.PI * 2
-    );
-
-
-    ctx.stroke();
-
-
-    if (
-        pointer.down &&
-        game.energy > 0
+    switch (
+        game.stage
     ) {
 
-        const repelPulse =
-            125 +
-            Math.sin(
-                game.time *
-                12
-            ) *
-            14;
+        case "gasGiant":
+
+            drawGasGiant();
+
+            break;
 
 
-        ctx.strokeStyle =
-            "rgba(120,216,255,.36)";
+        case "star":
+
+            drawStar();
+
+            break;
 
 
-        ctx.lineWidth =
-            2;
+        case "blackHole":
+
+            drawPlayerBlackHole(
+                false
+            );
+
+            break;
 
 
-        ctx.beginPath();
+        case "superBlackHole":
+
+            drawPlayerBlackHole(
+                true
+            );
+
+            break;
 
 
-        ctx.arc(
-            0,
-            0,
-            repelPulse,
-            0,
-            Math.PI * 2
-        );
+        default:
 
-
-        ctx.stroke();
-
+            drawRockyPlanet();
     }
 
 
     if (
-        game.shield > 0
+        game.shield >
+        0
     ) {
 
         ctx.strokeStyle =
-            "rgba(112,232,255,.75)";
+            "rgba(104,230,255,.7)";
 
 
         ctx.lineWidth =
@@ -3692,28 +4982,1015 @@ function drawCore() {
 
 
         ctx.arc(
-            0,
-            0,
-            48 +
+            core.x,
+            core.y,
+            getCoreRadius() +
+            18 +
             Math.sin(
                 game.time *
                 4
             ) *
             3,
             0,
-            Math.PI * 2
+            Math.PI *
+            2
         );
 
 
         ctx.stroke();
+    }
 
+
+    if (
+        pointer.down &&
+        game.energy >
+        0
+    ) {
+
+        ctx.strokeStyle =
+            "rgba(108,213,255,.35)";
+
+
+        ctx.lineWidth =
+            2;
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            core.x,
+            core.y,
+            125 +
+            Math.sin(
+                game.time *
+                11
+            ) *
+            12,
+            0,
+            Math.PI *
+            2
+        );
+
+
+        ctx.stroke();
     }
 
 
     ctx.restore();
-
 }
 
+
+/* =====================================================
+   ROCKY PLANET
+===================================================== */
+
+function drawRockyPlanet() {
+
+    const r =
+        getCoreRadius();
+
+
+    ctx.save();
+
+
+    ctx.translate(
+        core.x,
+        core.y
+    );
+
+
+    const gradient =
+        ctx.createRadialGradient(
+            -r *
+            .35,
+            -r *
+            .35,
+            2,
+            0,
+            0,
+            r *
+            1.1
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "#9df4ff"
+    );
+
+
+    gradient.addColorStop(
+        .28,
+        "#3488b8"
+    );
+
+
+    gradient.addColorStop(
+        .63,
+        "#245676"
+    );
+
+
+    gradient.addColorStop(
+        1,
+        "#081b32"
+    );
+
+
+    ctx.shadowColor =
+        "#5ccfff";
+
+
+    ctx.shadowBlur =
+        18;
+
+
+    ctx.fillStyle =
+        gradient;
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+        0,
+        0,
+        r,
+        0,
+        Math.PI *
+        2
+    );
+
+
+    ctx.fill();
+
+
+    /* continents */
+
+    ctx.shadowBlur =
+        0;
+
+
+    ctx.fillStyle =
+        "rgba(89,190,131,.75)";
+
+
+    ctx.beginPath();
+
+
+    ctx.ellipse(
+        -6,
+        -3,
+        8,
+        5,
+        -.4,
+        0,
+        Math.PI *
+        2
+    );
+
+
+    ctx.fill();
+
+
+    ctx.beginPath();
+
+
+    ctx.ellipse(
+        7,
+        8,
+        6,
+        4,
+        .5,
+        0,
+        Math.PI *
+        2
+    );
+
+
+    ctx.fill();
+
+
+    ctx.restore();
+}
+
+
+/* =====================================================
+   GAS GIANT
+===================================================== */
+
+function drawGasGiant() {
+
+    const r =
+        getCoreRadius();
+
+
+    ctx.save();
+
+
+    ctx.translate(
+        core.x,
+        core.y
+    );
+
+
+    ctx.shadowColor =
+        "#e9a95e";
+
+
+    ctx.shadowBlur =
+        22;
+
+
+    const gradient =
+        ctx.createRadialGradient(
+            -8,
+            -10,
+            3,
+            0,
+            0,
+            r *
+            1.2
+        );
+
+
+    gradient.addColorStop(
+        0,
+        "#fff0c5"
+    );
+
+
+    gradient.addColorStop(
+        .28,
+        "#e2b064"
+    );
+
+
+    gradient.addColorStop(
+        .7,
+        "#a8653e"
+    );
+
+
+    gradient.addColorStop(
+        1,
+        "#513029"
+    );
+
+
+    ctx.fillStyle =
+        gradient;
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+        0,
+        0,
+        r,
+        0,
+        Math.PI *
+        2
+    );
+
+
+    ctx.fill();
+
+
+    ctx.save();
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+        0,
+        0,
+        r,
+        0,
+        Math.PI *
+        2
+    );
+
+
+    ctx.clip();
+
+
+    ctx.shadowBlur =
+        0;
+
+
+    const bands =
+        [
+            {
+                y: -15,
+                h: 5,
+                color: "rgba(111,60,41,.55)"
+            },
+
+            {
+                y: -6,
+                h: 6,
+                color: "rgba(255,219,161,.6)"
+            },
+
+            {
+                y: 4,
+                h: 6,
+                color: "rgba(122,70,47,.55)"
+            },
+
+            {
+                y: 15,
+                h: 4,
+                color: "rgba(255,205,142,.5)"
+            }
+        ];
+
+
+    for (
+        const band
+        of bands
+    ) {
+
+        ctx.fillStyle =
+            band.color;
+
+
+        ctx.fillRect(
+            -r,
+            band.y,
+            r *
+            2,
+            band.h
+        );
+    }
+
+
+    /* storm */
+
+    ctx.fillStyle =
+        "rgba(191,78,51,.8)";
+
+
+    ctx.beginPath();
+
+
+    ctx.ellipse(
+        10,
+        8,
+        7,
+        3,
+        -.15,
+        0,
+        Math.PI *
+        2
+    );
+
+
+    ctx.fill();
+
+
+    ctx.restore();
+
+
+    ctx.restore();
+}
+
+
+/* =====================================================
+   STAR
+===================================================== */
+
+function drawStar() {
+
+    const r =
+        getCoreRadius();
+
+
+    const colors =
+        getStarColor();
+
+
+    ctx.save();
+
+
+    ctx.translate(
+        core.x,
+        core.y
+    );
+
+
+    /* corona */
+
+    const coronaRadius =
+        r *
+        (
+            2 +
+            Math.sin(
+                game.time *
+                4
+            ) *
+            .08
+        );
+
+
+    const corona =
+        ctx.createRadialGradient(
+            0,
+            0,
+            r *
+            .3,
+            0,
+            0,
+            coronaRadius
+        );
+
+
+    corona.addColorStop(
+        0,
+        colors.core
+    );
+
+
+    corona.addColorStop(
+        .28,
+        colors.mid
+    );
+
+
+    corona.addColorStop(
+        .58,
+        colors.glow +
+        "88"
+    );
+
+
+    corona.addColorStop(
+        1,
+        colors.glow +
+        "00"
+    );
+
+
+    ctx.fillStyle =
+        corona;
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+        0,
+        0,
+        coronaRadius,
+        0,
+        Math.PI *
+        2
+    );
+
+
+    ctx.fill();
+
+
+    ctx.shadowColor =
+        colors.glow;
+
+
+    ctx.shadowBlur =
+        35;
+
+
+    const starGradient =
+        ctx.createRadialGradient(
+            -7,
+            -7,
+            2,
+            0,
+            0,
+            r
+        );
+
+
+    starGradient.addColorStop(
+        0,
+        colors.core
+    );
+
+
+    starGradient.addColorStop(
+        .48,
+        colors.mid
+    );
+
+
+    starGradient.addColorStop(
+        1,
+        colors.glow
+    );
+
+
+    ctx.fillStyle =
+        starGradient;
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+        0,
+        0,
+        r,
+        0,
+        Math.PI *
+        2
+    );
+
+
+    ctx.fill();
+
+
+    /* solar flares */
+
+    ctx.shadowBlur =
+        0;
+
+
+    ctx.strokeStyle =
+        colors.glow +
+        "99";
+
+
+    ctx.lineWidth =
+        2;
+
+
+    for (
+        let i = 0;
+        i < 6;
+        i++
+    ) {
+
+        const a =
+            game.time *
+            .45 +
+            i /
+            6 *
+            Math.PI *
+            2;
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            0,
+            0,
+            r +
+            7 +
+            Math.sin(
+                game.time *
+                3 +
+                i
+            ) *
+            3,
+            a,
+            a +
+            .5
+        );
+
+
+        ctx.stroke();
+    }
+
+
+    ctx.restore();
+}
+
+
+/* =====================================================
+   PLAYER BLACK HOLE
+===================================================== */
+
+function drawPlayerBlackHole(
+    superMassive
+) {
+
+    const r =
+        getCoreRadius();
+
+
+    ctx.save();
+
+
+    ctx.translate(
+        core.x,
+        core.y
+    );
+
+
+    const spin =
+        game.time *
+        (
+            superMassive
+                ? 1.1
+                : 1.6
+        );
+
+
+    ctx.rotate(
+        spin
+    );
+
+
+    /* gravitational glow */
+
+    const spaceWarp =
+        ctx.createRadialGradient(
+            0,
+            0,
+            r,
+            0,
+            0,
+            r *
+            (
+                superMassive
+                    ? 4
+                    : 3
+            )
+        );
+
+
+    spaceWarp.addColorStop(
+        0,
+        "rgba(0,0,0,1)"
+    );
+
+
+    spaceWarp.addColorStop(
+        .26,
+        superMassive
+            ? "rgba(98,62,185,.35)"
+            : "rgba(132,63,181,.24)"
+    );
+
+
+    spaceWarp.addColorStop(
+        .55,
+        "rgba(70,115,230,.07)"
+    );
+
+
+    spaceWarp.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+    );
+
+
+    ctx.fillStyle =
+        spaceWarp;
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+        0,
+        0,
+        r *
+        (
+            superMassive
+                ? 4
+                : 3
+        ),
+        0,
+        Math.PI *
+        2
+    );
+
+
+    ctx.fill();
+
+
+    /* accretion disk outer */
+
+    ctx.shadowColor =
+        superMassive
+            ? "#8bbcff"
+            : "#ff9b54";
+
+
+    ctx.shadowBlur =
+        superMassive
+            ? 35
+            : 24;
+
+
+    ctx.strokeStyle =
+        superMassive
+            ? "rgba(125,177,255,.75)"
+            : "rgba(255,152,72,.75)";
+
+
+    ctx.lineWidth =
+        superMassive
+            ? 8
+            : 6;
+
+
+    ctx.beginPath();
+
+
+    ctx.ellipse(
+        0,
+        0,
+        r *
+        2.25,
+        r *
+        .55,
+        .3,
+        0,
+        Math.PI *
+        2
+    );
+
+
+    ctx.stroke();
+
+
+    /* second ring */
+
+    ctx.strokeStyle =
+        superMassive
+            ? "rgba(195,140,255,.65)"
+            : "rgba(255,218,118,.58)";
+
+
+    ctx.lineWidth =
+        3;
+
+
+    ctx.beginPath();
+
+
+    ctx.ellipse(
+        0,
+        0,
+        r *
+        1.82,
+        r *
+        .42,
+        -.33,
+        0,
+        Math.PI *
+        2
+    );
+
+
+    ctx.stroke();
+
+
+    /* event horizon */
+
+    ctx.shadowColor =
+        "#000";
+
+
+    ctx.shadowBlur =
+        15;
+
+
+    ctx.fillStyle =
+        "#000";
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+        0,
+        0,
+        r,
+        0,
+        Math.PI *
+        2
+    );
+
+
+    ctx.fill();
+
+
+    /* photon ring */
+
+    ctx.shadowColor =
+        superMassive
+            ? "#b8dfff"
+            : "#ffd39b";
+
+
+    ctx.shadowBlur =
+        18;
+
+
+    ctx.strokeStyle =
+        superMassive
+            ? "rgba(215,235,255,.85)"
+            : "rgba(255,222,173,.8)";
+
+
+    ctx.lineWidth =
+        1.8;
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+        0,
+        0,
+        r +
+        4,
+        0,
+        Math.PI *
+        2
+    );
+
+
+    ctx.stroke();
+
+
+    ctx.restore();
+
+
+    /* relativistic jets */
+
+    if (
+        superMassive
+    ) {
+
+        drawJets(
+            r
+        );
+    }
+}
+
+
+/* =====================================================
+   RELATIVISTIC JETS
+===================================================== */
+
+function drawJets(
+    r
+) {
+
+    ctx.save();
+
+
+    ctx.translate(
+        core.x,
+        core.y
+    );
+
+
+    const length =
+        r *
+        4.5;
+
+
+    const alpha =
+        .45 +
+        Math.sin(
+            game.time *
+            5
+        ) *
+        .08;
+
+
+    const topJet =
+        ctx.createLinearGradient(
+            0,
+            -r,
+            0,
+            -length
+        );
+
+
+    topJet.addColorStop(
+        0,
+        `rgba(180,220,255,${alpha})`
+    );
+
+
+    topJet.addColorStop(
+        1,
+        "rgba(75,130,255,0)"
+    );
+
+
+    ctx.fillStyle =
+        topJet;
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+        -5,
+        -r
+    );
+
+
+    ctx.lineTo(
+        -16,
+        -length
+    );
+
+
+    ctx.lineTo(
+        16,
+        -length
+    );
+
+
+    ctx.lineTo(
+        5,
+        -r
+    );
+
+
+    ctx.closePath();
+
+
+    ctx.fill();
+
+
+    const bottomJet =
+        ctx.createLinearGradient(
+            0,
+            r,
+            0,
+            length
+        );
+
+
+    bottomJet.addColorStop(
+        0,
+        `rgba(180,220,255,${alpha})`
+    );
+
+
+    bottomJet.addColorStop(
+        1,
+        "rgba(75,130,255,0)"
+    );
+
+
+    ctx.fillStyle =
+        bottomJet;
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+        -5,
+        r
+    );
+
+
+    ctx.lineTo(
+        -16,
+        length
+    );
+
+
+    ctx.lineTo(
+        16,
+        length
+    );
+
+
+    ctx.lineTo(
+        5,
+        r
+    );
+
+
+    ctx.closePath();
+
+
+    ctx.fill();
+
+
+    ctx.restore();
+}
+
+
+/* =====================================================
+   DRAW
+===================================================== */
 
 function draw() {
 
@@ -3721,32 +5998,29 @@ function draw() {
 
 
     for (
-        const power
+        const p
         of powerUps
     ) {
 
-        power.draw();
-
+        p.draw();
     }
 
 
     for (
-        const hole
+        const h
         of blackHoles
     ) {
 
-        hole.draw();
-
+        h.draw();
     }
 
 
     for (
-        const firefly
+        const f
         of fireflies
     ) {
 
-        firefly.draw();
-
+        f.draw();
     }
 
 
@@ -3757,9 +6031,12 @@ function draw() {
 
 
     drawFloatingTexts();
-
 }
 
+
+/* =====================================================
+   MAIN LOOP
+===================================================== */
 
 function loop(
     now
@@ -3795,9 +6072,12 @@ function loop(
     requestAnimationFrame(
         loop
     );
-
 }
 
+
+/* =====================================================
+   LOCAL RANKING
+===================================================== */
 
 function getRanking() {
 
@@ -3817,15 +6097,12 @@ function getRanking() {
         )
             ? data
             : [];
-
     }
 
     catch {
 
         return [];
-
     }
-
 }
 
 
@@ -3836,13 +6113,13 @@ function saveRanking() {
             .trim()
             .slice(
                 0,
-                15
+                16
             ) ||
-        "Gravity Pilot";
+        "Cosmic Pilot";
 
 
     localStorage.setItem(
-        "gravity-player-name",
+        "gravity-evolution-name",
         name
     );
 
@@ -3860,12 +6137,15 @@ function saveRanking() {
                 game.score
             ),
 
-        wave:
-            game.wave,
+        mass:
+            Math.floor(
+                game.mass
+            ),
 
-        swarm:
-            game.maxSwarmReached
-
+        stage:
+            EVOLUTION[
+                game.stage
+            ].name
     });
 
 
@@ -3874,8 +6154,8 @@ function saveRanking() {
             a,
             b
         ) =>
-            b.score -
-            a.score
+            b.mass -
+            a.mass
     );
 
 
@@ -3888,7 +6168,6 @@ function saveRanking() {
             )
         )
     );
-
 }
 
 
@@ -3902,7 +6181,8 @@ function renderRanking() {
 
 
     if (
-        ranking.length === 0
+        ranking.length ===
+        0
     ) {
 
         const li =
@@ -3912,7 +6192,7 @@ function renderRanking() {
 
 
         li.textContent =
-            "ยังไม่มีคะแนน";
+            "ยังไม่มี Cosmic Record";
 
 
         rankingList.append(
@@ -3921,7 +6201,6 @@ function renderRanking() {
 
 
         return;
-
     }
 
 
@@ -3960,7 +6239,8 @@ function renderRanking() {
 
 
             place.textContent =
-                index < 3
+                index <
+                3
                     ?
                     [
                         "🥇",
@@ -3981,8 +6261,9 @@ function renderRanking() {
 
             score.textContent =
                 Number(
-                    row.score
-                ).toLocaleString();
+                    row.mass
+                ).toLocaleString() +
+                " M";
 
 
             li.append(
@@ -3995,12 +6276,14 @@ function renderRanking() {
             rankingList.append(
                 li
             );
-
         }
     );
-
 }
 
+
+/* =====================================================
+   POINTER
+===================================================== */
 
 function pointerMove(
     event
@@ -4009,8 +6292,10 @@ function pointerMove(
     pointer.x =
         event.clientX;
 
+
     pointer.y =
         event.clientY;
+
 
     pointer.active =
         true;
@@ -4019,9 +6304,9 @@ function pointerMove(
     core.targetX =
         pointer.x;
 
+
     core.targetY =
         pointer.y;
-
 }
 
 
@@ -4053,7 +6338,6 @@ canvas.addEventListener(
         }
 
         catch {}
-
     }
 );
 
@@ -4075,7 +6359,6 @@ canvas.addEventListener(
         }
 
         catch {}
-
     }
 );
 
@@ -4086,12 +6369,15 @@ canvas.addEventListener(
 
         pointer.down =
             false;
-
     }
 );
 
 
-window.addEventListener(
+/* =====================================================
+   KEYBOARD
+===================================================== */
+
+addEventListener(
     "keydown",
     event => {
 
@@ -4102,16 +6388,21 @@ window.addEventListener(
 
             event.preventDefault();
 
-            pointer.down =
-                true;
 
+            if (
+                game.state ===
+                "playing"
+            ) {
+
+                pointer.down =
+                    true;
+            }
         }
-
     }
 );
 
 
-window.addEventListener(
+addEventListener(
     "keyup",
     event => {
 
@@ -4122,37 +6413,38 @@ window.addEventListener(
 
             pointer.down =
                 false;
-
         }
-
     }
 );
 
 
-window.addEventListener(
+addEventListener(
     "blur",
     () => {
 
         pointer.down =
             false;
-
     }
 );
 
+
+/* =====================================================
+   START BUTTON
+===================================================== */
 
 startBtn.addEventListener(
     "click",
-    () => {
-
-        startGame();
-
-    }
+    startGame
 );
 
 
+/* =====================================================
+   INITIAL MENU BACKGROUND
+===================================================== */
+
 playerName.value =
     localStorage.getItem(
-        "gravity-player-name"
+        "gravity-evolution-name"
     ) ||
     "";
 
@@ -4162,28 +6454,27 @@ renderRanking();
 
 for (
     let i = 0;
-    i < 100;
+    i < 110;
     i++
 ) {
 
-    const firefly =
+    const f =
         new Firefly();
 
 
-    firefly.x =
+    f.x =
         Math.random() *
         width;
 
 
-    firefly.y =
+    f.y =
         Math.random() *
         height;
 
 
     fireflies.push(
-        firefly
+        f
     );
-
 }
 
 
